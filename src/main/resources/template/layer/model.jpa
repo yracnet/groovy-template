@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jpa:entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm" v="5.2" rws="_1547420720096231" Pws="_1547420720096231" cws="_1547420720096231" persistenceUnitName="DEFAULT_PU" sm="false" xs="false" id="_1547408279045203" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd">
+    <jpa:entity compositePrimaryKeyClass="ProductPK" abs="false" class="Product" v="true" xre="false" m="false" rootElement="_1547408279045203" id="_1547408279045204">
+        <jpa:attributes>
+            <jpa:basic optional="true" attribute-type="java.math.BigDecimal" v="true" name="purchaseCost" id="_1547408279045206">
+                <jpa:column name="PURCHASE_COST" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT" precision="12" scale="2"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="Integer" v="true" name="quantityOnHand" id="_1547408279045207">
+                <jpa:column name="QUANTITY_ON_HAND" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="java.math.BigDecimal" v="true" name="markup" id="_1547408279045208">
+                <jpa:column name="MARKUP" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT" precision="4" scale="2"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="available" id="_1547408279045209">
+                <jpa:column name="AVAILABLE" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT" length="5"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="description" id="_1547408279045210">
+                <jpa:column name="DESCRIPTION" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT" length="50"/>
+            </jpa:basic>
+            <jpa:id attribute-type="Integer" v="true" name="productId" id="_1547408279045205">
+                <jpa:column name="PRODUCT_ID" unique="false" nullable="false" insertable="true" updatable="true" table="PRODUCT"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="PRODUCT"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="Entity_1PK" abs="false" class="Entity_1" pclass="Entity_1" v="true" xre="false" m="false" rootElement="_1547408279045203" id="_1547420738675234">
+        <jpa:ath>yracnet</jpa:ath>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" v="true" name="attribute" pname="attribute" id="_1547420748176240"/>
+            <jpa:basic attribute-type="String" v="true" name="attribute1" pname="attribute1" id="_1547420748791241"/>
+            <jpa:basic attribute-type="String" v="true" name="attribute2" pname="attribute2" id="_1547420749034242"/>
+            <jpa:id attribute-type="Long" v="true" name="id" id="_1547420738677235">
+                <jpa:generated-value strategy="DEFAULT"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="false" name="Entity_1.findAll">
+            <jpa:query>Select e from Entity_1 e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="Entity_1.findByAttribute">
+            <jpa:query>Select e from Entity_1 e where e.attribute=:attribute</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="Entity_1.findByAttribute1">
+            <jpa:query>Select e from Entity_1 e where e.attribute1=:attribute1</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="Entity_1.findByAttribute2">
+            <jpa:query>Select e from Entity_1 e where e.attribute2=:attribute2</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="Entity_2PK" abs="false" class="Entity_2" pclass="Entity_2" v="true" xre="false" m="false" rootElement="_1547408279045203" id="_1547420741264237">
+        <jpa:ath>yracnet</jpa:ath>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" v="true" name="attribute" pname="attribute" id="_1547420753262243"/>
+            <jpa:basic attribute-type="String" v="true" name="attribute1" pname="attribute1" id="_1547420753451244"/>
+            <jpa:basic attribute-type="String" v="true" name="attribute2" pname="attribute2" id="_1547420753649245"/>
+            <jpa:id attribute-type="Long" v="true" name="id" id="_1547420741265238">
+                <jpa:generated-value strategy="DEFAULT"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="false" name="Entity_2.findAll">
+            <jpa:query>Select e from Entity_2 e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="Entity_2.findByAttribute">
+            <jpa:query>Select e from Entity_2 e where e.attribute=:attribute</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="Entity_2.findByAttribute1">
+            <jpa:query>Select e from Entity_2 e where e.attribute1=:attribute1</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="Entity_2.findByAttribute2">
+            <jpa:query>Select e from Entity_2 e where e.attribute2=:attribute2</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:wsl>
+        <jpa:ws n="Main" id="_1547420720096231">
+            <i ref="_1547420741264237" x="623" y="177"/>
+            <i ref="_1547408279045204" x="32" y="32"/>
+            <i ref="_1547420738675234" x="636" y="50"/>
+        </jpa:ws>
+    </jpa:wsl>
+</jpa:entity-mappings>

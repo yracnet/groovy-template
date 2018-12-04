@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <%
+    def entity = json.'entity-mappings'.entity
+    entity.each{
+    %>
+    <!-- ${it._id} -->
+    <%
+    def className = fn.toName(it._class)
+    def classVar  = fn.toNameVar(it._class)
+    def classText = fn.toNameText(it._class)
+    def classConst= fn.toNameConst(it._class)
+    %>
+    <file name="${className}Serv" package="${groupId}.${artifactId}.${module}" dir="." layer="serv">
+        interface ${className}Serv {
+        List<${className}Data> filter${className}(${className}Filter ${classVar});
+        ${className}Data[] filter${className}(${className}Filter ${classVar});
+        ${className}Data create${className}(${className}Data ${classVar});
+        ${className}Data update${className}(${className}Data ${classVar});
+        ${className}Data remove${className}(${className}Data ${classVar});
+        }
+    </file>
+    <%
+    def basics = it.attributes.basic
+    def id = it.attributes.id
+    %>
+    <file name="${className}Data" package="${groupId}.${artifactId}.${module}.state" dir="." layer="serv">
+        public class ${className}Data implements Serialize{
+        public ${id.'_attribute-type'} ${id._name};
+        <% basics.each{  %>
+        public ${it.'_attribute-type'} ${it._name};
+        <% } %>
+        }
+    </file>
+    <file name="${className}Filter" package="${groupId}.${artifactId}.${module}.state" dir="." layer="serv">
+        public class ${className}Filter implements Serialize{
+        public ${id.'_attribute-type'} ${id._name};
+        <% basics.each{  %>/**
+        * Attribute ${it._name}
+        */
+        public Filter<${it.'_attribute-type'}> ${it._name};
+        <% } %>
+        }
+    </file>
+    <% } %>
+</files>

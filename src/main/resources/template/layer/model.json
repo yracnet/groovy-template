@@ -1,0 +1,360 @@
+{
+	"entity-mappings": {
+		"entity": [
+			{
+				"attributes": {
+					"basic": [
+						{
+							"column": {
+								"_name": "PURCHASE_COST",
+								"_unique": "false",
+								"_nullable": "true",
+								"_insertable": "true",
+								"_updatable": "true",
+								"_table": "PRODUCT",
+								"_precision": "12",
+								"_scale": "2",
+								"__prefix": "jpa"
+							},
+							"_optional": "true",
+							"_attribute-type": "java.math.BigDecimal",
+							"_v": "true",
+							"_name": "purchaseCost",
+							"_id": "_1547408279045206",
+							"__prefix": "jpa"
+						},
+						{
+							"column": {
+								"_name": "QUANTITY_ON_HAND",
+								"_unique": "false",
+								"_nullable": "true",
+								"_insertable": "true",
+								"_updatable": "true",
+								"_table": "PRODUCT",
+								"__prefix": "jpa"
+							},
+							"_optional": "true",
+							"_attribute-type": "Integer",
+							"_v": "true",
+							"_name": "quantityOnHand",
+							"_id": "_1547408279045207",
+							"__prefix": "jpa"
+						},
+						{
+							"column": {
+								"_name": "MARKUP",
+								"_unique": "false",
+								"_nullable": "true",
+								"_insertable": "true",
+								"_updatable": "true",
+								"_table": "PRODUCT",
+								"_precision": "4",
+								"_scale": "2",
+								"__prefix": "jpa"
+							},
+							"_optional": "true",
+							"_attribute-type": "java.math.BigDecimal",
+							"_v": "true",
+							"_name": "markup",
+							"_id": "_1547408279045208",
+							"__prefix": "jpa"
+						},
+						{
+							"column": {
+								"_name": "AVAILABLE",
+								"_unique": "false",
+								"_nullable": "true",
+								"_insertable": "true",
+								"_updatable": "true",
+								"_table": "PRODUCT",
+								"_length": "5",
+								"__prefix": "jpa"
+							},
+							"_optional": "true",
+							"_attribute-type": "String",
+							"_v": "true",
+							"_name": "available",
+							"_id": "_1547408279045209",
+							"__prefix": "jpa"
+						},
+						{
+							"column": {
+								"_name": "DESCRIPTION",
+								"_unique": "false",
+								"_nullable": "true",
+								"_insertable": "true",
+								"_updatable": "true",
+								"_table": "PRODUCT",
+								"_length": "50",
+								"__prefix": "jpa"
+							},
+							"_optional": "true",
+							"_attribute-type": "String",
+							"_v": "true",
+							"_name": "description",
+							"_id": "_1547408279045210",
+							"__prefix": "jpa"
+						}
+					],
+					"id": {
+						"column": {
+							"_name": "PRODUCT_ID",
+							"_unique": "false",
+							"_nullable": "false",
+							"_insertable": "true",
+							"_updatable": "true",
+							"_table": "PRODUCT",
+							"__prefix": "jpa"
+						},
+						"_attribute-type": "Integer",
+						"_v": "true",
+						"_name": "productId",
+						"_id": "_1547408279045205",
+						"__prefix": "jpa"
+					},
+					"__prefix": "jpa"
+				},
+				"table": {
+					"_name": "PRODUCT",
+					"__prefix": "jpa"
+				},
+				"_compositePrimaryKeyClass": "ProductPK",
+				"_abs": "false",
+				"_class": "Product",
+				"_v": "true",
+				"_xre": "false",
+				"_m": "false",
+				"_rootElement": "_1547408279045203",
+				"_id": "_1547408279045204",
+				"__prefix": "jpa"
+			},
+			{
+				"ath": {
+					"__prefix": "jpa",
+					"__text": "yracnet"
+				},
+				"attributes": {
+					"basic": [
+						{
+							"_attribute-type": "String",
+							"_v": "true",
+							"_name": "attribute",
+							"_pname": "attribute",
+							"_id": "_1547420748176240",
+							"__prefix": "jpa"
+						},
+						{
+							"_attribute-type": "String",
+							"_v": "true",
+							"_name": "attribute1",
+							"_pname": "attribute1",
+							"_id": "_1547420748791241",
+							"__prefix": "jpa"
+						},
+						{
+							"_attribute-type": "String",
+							"_v": "true",
+							"_name": "attribute2",
+							"_pname": "attribute2",
+							"_id": "_1547420749034242",
+							"__prefix": "jpa"
+						}
+					],
+					"id": {
+						"generated-value": {
+							"_strategy": "DEFAULT",
+							"__prefix": "jpa"
+						},
+						"_attribute-type": "Long",
+						"_v": "true",
+						"_name": "id",
+						"_id": "_1547420738677235",
+						"__prefix": "jpa"
+					},
+					"__prefix": "jpa"
+				},
+				"nq": [
+					{
+						"query": {
+							"__prefix": "jpa",
+							"__text": "Select e from Entity_1 e"
+						},
+						"_e": "false",
+						"_name": "Entity_1.findAll",
+						"__prefix": "jpa"
+					},
+					{
+						"query": {
+							"__prefix": "jpa",
+							"__text": "Select e from Entity_1 e where e.attribute=:attribute"
+						},
+						"_e": "false",
+						"_name": "Entity_1.findByAttribute",
+						"__prefix": "jpa"
+					},
+					{
+						"query": {
+							"__prefix": "jpa",
+							"__text": "Select e from Entity_1 e where e.attribute1=:attribute1"
+						},
+						"_e": "false",
+						"_name": "Entity_1.findByAttribute1",
+						"__prefix": "jpa"
+					},
+					{
+						"query": {
+							"__prefix": "jpa",
+							"__text": "Select e from Entity_1 e where e.attribute2=:attribute2"
+						},
+						"_e": "false",
+						"_name": "Entity_1.findByAttribute2",
+						"__prefix": "jpa"
+					}
+				],
+				"_compositePrimaryKeyClass": "Entity_1PK",
+				"_abs": "false",
+				"_class": "Entity_1",
+				"_pclass": "Entity_1",
+				"_v": "true",
+				"_xre": "false",
+				"_m": "false",
+				"_rootElement": "_1547408279045203",
+				"_id": "_1547420738675234",
+				"__prefix": "jpa"
+			},
+			{
+				"ath": {
+					"__prefix": "jpa",
+					"__text": "yracnet"
+				},
+				"attributes": {
+					"basic": [
+						{
+							"_attribute-type": "String",
+							"_v": "true",
+							"_name": "attribute",
+							"_pname": "attribute",
+							"_id": "_1547420753262243",
+							"__prefix": "jpa"
+						},
+						{
+							"_attribute-type": "String",
+							"_v": "true",
+							"_name": "attribute1",
+							"_pname": "attribute1",
+							"_id": "_1547420753451244",
+							"__prefix": "jpa"
+						},
+						{
+							"_attribute-type": "String",
+							"_v": "true",
+							"_name": "attribute2",
+							"_pname": "attribute2",
+							"_id": "_1547420753649245",
+							"__prefix": "jpa"
+						}
+					],
+					"id": {
+						"generated-value": {
+							"_strategy": "DEFAULT",
+							"__prefix": "jpa"
+						},
+						"_attribute-type": "Long",
+						"_v": "true",
+						"_name": "id",
+						"_id": "_1547420741265238",
+						"__prefix": "jpa"
+					},
+					"__prefix": "jpa"
+				},
+				"nq": [
+					{
+						"query": {
+							"__prefix": "jpa",
+							"__text": "Select e from Entity_2 e"
+						},
+						"_e": "false",
+						"_name": "Entity_2.findAll",
+						"__prefix": "jpa"
+					},
+					{
+						"query": {
+							"__prefix": "jpa",
+							"__text": "Select e from Entity_2 e where e.attribute=:attribute"
+						},
+						"_e": "false",
+						"_name": "Entity_2.findByAttribute",
+						"__prefix": "jpa"
+					},
+					{
+						"query": {
+							"__prefix": "jpa",
+							"__text": "Select e from Entity_2 e where e.attribute1=:attribute1"
+						},
+						"_e": "false",
+						"_name": "Entity_2.findByAttribute1",
+						"__prefix": "jpa"
+					},
+					{
+						"query": {
+							"__prefix": "jpa",
+							"__text": "Select e from Entity_2 e where e.attribute2=:attribute2"
+						},
+						"_e": "false",
+						"_name": "Entity_2.findByAttribute2",
+						"__prefix": "jpa"
+					}
+				],
+				"_compositePrimaryKeyClass": "Entity_2PK",
+				"_abs": "false",
+				"_class": "Entity_2",
+				"_pclass": "Entity_2",
+				"_v": "true",
+				"_xre": "false",
+				"_m": "false",
+				"_rootElement": "_1547408279045203",
+				"_id": "_1547420741264237",
+				"__prefix": "jpa"
+			}
+		],
+		"wsl": {
+			"ws": {
+				"i": [
+					{
+						"_ref": "_1547420741264237",
+						"_x": "623",
+						"_y": "177"
+					},
+					{
+						"_ref": "_1547408279045204",
+						"_x": "32",
+						"_y": "32"
+					},
+					{
+						"_ref": "_1547420738675234",
+						"_x": "636",
+						"_y": "50"
+					}
+				],
+				"_n": "Main",
+				"_id": "_1547420720096231",
+				"__prefix": "jpa"
+			},
+			"__prefix": "jpa"
+		},
+		"_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+		"_xmlns:java": "http://jcp.org/en/jsr/detail?id=270",
+		"_xmlns:xs": "http://www.w3.org/2001/XMLSchema",
+		"_xmlns:jpa": "http://java.sun.com/xml/ns/persistence/orm",
+		"_v": "5.2",
+		"_rws": "_1547420720096231",
+		"_Pws": "_1547420720096231",
+		"_cws": "_1547420720096231",
+		"_persistenceUnitName": "DEFAULT_PU",
+		"_sm": "false",
+		"_xs": "false",
+		"_id": "_1547408279045203",
+		"_xsi:schemaLocation": "http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd",
+		"__prefix": "jpa"
+	}
+}
