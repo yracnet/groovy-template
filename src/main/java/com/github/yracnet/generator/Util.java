@@ -13,9 +13,15 @@ import java.io.File;
  */
 public class Util {
 
-    public static File getBasedir() {
-        String path = Util.class.getResource("/template/layer").getPath();
+    public static File getProjectPath() {
+        String path = Util.class.getResource("/").getPath();
+        System.out.println("--->"+path);
+        return new File(path+"/../..");
+    }
+
+    public static File getTemplateFile(String name) {
+        String path = Util.class.getResource("/template/layer/" + name).getPath();
         return new File(path);
     }
-    
+
 }

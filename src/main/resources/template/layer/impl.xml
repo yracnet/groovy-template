@@ -11,11 +11,11 @@
     %>
     <file name="${className}Serv" package="${groupId}.${artifactId}.${module}" dir="." layer="serv">
         interface ${className}Serv {
-            List<${className}Data> filter${className}(${className}Filter ${classVar});
-            ${className}Data[] filter${className}(${className}Filter ${classVar});
-            ${className}Data create${className}(${className}Data ${classVar});
-            ${className}Data update${className}(${className}Data ${classVar});
-            ${className}Data remove${className}(${className}Data ${classVar});
+        List<${className}Data> filter${className}(${className}Filter ${classVar});
+        ${className}Data[] filter${className}(${className}Filter ${classVar});
+        ${className}Data create${className}(${className}Data ${classVar});
+        ${className}Data update${className}(${className}Data ${classVar});
+        ${className}Data remove${className}(${className}Data ${classVar});
         }
     </file>
     <file name="${className}Data" package="${groupId}.${artifactId}.${module}.state" dir="." layer="serv">

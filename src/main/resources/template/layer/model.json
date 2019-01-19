@@ -1,360 +1,1958 @@
 {
-	"entity-mappings": {
-		"entity": [
-			{
-				"attributes": {
-					"basic": [
-						{
-							"column": {
-								"_name": "PURCHASE_COST",
-								"_unique": "false",
-								"_nullable": "true",
-								"_insertable": "true",
-								"_updatable": "true",
-								"_table": "PRODUCT",
-								"_precision": "12",
-								"_scale": "2",
-								"__prefix": "jpa"
-							},
-							"_optional": "true",
-							"_attribute-type": "java.math.BigDecimal",
-							"_v": "true",
-							"_name": "purchaseCost",
-							"_id": "_1547408279045206",
-							"__prefix": "jpa"
-						},
-						{
-							"column": {
-								"_name": "QUANTITY_ON_HAND",
-								"_unique": "false",
-								"_nullable": "true",
-								"_insertable": "true",
-								"_updatable": "true",
-								"_table": "PRODUCT",
-								"__prefix": "jpa"
-							},
-							"_optional": "true",
-							"_attribute-type": "Integer",
-							"_v": "true",
-							"_name": "quantityOnHand",
-							"_id": "_1547408279045207",
-							"__prefix": "jpa"
-						},
-						{
-							"column": {
-								"_name": "MARKUP",
-								"_unique": "false",
-								"_nullable": "true",
-								"_insertable": "true",
-								"_updatable": "true",
-								"_table": "PRODUCT",
-								"_precision": "4",
-								"_scale": "2",
-								"__prefix": "jpa"
-							},
-							"_optional": "true",
-							"_attribute-type": "java.math.BigDecimal",
-							"_v": "true",
-							"_name": "markup",
-							"_id": "_1547408279045208",
-							"__prefix": "jpa"
-						},
-						{
-							"column": {
-								"_name": "AVAILABLE",
-								"_unique": "false",
-								"_nullable": "true",
-								"_insertable": "true",
-								"_updatable": "true",
-								"_table": "PRODUCT",
-								"_length": "5",
-								"__prefix": "jpa"
-							},
-							"_optional": "true",
-							"_attribute-type": "String",
-							"_v": "true",
-							"_name": "available",
-							"_id": "_1547408279045209",
-							"__prefix": "jpa"
-						},
-						{
-							"column": {
-								"_name": "DESCRIPTION",
-								"_unique": "false",
-								"_nullable": "true",
-								"_insertable": "true",
-								"_updatable": "true",
-								"_table": "PRODUCT",
-								"_length": "50",
-								"__prefix": "jpa"
-							},
-							"_optional": "true",
-							"_attribute-type": "String",
-							"_v": "true",
-							"_name": "description",
-							"_id": "_1547408279045210",
-							"__prefix": "jpa"
-						}
-					],
-					"id": {
-						"column": {
-							"_name": "PRODUCT_ID",
-							"_unique": "false",
-							"_nullable": "false",
-							"_insertable": "true",
-							"_updatable": "true",
-							"_table": "PRODUCT",
-							"__prefix": "jpa"
-						},
-						"_attribute-type": "Integer",
-						"_v": "true",
-						"_name": "productId",
-						"_id": "_1547408279045205",
-						"__prefix": "jpa"
-					},
-					"__prefix": "jpa"
-				},
-				"table": {
-					"_name": "PRODUCT",
-					"__prefix": "jpa"
-				},
-				"_compositePrimaryKeyClass": "ProductPK",
-				"_abs": "false",
-				"_class": "Product",
-				"_v": "true",
-				"_xre": "false",
-				"_m": "false",
-				"_rootElement": "_1547408279045203",
-				"_id": "_1547408279045204",
-				"__prefix": "jpa"
-			},
-			{
-				"ath": {
-					"__prefix": "jpa",
-					"__text": "yracnet"
-				},
-				"attributes": {
-					"basic": [
-						{
-							"_attribute-type": "String",
-							"_v": "true",
-							"_name": "attribute",
-							"_pname": "attribute",
-							"_id": "_1547420748176240",
-							"__prefix": "jpa"
-						},
-						{
-							"_attribute-type": "String",
-							"_v": "true",
-							"_name": "attribute1",
-							"_pname": "attribute1",
-							"_id": "_1547420748791241",
-							"__prefix": "jpa"
-						},
-						{
-							"_attribute-type": "String",
-							"_v": "true",
-							"_name": "attribute2",
-							"_pname": "attribute2",
-							"_id": "_1547420749034242",
-							"__prefix": "jpa"
-						}
-					],
-					"id": {
-						"generated-value": {
-							"_strategy": "DEFAULT",
-							"__prefix": "jpa"
-						},
-						"_attribute-type": "Long",
-						"_v": "true",
-						"_name": "id",
-						"_id": "_1547420738677235",
-						"__prefix": "jpa"
-					},
-					"__prefix": "jpa"
-				},
-				"nq": [
-					{
-						"query": {
-							"__prefix": "jpa",
-							"__text": "Select e from Entity_1 e"
-						},
-						"_e": "false",
-						"_name": "Entity_1.findAll",
-						"__prefix": "jpa"
-					},
-					{
-						"query": {
-							"__prefix": "jpa",
-							"__text": "Select e from Entity_1 e where e.attribute=:attribute"
-						},
-						"_e": "false",
-						"_name": "Entity_1.findByAttribute",
-						"__prefix": "jpa"
-					},
-					{
-						"query": {
-							"__prefix": "jpa",
-							"__text": "Select e from Entity_1 e where e.attribute1=:attribute1"
-						},
-						"_e": "false",
-						"_name": "Entity_1.findByAttribute1",
-						"__prefix": "jpa"
-					},
-					{
-						"query": {
-							"__prefix": "jpa",
-							"__text": "Select e from Entity_1 e where e.attribute2=:attribute2"
-						},
-						"_e": "false",
-						"_name": "Entity_1.findByAttribute2",
-						"__prefix": "jpa"
-					}
-				],
-				"_compositePrimaryKeyClass": "Entity_1PK",
-				"_abs": "false",
-				"_class": "Entity_1",
-				"_pclass": "Entity_1",
-				"_v": "true",
-				"_xre": "false",
-				"_m": "false",
-				"_rootElement": "_1547408279045203",
-				"_id": "_1547420738675234",
-				"__prefix": "jpa"
-			},
-			{
-				"ath": {
-					"__prefix": "jpa",
-					"__text": "yracnet"
-				},
-				"attributes": {
-					"basic": [
-						{
-							"_attribute-type": "String",
-							"_v": "true",
-							"_name": "attribute",
-							"_pname": "attribute",
-							"_id": "_1547420753262243",
-							"__prefix": "jpa"
-						},
-						{
-							"_attribute-type": "String",
-							"_v": "true",
-							"_name": "attribute1",
-							"_pname": "attribute1",
-							"_id": "_1547420753451244",
-							"__prefix": "jpa"
-						},
-						{
-							"_attribute-type": "String",
-							"_v": "true",
-							"_name": "attribute2",
-							"_pname": "attribute2",
-							"_id": "_1547420753649245",
-							"__prefix": "jpa"
-						}
-					],
-					"id": {
-						"generated-value": {
-							"_strategy": "DEFAULT",
-							"__prefix": "jpa"
-						},
-						"_attribute-type": "Long",
-						"_v": "true",
-						"_name": "id",
-						"_id": "_1547420741265238",
-						"__prefix": "jpa"
-					},
-					"__prefix": "jpa"
-				},
-				"nq": [
-					{
-						"query": {
-							"__prefix": "jpa",
-							"__text": "Select e from Entity_2 e"
-						},
-						"_e": "false",
-						"_name": "Entity_2.findAll",
-						"__prefix": "jpa"
-					},
-					{
-						"query": {
-							"__prefix": "jpa",
-							"__text": "Select e from Entity_2 e where e.attribute=:attribute"
-						},
-						"_e": "false",
-						"_name": "Entity_2.findByAttribute",
-						"__prefix": "jpa"
-					},
-					{
-						"query": {
-							"__prefix": "jpa",
-							"__text": "Select e from Entity_2 e where e.attribute1=:attribute1"
-						},
-						"_e": "false",
-						"_name": "Entity_2.findByAttribute1",
-						"__prefix": "jpa"
-					},
-					{
-						"query": {
-							"__prefix": "jpa",
-							"__text": "Select e from Entity_2 e where e.attribute2=:attribute2"
-						},
-						"_e": "false",
-						"_name": "Entity_2.findByAttribute2",
-						"__prefix": "jpa"
-					}
-				],
-				"_compositePrimaryKeyClass": "Entity_2PK",
-				"_abs": "false",
-				"_class": "Entity_2",
-				"_pclass": "Entity_2",
-				"_v": "true",
-				"_xre": "false",
-				"_m": "false",
-				"_rootElement": "_1547408279045203",
-				"_id": "_1547420741264237",
-				"__prefix": "jpa"
-			}
-		],
-		"wsl": {
-			"ws": {
-				"i": [
-					{
-						"_ref": "_1547420741264237",
-						"_x": "623",
-						"_y": "177"
-					},
-					{
-						"_ref": "_1547408279045204",
-						"_x": "32",
-						"_y": "32"
-					},
-					{
-						"_ref": "_1547420738675234",
-						"_x": "636",
-						"_y": "50"
-					}
-				],
-				"_n": "Main",
-				"_id": "_1547420720096231",
-				"__prefix": "jpa"
-			},
-			"__prefix": "jpa"
-		},
-		"_xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-		"_xmlns:java": "http://jcp.org/en/jsr/detail?id=270",
-		"_xmlns:xs": "http://www.w3.org/2001/XMLSchema",
-		"_xmlns:jpa": "http://java.sun.com/xml/ns/persistence/orm",
-		"_v": "5.2",
-		"_rws": "_1547420720096231",
-		"_Pws": "_1547420720096231",
-		"_cws": "_1547420720096231",
-		"_persistenceUnitName": "DEFAULT_PU",
-		"_sm": "false",
-		"_xs": "false",
-		"_id": "_1547408279045203",
-		"_xsi:schemaLocation": "http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd",
-		"__prefix": "jpa"
-	}
+    "access": null,
+    "persistenceUnitMetadata": null,
+    "converter": [
+        
+    ],
+    "mappedSuperclass": [
+        
+    ],
+    "entity": [
+        {
+            "access": null,
+            "table": {
+                "index": [
+                    
+                ],
+                "uniqueConstraint": [
+                    
+                ],
+                "schema": null,
+                "catalog": null,
+                "name": "MICRO_MARKET"
+            },
+            "convert": [
+                
+            ],
+            "prePersist": null,
+            "postUpdate": null,
+            "primaryKeyForeignKey": null,
+            "discriminatorValue": null,
+            "preRemove": null,
+            "excludeDefaultListeners": null,
+            "inheritance": null,
+            "primaryKeyJoinColumn": [
+                
+            ],
+            "namedQuery": [
+                
+            ],
+            "attributes": {
+                "basic": [
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "MICRO_MARKET",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": 52,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "RADIUS",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "radius"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "MICRO_MARKET",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": 52,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "AREA_LENGTH",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "areaLength"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "MICRO_MARKET",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": 52,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "AREA_WIDTH",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "areaWidth"
+                    }
+                ],
+                "transient": [
+                    
+                ],
+                "oneToOne": [
+                    
+                ],
+                "manyToMany": [
+                    
+                ],
+                "oneToMany": [
+                    {
+                        "access": null,
+                        "mapKeyColumn": null,
+                        "mapKey": null,
+                        "fetch": null,
+                        "orderBy": null,
+                        "joinColumn": [
+                            
+                        ],
+                        "cascade": null,
+                        "orphanRemoval": null,
+                        "mapKeyTemporal": null,
+                        "name": "customerCollection",
+                        "targetEntity": null,
+                        "mapKeyForeignKey": null,
+                        "mapKeyClass": null,
+                        "mapKeyConvert": [
+                            
+                        ],
+                        "mappedBy": null,
+                        "joinTable": null,
+                        "orderColumn": null,
+                        "mapKeyJoinColumn": [
+                            
+                        ],
+                        "foreignKey": null,
+                        "mapKeyEnumerated": null,
+                        "mapKeyAttributeOverride": [
+                            
+                        ]
+                    }
+                ],
+                "id": [
+                    {
+                        "access": null,
+                        "column": {
+                            "table": "MICRO_MARKET",
+                            "unique": false,
+                            "length": 10,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "ZIP_CODE",
+                            "nullable": false
+                        },
+                        "temporal": null,
+                        "generatedValue": null,
+                        "sequenceGenerator": null,
+                        "tableGenerator": null,
+                        "name": "zipCode"
+                    }
+                ],
+                "version": [
+                    
+                ],
+                "elementCollection": [
+                    
+                ],
+                "description": null,
+                "manyToOne": [
+                    
+                ],
+                "embeddedId": null,
+                "embedded": [
+                    
+                ]
+            },
+            "namedNativeQuery": [
+                
+            ],
+            "namedEntityGraph": [
+                
+            ],
+            "sequenceGenerator": null,
+            "postLoad": null,
+            "idClass": null,
+            "namedStoredProcedureQuery": [
+                
+            ],
+            "metadataComplete": null,
+            "name": null,
+            "postRemove": null,
+            "postPersist": null,
+            "discriminatorColumn": null,
+            "preUpdate": null,
+            "secondaryTable": [
+                
+            ],
+            "sqlResultSetMapping": [
+                
+            ],
+            "associationOverride": [
+                
+            ],
+            "attributeOverride": [
+                
+            ],
+            "description": null,
+            "cacheable": null,
+            "clazz": "MktMicroMarket",
+            "tableGenerator": null,
+            "entityListeners": null,
+            "excludeSuperclassListeners": null
+        },
+        {
+            "access": null,
+            "table": {
+                "index": [
+                    
+                ],
+                "uniqueConstraint": [
+                    
+                ],
+                "schema": null,
+                "catalog": null,
+                "name": "DISCOUNT_CODE"
+            },
+            "convert": [
+                
+            ],
+            "prePersist": null,
+            "postUpdate": null,
+            "primaryKeyForeignKey": null,
+            "discriminatorValue": null,
+            "preRemove": null,
+            "excludeDefaultListeners": null,
+            "inheritance": null,
+            "primaryKeyJoinColumn": [
+                
+            ],
+            "namedQuery": [
+                
+            ],
+            "attributes": {
+                "basic": [
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "DISCOUNT_CODE",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": 2,
+                            "precision": 4,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "RATE",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "rate"
+                    }
+                ],
+                "transient": [
+                    
+                ],
+                "oneToOne": [
+                    
+                ],
+                "manyToMany": [
+                    
+                ],
+                "oneToMany": [
+                    {
+                        "access": null,
+                        "mapKeyColumn": null,
+                        "mapKey": null,
+                        "fetch": null,
+                        "orderBy": null,
+                        "joinColumn": [
+                            
+                        ],
+                        "cascade": null,
+                        "orphanRemoval": null,
+                        "mapKeyTemporal": null,
+                        "name": "customerCollection",
+                        "targetEntity": null,
+                        "mapKeyForeignKey": null,
+                        "mapKeyClass": null,
+                        "mapKeyConvert": [
+                            
+                        ],
+                        "mappedBy": null,
+                        "joinTable": null,
+                        "orderColumn": null,
+                        "mapKeyJoinColumn": [
+                            
+                        ],
+                        "foreignKey": null,
+                        "mapKeyEnumerated": null,
+                        "mapKeyAttributeOverride": [
+                            
+                        ]
+                    }
+                ],
+                "id": [
+                    {
+                        "access": null,
+                        "column": {
+                            "table": "DISCOUNT_CODE",
+                            "unique": false,
+                            "length": 1,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "DISCOUNT_CODE",
+                            "nullable": false
+                        },
+                        "temporal": null,
+                        "generatedValue": {
+                            "strategy": null,
+                            "generator": null
+                        },
+                        "sequenceGenerator": null,
+                        "tableGenerator": null,
+                        "name": "discountCode"
+                    }
+                ],
+                "version": [
+                    
+                ],
+                "elementCollection": [
+                    
+                ],
+                "description": null,
+                "manyToOne": [
+                    
+                ],
+                "embeddedId": null,
+                "embedded": [
+                    
+                ]
+            },
+            "namedNativeQuery": [
+                
+            ],
+            "namedEntityGraph": [
+                
+            ],
+            "sequenceGenerator": null,
+            "postLoad": null,
+            "idClass": null,
+            "namedStoredProcedureQuery": [
+                
+            ],
+            "metadataComplete": null,
+            "name": null,
+            "postRemove": null,
+            "postPersist": null,
+            "discriminatorColumn": null,
+            "preUpdate": null,
+            "secondaryTable": [
+                
+            ],
+            "sqlResultSetMapping": [
+                
+            ],
+            "associationOverride": [
+                
+            ],
+            "attributeOverride": [
+                
+            ],
+            "description": null,
+            "cacheable": null,
+            "clazz": "MktDiscountCode",
+            "tableGenerator": null,
+            "entityListeners": null,
+            "excludeSuperclassListeners": null
+        },
+        {
+            "access": null,
+            "table": {
+                "index": [
+                    
+                ],
+                "uniqueConstraint": [
+                    
+                ],
+                "schema": null,
+                "catalog": null,
+                "name": "PURCHASE_ORDER"
+            },
+            "convert": [
+                
+            ],
+            "prePersist": null,
+            "postUpdate": null,
+            "primaryKeyForeignKey": null,
+            "discriminatorValue": null,
+            "preRemove": null,
+            "excludeDefaultListeners": null,
+            "inheritance": null,
+            "primaryKeyJoinColumn": [
+                
+            ],
+            "namedQuery": [
+                
+            ],
+            "attributes": {
+                "basic": [
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "PURCHASE_ORDER",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "QUANTITY",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "quantity"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "PURCHASE_ORDER",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": 2,
+                            "precision": 12,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "SHIPPING_COST",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "shippingCost"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "PURCHASE_ORDER",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "SALES_DATE",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": "DATE",
+                        "optional": true,
+                        "lob": null,
+                        "name": "salesDate"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "PURCHASE_ORDER",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "SHIPPING_DATE",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": "DATE",
+                        "optional": true,
+                        "lob": null,
+                        "name": "shippingDate"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "PURCHASE_ORDER",
+                            "unique": false,
+                            "length": 30,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "FREIGHT_COMPANY",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "freightCompany"
+                    }
+                ],
+                "transient": [
+                    
+                ],
+                "oneToOne": [
+                    
+                ],
+                "manyToMany": [
+                    
+                ],
+                "oneToMany": [
+                    
+                ],
+                "id": [
+                    {
+                        "access": null,
+                        "column": {
+                            "table": "PURCHASE_ORDER",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "ORDER_NUM",
+                            "nullable": false
+                        },
+                        "temporal": null,
+                        "generatedValue": null,
+                        "sequenceGenerator": null,
+                        "tableGenerator": null,
+                        "name": "orderNum"
+                    }
+                ],
+                "version": [
+                    
+                ],
+                "elementCollection": [
+                    
+                ],
+                "description": null,
+                "manyToOne": [
+                    {
+                        "access": null,
+                        "targetEntity": null,
+                        "mapsId": null,
+                        "fetch": null,
+                        "joinColumn": [
+                            {
+                                "table": null,
+                                "unique": false,
+                                "referencedColumnName": null,
+                                "updatable": true,
+                                "columnDefinition": null,
+                                "insertable": true,
+                                "name": "CUSTOMER_ID",
+                                "nullable": true
+                            }
+                        ],
+                        "cascade": null,
+                        "id": null,
+                        "joinTable": null,
+                        "optional": false,
+                        "foreignKey": null,
+                        "name": "customerId"
+                    },
+                    {
+                        "access": null,
+                        "targetEntity": null,
+                        "mapsId": null,
+                        "fetch": null,
+                        "joinColumn": [
+                            {
+                                "table": null,
+                                "unique": false,
+                                "referencedColumnName": null,
+                                "updatable": true,
+                                "columnDefinition": null,
+                                "insertable": true,
+                                "name": "PRODUCT_ID",
+                                "nullable": true
+                            }
+                        ],
+                        "cascade": null,
+                        "id": null,
+                        "joinTable": null,
+                        "optional": false,
+                        "foreignKey": null,
+                        "name": "productId"
+                    }
+                ],
+                "embeddedId": null,
+                "embedded": [
+                    
+                ]
+            },
+            "namedNativeQuery": [
+                
+            ],
+            "namedEntityGraph": [
+                
+            ],
+            "sequenceGenerator": null,
+            "postLoad": null,
+            "idClass": null,
+            "namedStoredProcedureQuery": [
+                
+            ],
+            "metadataComplete": null,
+            "name": null,
+            "postRemove": null,
+            "postPersist": null,
+            "discriminatorColumn": null,
+            "preUpdate": null,
+            "secondaryTable": [
+                
+            ],
+            "sqlResultSetMapping": [
+                
+            ],
+            "associationOverride": [
+                
+            ],
+            "attributeOverride": [
+                
+            ],
+            "description": null,
+            "cacheable": null,
+            "clazz": "MktPurchaseOrder",
+            "tableGenerator": null,
+            "entityListeners": null,
+            "excludeSuperclassListeners": null
+        },
+        {
+            "access": null,
+            "table": {
+                "index": [
+                    
+                ],
+                "uniqueConstraint": [
+                    
+                ],
+                "schema": null,
+                "catalog": null,
+                "name": "PRODUCT"
+            },
+            "convert": [
+                
+            ],
+            "prePersist": null,
+            "postUpdate": null,
+            "primaryKeyForeignKey": null,
+            "discriminatorValue": null,
+            "preRemove": null,
+            "excludeDefaultListeners": null,
+            "inheritance": null,
+            "primaryKeyJoinColumn": [
+                
+            ],
+            "namedQuery": [
+                
+            ],
+            "attributes": {
+                "basic": [
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "PRODUCT",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": 2,
+                            "precision": 12,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "PURCHASE_COST",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "purchaseCost"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "PRODUCT",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "QUANTITY_ON_HAND",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "quantityOnHand"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "PRODUCT",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": 2,
+                            "precision": 4,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "MARKUP",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "markup"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "PRODUCT",
+                            "unique": false,
+                            "length": 5,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "AVAILABLE",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "available"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "PRODUCT",
+                            "unique": false,
+                            "length": 50,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "DESCRIPTION",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "description"
+                    }
+                ],
+                "transient": [
+                    
+                ],
+                "oneToOne": [
+                    
+                ],
+                "manyToMany": [
+                    
+                ],
+                "oneToMany": [
+                    {
+                        "access": null,
+                        "mapKeyColumn": null,
+                        "mapKey": null,
+                        "fetch": null,
+                        "orderBy": null,
+                        "joinColumn": [
+                            
+                        ],
+                        "cascade": null,
+                        "orphanRemoval": null,
+                        "mapKeyTemporal": null,
+                        "name": "purchaseOrderCollection",
+                        "targetEntity": null,
+                        "mapKeyForeignKey": null,
+                        "mapKeyClass": null,
+                        "mapKeyConvert": [
+                            
+                        ],
+                        "mappedBy": null,
+                        "joinTable": null,
+                        "orderColumn": null,
+                        "mapKeyJoinColumn": [
+                            
+                        ],
+                        "foreignKey": null,
+                        "mapKeyEnumerated": null,
+                        "mapKeyAttributeOverride": [
+                            
+                        ]
+                    }
+                ],
+                "id": [
+                    {
+                        "access": null,
+                        "column": {
+                            "table": "PRODUCT",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "PRODUCT_ID",
+                            "nullable": false
+                        },
+                        "temporal": null,
+                        "generatedValue": null,
+                        "sequenceGenerator": null,
+                        "tableGenerator": null,
+                        "name": "productId"
+                    }
+                ],
+                "version": [
+                    
+                ],
+                "elementCollection": [
+                    
+                ],
+                "description": null,
+                "manyToOne": [
+                    {
+                        "access": null,
+                        "targetEntity": null,
+                        "mapsId": null,
+                        "fetch": null,
+                        "joinColumn": [
+                            {
+                                "table": null,
+                                "unique": false,
+                                "referencedColumnName": null,
+                                "updatable": true,
+                                "columnDefinition": null,
+                                "insertable": true,
+                                "name": "MANUFACTURER_ID",
+                                "nullable": true
+                            }
+                        ],
+                        "cascade": null,
+                        "id": null,
+                        "joinTable": null,
+                        "optional": false,
+                        "foreignKey": null,
+                        "name": "manufacturerId"
+                    },
+                    {
+                        "access": null,
+                        "targetEntity": null,
+                        "mapsId": null,
+                        "fetch": null,
+                        "joinColumn": [
+                            {
+                                "table": null,
+                                "unique": false,
+                                "referencedColumnName": null,
+                                "updatable": true,
+                                "columnDefinition": null,
+                                "insertable": true,
+                                "name": "PRODUCT_CODE",
+                                "nullable": true
+                            }
+                        ],
+                        "cascade": null,
+                        "id": null,
+                        "joinTable": null,
+                        "optional": false,
+                        "foreignKey": null,
+                        "name": "mktProductCode"
+                    }
+                ],
+                "embeddedId": null,
+                "embedded": [
+                    
+                ]
+            },
+            "namedNativeQuery": [
+                
+            ],
+            "namedEntityGraph": [
+                
+            ],
+            "sequenceGenerator": null,
+            "postLoad": null,
+            "idClass": null,
+            "namedStoredProcedureQuery": [
+                
+            ],
+            "metadataComplete": null,
+            "name": null,
+            "postRemove": null,
+            "postPersist": null,
+            "discriminatorColumn": null,
+            "preUpdate": null,
+            "secondaryTable": [
+                
+            ],
+            "sqlResultSetMapping": [
+                
+            ],
+            "associationOverride": [
+                
+            ],
+            "attributeOverride": [
+                
+            ],
+            "description": null,
+            "cacheable": null,
+            "clazz": "MktProduct",
+            "tableGenerator": null,
+            "entityListeners": null,
+            "excludeSuperclassListeners": null
+        },
+        {
+            "access": null,
+            "table": {
+                "index": [
+                    
+                ],
+                "uniqueConstraint": [
+                    
+                ],
+                "schema": null,
+                "catalog": null,
+                "name": "CUSTOMER"
+            },
+            "convert": [
+                
+            ],
+            "prePersist": null,
+            "postUpdate": null,
+            "primaryKeyForeignKey": null,
+            "discriminatorValue": null,
+            "preRemove": null,
+            "excludeDefaultListeners": null,
+            "inheritance": null,
+            "primaryKeyJoinColumn": [
+                
+            ],
+            "namedQuery": [
+                
+            ],
+            "attributes": {
+                "basic": [
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "CUSTOMER",
+                            "unique": false,
+                            "length": 30,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "NAME",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "name"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "CUSTOMER",
+                            "unique": false,
+                            "length": 30,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "ADDRESSLINE1",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "addressline1"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "CUSTOMER",
+                            "unique": false,
+                            "length": 30,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "ADDRESSLINE2",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "addressline2"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "CUSTOMER",
+                            "unique": false,
+                            "length": 25,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "CITY",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "city"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "CUSTOMER",
+                            "unique": false,
+                            "length": 2,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "STATE",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "state"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "CUSTOMER",
+                            "unique": false,
+                            "length": 12,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "PHONE",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "phone"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "CUSTOMER",
+                            "unique": false,
+                            "length": 12,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "FAX",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "fax"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "CUSTOMER",
+                            "unique": false,
+                            "length": 40,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "EMAIL",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "email"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "CUSTOMER",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "CREDIT_LIMIT",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "creditLimit"
+                    }
+                ],
+                "transient": [
+                    
+                ],
+                "oneToOne": [
+                    
+                ],
+                "manyToMany": [
+                    
+                ],
+                "oneToMany": [
+                    {
+                        "access": null,
+                        "mapKeyColumn": null,
+                        "mapKey": null,
+                        "fetch": null,
+                        "orderBy": null,
+                        "joinColumn": [
+                            
+                        ],
+                        "cascade": null,
+                        "orphanRemoval": null,
+                        "mapKeyTemporal": null,
+                        "name": "purchaseOrderCollection",
+                        "targetEntity": null,
+                        "mapKeyForeignKey": null,
+                        "mapKeyClass": null,
+                        "mapKeyConvert": [
+                            
+                        ],
+                        "mappedBy": null,
+                        "joinTable": null,
+                        "orderColumn": null,
+                        "mapKeyJoinColumn": [
+                            
+                        ],
+                        "foreignKey": null,
+                        "mapKeyEnumerated": null,
+                        "mapKeyAttributeOverride": [
+                            
+                        ]
+                    }
+                ],
+                "id": [
+                    {
+                        "access": null,
+                        "column": {
+                            "table": "CUSTOMER",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "CUSTOMER_ID",
+                            "nullable": false
+                        },
+                        "temporal": null,
+                        "generatedValue": null,
+                        "sequenceGenerator": null,
+                        "tableGenerator": null,
+                        "name": "customerId"
+                    }
+                ],
+                "version": [
+                    
+                ],
+                "elementCollection": [
+                    
+                ],
+                "description": null,
+                "manyToOne": [
+                    {
+                        "access": null,
+                        "targetEntity": null,
+                        "mapsId": null,
+                        "fetch": null,
+                        "joinColumn": [
+                            {
+                                "table": null,
+                                "unique": false,
+                                "referencedColumnName": null,
+                                "updatable": true,
+                                "columnDefinition": null,
+                                "insertable": true,
+                                "name": "DISCOUNT_CODE",
+                                "nullable": true
+                            }
+                        ],
+                        "cascade": null,
+                        "id": null,
+                        "joinTable": null,
+                        "optional": false,
+                        "foreignKey": null,
+                        "name": "mktDiscountCode"
+                    },
+                    {
+                        "access": null,
+                        "targetEntity": null,
+                        "mapsId": null,
+                        "fetch": null,
+                        "joinColumn": [
+                            {
+                                "table": null,
+                                "unique": false,
+                                "referencedColumnName": null,
+                                "updatable": true,
+                                "columnDefinition": null,
+                                "insertable": true,
+                                "name": "ZIP",
+                                "nullable": true
+                            }
+                        ],
+                        "cascade": null,
+                        "id": null,
+                        "joinTable": null,
+                        "optional": false,
+                        "foreignKey": null,
+                        "name": "zip"
+                    }
+                ],
+                "embeddedId": null,
+                "embedded": [
+                    
+                ]
+            },
+            "namedNativeQuery": [
+                
+            ],
+            "namedEntityGraph": [
+                
+            ],
+            "sequenceGenerator": null,
+            "postLoad": null,
+            "idClass": null,
+            "namedStoredProcedureQuery": [
+                
+            ],
+            "metadataComplete": null,
+            "name": null,
+            "postRemove": null,
+            "postPersist": null,
+            "discriminatorColumn": null,
+            "preUpdate": null,
+            "secondaryTable": [
+                
+            ],
+            "sqlResultSetMapping": [
+                
+            ],
+            "associationOverride": [
+                
+            ],
+            "attributeOverride": [
+                
+            ],
+            "description": null,
+            "cacheable": null,
+            "clazz": "MktCustomer",
+            "tableGenerator": null,
+            "entityListeners": null,
+            "excludeSuperclassListeners": null
+        },
+        {
+            "access": null,
+            "table": {
+                "index": [
+                    
+                ],
+                "uniqueConstraint": [
+                    
+                ],
+                "schema": null,
+                "catalog": null,
+                "name": "MANUFACTURER"
+            },
+            "convert": [
+                
+            ],
+            "prePersist": null,
+            "postUpdate": null,
+            "primaryKeyForeignKey": null,
+            "discriminatorValue": null,
+            "preRemove": null,
+            "excludeDefaultListeners": null,
+            "inheritance": null,
+            "primaryKeyJoinColumn": [
+                
+            ],
+            "namedQuery": [
+                
+            ],
+            "attributes": {
+                "basic": [
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "MANUFACTURER",
+                            "unique": false,
+                            "length": 30,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "NAME",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "name"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "MANUFACTURER",
+                            "unique": false,
+                            "length": 30,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "ADDRESSLINE1",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "addressline1"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "MANUFACTURER",
+                            "unique": false,
+                            "length": 30,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "ADDRESSLINE2",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "addressline2"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "MANUFACTURER",
+                            "unique": false,
+                            "length": 25,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "CITY",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "city"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "MANUFACTURER",
+                            "unique": false,
+                            "length": 2,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "STATE",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "state"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "MANUFACTURER",
+                            "unique": false,
+                            "length": 10,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "ZIP",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "zip"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "MANUFACTURER",
+                            "unique": false,
+                            "length": 12,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "PHONE",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "phone"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "MANUFACTURER",
+                            "unique": false,
+                            "length": 12,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "FAX",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "fax"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "MANUFACTURER",
+                            "unique": false,
+                            "length": 40,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "EMAIL",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "email"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "MANUFACTURER",
+                            "unique": false,
+                            "length": 30,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "REP",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "rep"
+                    }
+                ],
+                "transient": [
+                    
+                ],
+                "oneToOne": [
+                    
+                ],
+                "manyToMany": [
+                    
+                ],
+                "oneToMany": [
+                    {
+                        "access": null,
+                        "mapKeyColumn": null,
+                        "mapKey": null,
+                        "fetch": null,
+                        "orderBy": null,
+                        "joinColumn": [
+                            
+                        ],
+                        "cascade": null,
+                        "orphanRemoval": null,
+                        "mapKeyTemporal": null,
+                        "name": "productCollection",
+                        "targetEntity": null,
+                        "mapKeyForeignKey": null,
+                        "mapKeyClass": null,
+                        "mapKeyConvert": [
+                            
+                        ],
+                        "mappedBy": null,
+                        "joinTable": null,
+                        "orderColumn": null,
+                        "mapKeyJoinColumn": [
+                            
+                        ],
+                        "foreignKey": null,
+                        "mapKeyEnumerated": null,
+                        "mapKeyAttributeOverride": [
+                            
+                        ]
+                    }
+                ],
+                "id": [
+                    {
+                        "access": null,
+                        "column": {
+                            "table": "MANUFACTURER",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "MANUFACTURER_ID",
+                            "nullable": false
+                        },
+                        "temporal": null,
+                        "generatedValue": null,
+                        "sequenceGenerator": null,
+                        "tableGenerator": null,
+                        "name": "manufacturerId"
+                    }
+                ],
+                "version": [
+                    
+                ],
+                "elementCollection": [
+                    
+                ],
+                "description": null,
+                "manyToOne": [
+                    
+                ],
+                "embeddedId": null,
+                "embedded": [
+                    
+                ]
+            },
+            "namedNativeQuery": [
+                
+            ],
+            "namedEntityGraph": [
+                
+            ],
+            "sequenceGenerator": null,
+            "postLoad": null,
+            "idClass": null,
+            "namedStoredProcedureQuery": [
+                
+            ],
+            "metadataComplete": null,
+            "name": null,
+            "postRemove": null,
+            "postPersist": null,
+            "discriminatorColumn": null,
+            "preUpdate": null,
+            "secondaryTable": [
+                
+            ],
+            "sqlResultSetMapping": [
+                
+            ],
+            "associationOverride": [
+                
+            ],
+            "attributeOverride": [
+                
+            ],
+            "description": null,
+            "cacheable": null,
+            "clazz": "MktManufacturer",
+            "tableGenerator": null,
+            "entityListeners": null,
+            "excludeSuperclassListeners": null
+        },
+        {
+            "access": null,
+            "table": {
+                "index": [
+                    
+                ],
+                "uniqueConstraint": [
+                    
+                ],
+                "schema": null,
+                "catalog": null,
+                "name": "PRODUCT_CODE"
+            },
+            "convert": [
+                
+            ],
+            "prePersist": null,
+            "postUpdate": null,
+            "primaryKeyForeignKey": null,
+            "discriminatorValue": null,
+            "preRemove": null,
+            "excludeDefaultListeners": null,
+            "inheritance": null,
+            "primaryKeyJoinColumn": [
+                
+            ],
+            "namedQuery": [
+                
+            ],
+            "attributes": {
+                "basic": [
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "PRODUCT_CODE",
+                            "unique": false,
+                            "length": null,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "DISCOUNT_CODE",
+                            "nullable": false
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": false,
+                        "lob": null,
+                        "name": "discountCode"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "column": {
+                            "table": "PRODUCT_CODE",
+                            "unique": false,
+                            "length": 10,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "DESCRIPTION",
+                            "nullable": true
+                        },
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": true,
+                        "lob": null,
+                        "name": "description"
+                    }
+                ],
+                "transient": [
+                    
+                ],
+                "oneToOne": [
+                    
+                ],
+                "manyToMany": [
+                    
+                ],
+                "oneToMany": [
+                    {
+                        "access": null,
+                        "mapKeyColumn": null,
+                        "mapKey": null,
+                        "fetch": null,
+                        "orderBy": null,
+                        "joinColumn": [
+                            
+                        ],
+                        "cascade": null,
+                        "orphanRemoval": null,
+                        "mapKeyTemporal": null,
+                        "name": "productCollection",
+                        "targetEntity": null,
+                        "mapKeyForeignKey": null,
+                        "mapKeyClass": null,
+                        "mapKeyConvert": [
+                            
+                        ],
+                        "mappedBy": null,
+                        "joinTable": null,
+                        "orderColumn": null,
+                        "mapKeyJoinColumn": [
+                            
+                        ],
+                        "foreignKey": null,
+                        "mapKeyEnumerated": null,
+                        "mapKeyAttributeOverride": [
+                            
+                        ]
+                    }
+                ],
+                "id": [
+                    {
+                        "access": null,
+                        "column": {
+                            "table": "PRODUCT_CODE",
+                            "unique": false,
+                            "length": 2,
+                            "updatable": true,
+                            "scale": null,
+                            "precision": null,
+                            "columnDefinition": null,
+                            "insertable": true,
+                            "name": "PROD_CODE",
+                            "nullable": false
+                        },
+                        "temporal": null,
+                        "generatedValue": null,
+                        "sequenceGenerator": null,
+                        "tableGenerator": null,
+                        "name": "prodCode"
+                    }
+                ],
+                "version": [
+                    
+                ],
+                "elementCollection": [
+                    
+                ],
+                "description": null,
+                "manyToOne": [
+                    
+                ],
+                "embeddedId": null,
+                "embedded": [
+                    
+                ]
+            },
+            "namedNativeQuery": [
+                
+            ],
+            "namedEntityGraph": [
+                
+            ],
+            "sequenceGenerator": null,
+            "postLoad": null,
+            "idClass": null,
+            "namedStoredProcedureQuery": [
+                
+            ],
+            "metadataComplete": null,
+            "name": null,
+            "postRemove": null,
+            "postPersist": null,
+            "discriminatorColumn": null,
+            "preUpdate": null,
+            "secondaryTable": [
+                
+            ],
+            "sqlResultSetMapping": [
+                
+            ],
+            "associationOverride": [
+                
+            ],
+            "attributeOverride": [
+                
+            ],
+            "description": null,
+            "cacheable": null,
+            "clazz": "MktProductCode",
+            "tableGenerator": null,
+            "entityListeners": null,
+            "excludeSuperclassListeners": null
+        }
+    ],
+    "schema": null,
+    "version": "2.2",
+    "namedQuery": [
+        
+    ],
+    "namedNativeQuery": [
+        
+    ],
+    "sqlResultSetMapping": [
+        
+    ],
+    "sequenceGenerator": [
+        
+    ],
+    "namedStoredProcedureQuery": [
+        
+    ],
+    "description": null,
+    "tableGenerator": [
+        
+    ],
+    "embeddable": [
+        
+    ],
+    "catalog": null,
+    "package": null
 }

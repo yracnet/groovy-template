@@ -1,79 +1,208 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<jpa:entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm" v="5.2" rws="_1547420720096231" Pws="_1547420720096231" cws="_1547420720096231" persistenceUnitName="DEFAULT_PU" sm="false" xs="false" id="_1547408279045203" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd">
-    <jpa:entity compositePrimaryKeyClass="ProductPK" abs="false" class="Product" v="true" xre="false" m="false" rootElement="_1547408279045203" id="_1547408279045204">
+<jpa:entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm" v="5.2" rws="_1547906303109149" Pws="_1547906303109149" cws="_1547906303109149" persistenceUnitName="DEFAULT_PU" sm="false" xs="false" id="_154790630305187" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd">
+    <jpa:entity compositePrimaryKeyClass="MktMicroMarketPK" abs="false" class="MktMicroMarket" pclass="MicroMarket" v="true" xre="false" m="false" rootElement="_154790630305187" id="_154790630305188">
         <jpa:attributes>
-            <jpa:basic optional="true" attribute-type="java.math.BigDecimal" v="true" name="purchaseCost" id="_1547408279045206">
+            <jpa:basic optional="true" attribute-type="Double" v="true" name="radius" id="_154790630305296">
+                <jpa:column name="RADIUS" unique="false" nullable="true" insertable="true" updatable="true" table="MICRO_MARKET" precision="52"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="Double" v="true" name="areaLength" id="_154790630305297">
+                <jpa:column name="AREA_LENGTH" unique="false" nullable="true" insertable="true" updatable="true" table="MICRO_MARKET" precision="52"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="Double" v="true" name="areaWidth" id="_154790630305298">
+                <jpa:column name="AREA_WIDTH" unique="false" nullable="true" insertable="true" updatable="true" table="MICRO_MARKET" precision="52"/>
+            </jpa:basic>
+            <jpa:one-to-many own="false" collection-type="java.util.List" connected-entity-id="_154790630305192" connected-attribute-id="_1547906303052132" v="true" name="customerCollection" id="_154790630305299"/>
+            <jpa:id attribute-type="String" v="true" name="zipCode" id="_154790630305295">
+                <jpa:column name="ZIP_CODE" unique="false" nullable="false" insertable="true" updatable="true" table="MICRO_MARKET" length="10"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="MICRO_MARKET"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="MktDiscountCodePK" abs="false" class="MktDiscountCode" pclass="DiscountCode" v="true" xre="false" m="false" rootElement="_154790630305187" id="_154790630305189">
+        <jpa:attributes>
+            <jpa:basic optional="true" attribute-type="java.math.BigDecimal" v="true" xvt="" name="rate" id="_1547906303052101">
+                <jpa:xwm/>
+                <jpa:xm/>
+                <jpa:column name="RATE" unique="false" nullable="true" insertable="true" updatable="true" table="DISCOUNT_CODE" precision="4" scale="2"/>
+            </jpa:basic>
+            <jpa:one-to-many own="false" collection-type="java.util.List" connected-entity-id="_154790630305192" connected-attribute-id="_1547906303052131" v="true" name="customerCollection" id="_1547906303052102"/>
+            <jpa:id attribute-type="String" v="true" xvt="" name="discountCode" pname="discountCode" id="_1547906303052100">
+                <jpa:xwm/>
+                <jpa:xm/>
+                <jpa:column name="DISCOUNT_CODE" unique="false" nullable="false" insertable="true" updatable="true" table="DISCOUNT_CODE" length="1"/>
+                <jpa:generated-value/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="DISCOUNT_CODE"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="MktPurchaseOrderPK" abs="false" class="MktPurchaseOrder" pclass="PurchaseOrder" v="true" xre="false" m="false" rootElement="_154790630305187" id="_154790630305190">
+        <jpa:attributes>
+            <jpa:basic optional="true" attribute-type="Short" v="true" name="quantity" id="_1547906303052104">
+                <jpa:column name="QUANTITY" unique="false" nullable="true" insertable="true" updatable="true" table="PURCHASE_ORDER"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="java.math.BigDecimal" v="true" name="shippingCost" id="_1547906303052105">
+                <jpa:column name="SHIPPING_COST" unique="false" nullable="true" insertable="true" updatable="true" table="PURCHASE_ORDER" precision="12" scale="2"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="java.util.Date" v="true" name="salesDate" id="_1547906303052106">
+                <jpa:temporal>DATE</jpa:temporal>
+                <jpa:column name="SALES_DATE" unique="false" nullable="true" insertable="true" updatable="true" table="PURCHASE_ORDER"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="java.util.Date" v="true" name="shippingDate" id="_1547906303052107">
+                <jpa:temporal>DATE</jpa:temporal>
+                <jpa:column name="SHIPPING_DATE" unique="false" nullable="true" insertable="true" updatable="true" table="PURCHASE_ORDER"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="freightCompany" id="_1547906303052108">
+                <jpa:column name="FREIGHT_COMPANY" unique="false" nullable="true" insertable="true" updatable="true" table="PURCHASE_ORDER" length="30"/>
+            </jpa:basic>
+            <jpa:many-to-one optional="false" primaryKey="false" connected-entity-id="_154790630305192" connected-attribute-id="_1547906303052130" v="true" name="customerId" id="_1547906303052109">
+                <jpa:join-column name="CUSTOMER_ID" rc="CUSTOMER_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:many-to-one>
+            <jpa:many-to-one optional="false" primaryKey="false" connected-entity-id="_154790630305191" connected-attribute-id="_1547906303052117" v="true" name="productId" id="_1547906303052110">
+                <jpa:join-column name="PRODUCT_ID" rc="PRODUCT_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:many-to-one>
+            <jpa:id attribute-type="Integer" v="true" name="orderNum" id="_1547906303052103">
+                <jpa:column name="ORDER_NUM" unique="false" nullable="false" insertable="true" updatable="true" table="PURCHASE_ORDER"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="PURCHASE_ORDER"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="MktProductPK" abs="false" class="MktProduct" pclass="Product" v="true" xre="false" m="false" rootElement="_154790630305187" id="_154790630305191">
+        <jpa:attributes>
+            <jpa:basic optional="true" attribute-type="java.math.BigDecimal" v="true" name="purchaseCost" id="_1547906303052112">
                 <jpa:column name="PURCHASE_COST" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT" precision="12" scale="2"/>
             </jpa:basic>
-            <jpa:basic optional="true" attribute-type="Integer" v="true" name="quantityOnHand" id="_1547408279045207">
+            <jpa:basic optional="true" attribute-type="Integer" v="true" name="quantityOnHand" id="_1547906303052113">
                 <jpa:column name="QUANTITY_ON_HAND" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT"/>
             </jpa:basic>
-            <jpa:basic optional="true" attribute-type="java.math.BigDecimal" v="true" name="markup" id="_1547408279045208">
+            <jpa:basic optional="true" attribute-type="java.math.BigDecimal" v="true" name="markup" id="_1547906303052114">
                 <jpa:column name="MARKUP" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT" precision="4" scale="2"/>
             </jpa:basic>
-            <jpa:basic optional="true" attribute-type="String" v="true" name="available" id="_1547408279045209">
+            <jpa:basic optional="true" attribute-type="String" v="true" name="available" id="_1547906303052115">
                 <jpa:column name="AVAILABLE" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT" length="5"/>
             </jpa:basic>
-            <jpa:basic optional="true" attribute-type="String" v="true" name="description" id="_1547408279045210">
+            <jpa:basic optional="true" attribute-type="String" v="true" name="description" id="_1547906303052116">
                 <jpa:column name="DESCRIPTION" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT" length="50"/>
             </jpa:basic>
-            <jpa:id attribute-type="Integer" v="true" name="productId" id="_1547408279045205">
+            <jpa:many-to-one optional="false" primaryKey="false" connected-entity-id="_154790630305193" connected-attribute-id="_1547906303053144" v="true" name="manufacturerId" id="_1547906303052118">
+                <jpa:join-column name="MANUFACTURER_ID" rc="MANUFACTURER_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:many-to-one>
+            <jpa:many-to-one optional="false" primaryKey="false" connected-entity-id="_154790630305194" connected-attribute-id="_1547906303053148" v="true" name="mktProductCode" pname="productCode" id="_1547906303052119">
+                <jpa:join-column name="PRODUCT_CODE" rc="PROD_CODE" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:many-to-one>
+            <jpa:one-to-many own="false" collection-type="java.util.List" connected-entity-id="_154790630305190" connected-attribute-id="_1547906303052110" v="true" name="purchaseOrderCollection" id="_1547906303052117"/>
+            <jpa:id attribute-type="Integer" v="true" name="productId" id="_1547906303052111">
                 <jpa:column name="PRODUCT_ID" unique="false" nullable="false" insertable="true" updatable="true" table="PRODUCT"/>
             </jpa:id>
         </jpa:attributes>
         <jpa:table name="PRODUCT"/>
     </jpa:entity>
-    <jpa:entity compositePrimaryKeyClass="Entity_1PK" abs="false" class="Entity_1" pclass="Entity_1" v="true" xre="false" m="false" rootElement="_1547408279045203" id="_1547420738675234">
-        <jpa:ath>yracnet</jpa:ath>
+    <jpa:entity compositePrimaryKeyClass="MktCustomerPK" abs="false" class="MktCustomer" pclass="Customer" v="true" xre="false" m="false" rootElement="_154790630305187" id="_154790630305192">
         <jpa:attributes>
-            <jpa:basic attribute-type="String" v="true" name="attribute" pname="attribute" id="_1547420748176240"/>
-            <jpa:basic attribute-type="String" v="true" name="attribute1" pname="attribute1" id="_1547420748791241"/>
-            <jpa:basic attribute-type="String" v="true" name="attribute2" pname="attribute2" id="_1547420749034242"/>
-            <jpa:id attribute-type="Long" v="true" name="id" id="_1547420738677235">
-                <jpa:generated-value strategy="DEFAULT"/>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="name" id="_1547906303052121">
+                <jpa:column name="NAME" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER" length="30"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="addressline1" id="_1547906303052122">
+                <jpa:column name="ADDRESSLINE1" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER" length="30"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="addressline2" id="_1547906303052123">
+                <jpa:column name="ADDRESSLINE2" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER" length="30"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="city" id="_1547906303052124">
+                <jpa:column name="CITY" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER" length="25"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="state" id="_1547906303052125">
+                <jpa:column name="STATE" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER" length="2"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="phone" id="_1547906303052126">
+                <jpa:column name="PHONE" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER" length="12"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="fax" id="_1547906303052127">
+                <jpa:column name="FAX" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER" length="12"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="email" id="_1547906303052128">
+                <jpa:column name="EMAIL" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER" length="40"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="Integer" v="true" name="creditLimit" id="_1547906303052129">
+                <jpa:column name="CREDIT_LIMIT" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER"/>
+            </jpa:basic>
+            <jpa:many-to-one optional="false" primaryKey="false" connected-entity-id="_154790630305189" connected-attribute-id="_1547906303052102" v="true" name="mktDiscountCode" pname="discountCode" id="_1547906303052131">
+                <jpa:join-column name="DISCOUNT_CODE" rc="DISCOUNT_CODE" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:many-to-one>
+            <jpa:many-to-one optional="false" primaryKey="false" connected-entity-id="_154790630305188" connected-attribute-id="_154790630305299" v="true" name="zip" id="_1547906303052132">
+                <jpa:join-column name="ZIP" rc="ZIP_CODE" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:many-to-one>
+            <jpa:one-to-many own="false" collection-type="java.util.List" connected-entity-id="_154790630305190" connected-attribute-id="_1547906303052109" v="true" name="purchaseOrderCollection" id="_1547906303052130"/>
+            <jpa:id attribute-type="Integer" v="true" name="customerId" id="_1547906303052120">
+                <jpa:column name="CUSTOMER_ID" unique="false" nullable="false" insertable="true" updatable="true" table="CUSTOMER"/>
             </jpa:id>
         </jpa:attributes>
-        <jpa:nq e="false" name="Entity_1.findAll">
-            <jpa:query>Select e from Entity_1 e</jpa:query>
-        </jpa:nq>
-        <jpa:nq e="false" name="Entity_1.findByAttribute">
-            <jpa:query>Select e from Entity_1 e where e.attribute=:attribute</jpa:query>
-        </jpa:nq>
-        <jpa:nq e="false" name="Entity_1.findByAttribute1">
-            <jpa:query>Select e from Entity_1 e where e.attribute1=:attribute1</jpa:query>
-        </jpa:nq>
-        <jpa:nq e="false" name="Entity_1.findByAttribute2">
-            <jpa:query>Select e from Entity_1 e where e.attribute2=:attribute2</jpa:query>
-        </jpa:nq>
+        <jpa:table name="CUSTOMER"/>
     </jpa:entity>
-    <jpa:entity compositePrimaryKeyClass="Entity_2PK" abs="false" class="Entity_2" pclass="Entity_2" v="true" xre="false" m="false" rootElement="_1547408279045203" id="_1547420741264237">
-        <jpa:ath>yracnet</jpa:ath>
+    <jpa:entity compositePrimaryKeyClass="MktManufacturerPK" abs="false" class="MktManufacturer" pclass="Manufacturer" v="true" xre="false" m="false" rootElement="_154790630305187" id="_154790630305193">
         <jpa:attributes>
-            <jpa:basic attribute-type="String" v="true" name="attribute" pname="attribute" id="_1547420753262243"/>
-            <jpa:basic attribute-type="String" v="true" name="attribute1" pname="attribute1" id="_1547420753451244"/>
-            <jpa:basic attribute-type="String" v="true" name="attribute2" pname="attribute2" id="_1547420753649245"/>
-            <jpa:id attribute-type="Long" v="true" name="id" id="_1547420741265238">
-                <jpa:generated-value strategy="DEFAULT"/>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="name" id="_1547906303052134">
+                <jpa:column name="NAME" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="30"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="addressline1" id="_1547906303052135">
+                <jpa:column name="ADDRESSLINE1" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="30"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="addressline2" id="_1547906303052136">
+                <jpa:column name="ADDRESSLINE2" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="30"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="city" id="_1547906303053137">
+                <jpa:column name="CITY" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="25"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="state" id="_1547906303053138">
+                <jpa:column name="STATE" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="2"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="zip" id="_1547906303053139">
+                <jpa:column name="ZIP" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="10"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="phone" id="_1547906303053140">
+                <jpa:column name="PHONE" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="12"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="fax" id="_1547906303053141">
+                <jpa:column name="FAX" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="12"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="email" id="_1547906303053142">
+                <jpa:column name="EMAIL" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="40"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" name="rep" id="_1547906303053143">
+                <jpa:column name="REP" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="30"/>
+            </jpa:basic>
+            <jpa:one-to-many own="false" collection-type="java.util.List" connected-entity-id="_154790630305191" connected-attribute-id="_1547906303052118" v="true" name="productCollection" id="_1547906303053144"/>
+            <jpa:id attribute-type="Integer" v="true" name="manufacturerId" id="_1547906303052133">
+                <jpa:column name="MANUFACTURER_ID" unique="false" nullable="false" insertable="true" updatable="true" table="MANUFACTURER"/>
             </jpa:id>
         </jpa:attributes>
-        <jpa:nq e="false" name="Entity_2.findAll">
-            <jpa:query>Select e from Entity_2 e</jpa:query>
-        </jpa:nq>
-        <jpa:nq e="false" name="Entity_2.findByAttribute">
-            <jpa:query>Select e from Entity_2 e where e.attribute=:attribute</jpa:query>
-        </jpa:nq>
-        <jpa:nq e="false" name="Entity_2.findByAttribute1">
-            <jpa:query>Select e from Entity_2 e where e.attribute1=:attribute1</jpa:query>
-        </jpa:nq>
-        <jpa:nq e="false" name="Entity_2.findByAttribute2">
-            <jpa:query>Select e from Entity_2 e where e.attribute2=:attribute2</jpa:query>
-        </jpa:nq>
+        <jpa:table name="MANUFACTURER"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="MktProductCodePK" abs="false" class="MktProductCode" pclass="ProductCode" v="true" xre="false" m="false" rootElement="_154790630305187" id="_154790630305194">
+        <jpa:attributes>
+            <jpa:basic optional="false" attribute-type="Character" v="true" name="discountCode" id="_1547906303053146">
+                <jpa:column name="DISCOUNT_CODE" unique="false" nullable="false" insertable="true" updatable="true" table="PRODUCT_CODE"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" xvt="" name="description" id="_1547906303053147">
+                <jpa:xwm/>
+                <jpa:xm/>
+                <jpa:column name="DESCRIPTION" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT_CODE" length="10"/>
+            </jpa:basic>
+            <jpa:one-to-many own="false" collection-type="java.util.List" connected-entity-id="_154790630305191" connected-attribute-id="_1547906303052119" v="true" name="productCollection" id="_1547906303053148"/>
+            <jpa:id attribute-type="String" v="true" name="prodCode" id="_1547906303053145">
+                <jpa:column name="PROD_CODE" unique="false" nullable="false" insertable="true" updatable="true" table="PRODUCT_CODE" length="2"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="PRODUCT_CODE"/>
     </jpa:entity>
     <jpa:wsl>
-        <jpa:ws n="Main" id="_1547420720096231">
-            <i ref="_1547420741264237" x="623" y="177"/>
-            <i ref="_1547408279045204" x="32" y="32"/>
-            <i ref="_1547420738675234" x="636" y="50"/>
+        <jpa:ws n="Main" id="_1547906303109149">
+            <i ref="_154790630305194" x="550" y="696"/>
+            <i ref="_154790630305193" x="1077" y="696"/>
+            <i ref="_154790630305192" x="282" y="314"/>
+            <i ref="_154790630305191" x="809" y="314"/>
+            <i ref="_154790630305190" x="550" y="32"/>
+            <i ref="_154790630305189" x="32" y="32"/>
+            <i ref="_154790630305188" x="32" y="696"/>
         </jpa:ws>
     </jpa:wsl>
 </jpa:entity-mappings>

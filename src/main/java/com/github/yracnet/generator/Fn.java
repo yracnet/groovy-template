@@ -12,9 +12,9 @@ package com.github.yracnet.generator;
 public class Fn {
 
     public String toName(String name) {
-        System.out.println("--->"+name);
-        name = name.replace("Crm", "");
-        System.out.println("--->"+name);
+        //System.out.println("--->" + name);
+        name = name.replace("Mkt", "");
+        //System.out.println("--->" + name);
         return name;
     }
 
@@ -54,7 +54,6 @@ public class Fn {
     public String toText(String name) {
         return name.replaceAll("([a-z0-9]+)([A-Z0-9]+)", "$1 $2");
     }
-
 
     public static void main(String arg[]) {
         Fn fn = new Fn();
