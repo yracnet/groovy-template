@@ -12,20 +12,36 @@
     <!-- path: [layer]/[dir]/[package] -->
     <file name="${className}Serv" layer="serv" dir="." package="${groupId}.${artifactId}.${module}">
         interface ${className}Serv {
+        
         List<${className}Data> filter${className}(${className}Filter ${classVar});
+        
         ${className}Data[] filter${className}(${className}Filter ${classVar});
+        
         ${className}Data create${className}(${className}Data ${classVar});
+        
         ${className}Data update${className}(${className}Data ${classVar});
+        
         ${className}Data remove${className}(${className}Data ${classVar});
+        
         }
     </file>
-    <file name="${className}Data" package="${groupId}.${artifactId}.${module}.state" dir="." layer="serv">
+    <file name="${className}Serv" layer="serv" dir="." package="${groupId}.${artifactId}.${module}.state">
         public class ${className}Data implements Serialize{
         <% ids.each{  %>
-        public ${it.'_attribute-type'} ${it.name};
+        public Value<${it.attributeType}> ${it.name};
+        <% }
+        basics.each{  %>
+        public Value<${it.attributeType}> ${it.name};
         <% } %>
-        <% basics.each{  %>
-        public ${it.'attribute-type'} ${it.name};
+        }
+    </file>
+    <file name="${className}Filter" layer="serv" dir="." package="${groupId}.${artifactId}.${module}.state">
+        public class ${className}Filter implements Serialize{
+        <% ids.each{  %>
+        public Filter<${it.attributeType}> ${it.name};
+        <% }
+        basics.each{  %>
+        public Filter<${it.attributeType}> ${it.name};
         <% } %>
         }
     </file>

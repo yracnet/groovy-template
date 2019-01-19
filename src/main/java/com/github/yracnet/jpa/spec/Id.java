@@ -71,6 +71,8 @@ public class Id {
     protected String name;
     @XmlAttribute(name = "access")
     protected AccessType access;
+    @XmlAttribute(name = "attribute-type")
+    protected String attributeType;
 
     /**
      * Gets the value of the column property.
@@ -238,6 +240,14 @@ public class Id {
      */
     public void setAccess(AccessType value) {
         this.access = value;
+    }
+
+    public String getAttributeType() {
+        return attributeType;
+    }
+
+    public void setAttributeType(String attributeType) {
+        this.attributeType = attributeType;
     }
 
 }

@@ -25,6 +25,7 @@ import java.util.Map;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.transform.Source;
 
 /**
@@ -35,20 +36,26 @@ public class Run04 {
 
     public static void main(String[] arg) throws Exception {
         File dir = getProjectPath();
-        File xmlModel = getTemplateFile("model.jpa");
-        System.out.println("==>" + xmlModel);
+        File jpaModel = getTemplateFile("model.jpa");
+        File xmlModel = getTemplateFile("model.xml");
+        System.out.println("==>" + jpaModel);
         File jsonModel = new File(dir, "/src/main/resources/template/layer/model.json");
         JAXBContext jc = JAXBContext.newInstance(new Class<?>[]{EntityMappings.class, Entity.class});
         Unmarshaller unmarshaller = jc.createUnmarshaller();
         unmarshaller.setEventHandler(new ValidateJAXB());
-        Source source = new StreamSource(xmlModel);
+        Source source = new StreamSource(jpaModel);
         EntityMappings entityMapper = unmarshaller.unmarshal(source, EntityMappings.class).getValue();
+        Marshaller marshaller = jc.createMarshaller();
+
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        marshaller.marshal(entityMapper, xmlModel);
+
         JsonBuilder builder = new JsonBuilder(entityMapper);
         JsonSlurper jsonSlurper = new JsonSlurper();
         String jsonString = builder.toPrettyString();
 
-Files.write( Paths.get(jsonModel.getPath()), jsonString.getBytes(), StandardOpenOption.CREATE);
-        
+        Files.write(Paths.get(jsonModel.getPath()), jsonString.getBytes(), StandardOpenOption.CREATE);
+
         Object mapper = jsonSlurper.parseText(builder.toString());
         File file = getTemplateFile("serv.xml");
         TemplateEngine engine = new SimpleTemplateEngine();

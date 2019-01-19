@@ -20,8 +20,8 @@ public class Util {
     }
 
     public static File getTemplateFile(String name) {
-        String path = Util.class.getResource("/template/layer/" + name).getPath();
-        return new File(path);
+        File base = getProjectPath();
+        return new File(base, "/src/main/resources/template/layer/" + name);
     }
 
 }

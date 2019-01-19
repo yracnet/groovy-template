@@ -179,13 +179,15 @@
     </jpa:entity>
     <jpa:entity compositePrimaryKeyClass="MktProductCodePK" abs="false" class="MktProductCode" pclass="ProductCode" v="true" xre="false" m="false" rootElement="_154790630305187" id="_154790630305194">
         <jpa:attributes>
-            <jpa:basic optional="false" attribute-type="Character" v="true" name="discountCode" id="_1547906303053146">
-                <jpa:column name="DISCOUNT_CODE" unique="false" nullable="false" insertable="true" updatable="true" table="PRODUCT_CODE"/>
-            </jpa:basic>
-            <jpa:basic optional="true" attribute-type="String" v="true" xvt="" name="description" id="_1547906303053147">
+            <jpa:basic optional="false" attribute-type="Character" v="true" xvt="" name="discountCode" id="_1547906303053146">
                 <jpa:xwm/>
                 <jpa:xm/>
-                <jpa:column name="DESCRIPTION" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT_CODE" length="10"/>
+                <jpa:column name="DISCOUNT_CODE" unique="false" nullable="false" insertable="true" updatable="true" table="PRODUCT_CODE"/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="String" v="true" xvt="" name="description2" pname="description" id="_1547906303053147">
+                <jpa:xwm/>
+                <jpa:xm/>
+                <jpa:column name="DESCRIPTION" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT_CODE" length="255"/>
             </jpa:basic>
             <jpa:one-to-many own="false" collection-type="java.util.List" connected-entity-id="_154790630305191" connected-attribute-id="_1547906303052119" v="true" name="productCollection" id="_1547906303053148"/>
             <jpa:id attribute-type="String" v="true" name="prodCode" id="_1547906303053145">

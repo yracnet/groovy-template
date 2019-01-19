@@ -1,6 +1,0 @@
-<document>
-    <scriptlet>def greeting = "${salutation}est"</scriptlet>
-    <expression>greeting</expression>
-    <to>$firstname "$nickname" $lastname</to>
-    How are you today?
-</document>

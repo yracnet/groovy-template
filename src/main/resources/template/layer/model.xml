@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jpa:entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm">
+    <jpa:entity class="MktMicroMarket">
+        <jpa:table name="MICRO_MARKET"/>
+        <jpa:attributes>
+            <jpa:id name="zipCode" attribute-type="String">
+                <jpa:column name="ZIP_CODE" unique="false" nullable="false" insertable="true" updatable="true" table="MICRO_MARKET" length="10"/>
+            </jpa:id>
+            <jpa:basic name="radius" optional="true" attribute-type="Double">
+                <jpa:column name="RADIUS" unique="false" nullable="true" insertable="true" updatable="true" table="MICRO_MARKET" precision="52"/>
+            </jpa:basic>
+            <jpa:basic name="areaLength" optional="true" attribute-type="Double">
+                <jpa:column name="AREA_LENGTH" unique="false" nullable="true" insertable="true" updatable="true" table="MICRO_MARKET" precision="52"/>
+            </jpa:basic>
+            <jpa:basic name="areaWidth" optional="true" attribute-type="Double">
+                <jpa:column name="AREA_WIDTH" unique="false" nullable="true" insertable="true" updatable="true" table="MICRO_MARKET" precision="52"/>
+            </jpa:basic>
+            <jpa:one-to-many name="customerCollection"/>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity class="MktDiscountCode">
+        <jpa:table name="DISCOUNT_CODE"/>
+        <jpa:attributes>
+            <jpa:id name="discountCode" attribute-type="String">
+                <jpa:column name="DISCOUNT_CODE" unique="false" nullable="false" insertable="true" updatable="true" table="DISCOUNT_CODE" length="1"/>
+                <jpa:generated-value/>
+            </jpa:id>
+            <jpa:basic name="rate" optional="true" attribute-type="java.math.BigDecimal">
+                <jpa:column name="RATE" unique="false" nullable="true" insertable="true" updatable="true" table="DISCOUNT_CODE" precision="4" scale="2"/>
+            </jpa:basic>
+            <jpa:one-to-many name="customerCollection"/>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity class="MktPurchaseOrder">
+        <jpa:table name="PURCHASE_ORDER"/>
+        <jpa:attributes>
+            <jpa:id name="orderNum" attribute-type="Integer">
+                <jpa:column name="ORDER_NUM" unique="false" nullable="false" insertable="true" updatable="true" table="PURCHASE_ORDER"/>
+            </jpa:id>
+            <jpa:basic name="quantity" optional="true" attribute-type="Short">
+                <jpa:column name="QUANTITY" unique="false" nullable="true" insertable="true" updatable="true" table="PURCHASE_ORDER"/>
+            </jpa:basic>
+            <jpa:basic name="shippingCost" optional="true" attribute-type="java.math.BigDecimal">
+                <jpa:column name="SHIPPING_COST" unique="false" nullable="true" insertable="true" updatable="true" table="PURCHASE_ORDER" precision="12" scale="2"/>
+            </jpa:basic>
+            <jpa:basic name="salesDate" optional="true" attribute-type="java.util.Date">
+                <jpa:column name="SALES_DATE" unique="false" nullable="true" insertable="true" updatable="true" table="PURCHASE_ORDER"/>
+                <jpa:temporal>DATE</jpa:temporal>
+            </jpa:basic>
+            <jpa:basic name="shippingDate" optional="true" attribute-type="java.util.Date">
+                <jpa:column name="SHIPPING_DATE" unique="false" nullable="true" insertable="true" updatable="true" table="PURCHASE_ORDER"/>
+                <jpa:temporal>DATE</jpa:temporal>
+            </jpa:basic>
+            <jpa:basic name="freightCompany" optional="true" attribute-type="String">
+                <jpa:column name="FREIGHT_COMPANY" unique="false" nullable="true" insertable="true" updatable="true" table="PURCHASE_ORDER" length="30"/>
+            </jpa:basic>
+            <jpa:many-to-one name="customerId" optional="false">
+                <jpa:join-column name="CUSTOMER_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:many-to-one>
+            <jpa:many-to-one name="productId" optional="false">
+                <jpa:join-column name="PRODUCT_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:many-to-one>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity class="MktProduct">
+        <jpa:table name="PRODUCT"/>
+        <jpa:attributes>
+            <jpa:id name="productId" attribute-type="Integer">
+                <jpa:column name="PRODUCT_ID" unique="false" nullable="false" insertable="true" updatable="true" table="PRODUCT"/>
+            </jpa:id>
+            <jpa:basic name="purchaseCost" optional="true" attribute-type="java.math.BigDecimal">
+                <jpa:column name="PURCHASE_COST" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT" precision="12" scale="2"/>
+            </jpa:basic>
+            <jpa:basic name="quantityOnHand" optional="true" attribute-type="Integer">
+                <jpa:column name="QUANTITY_ON_HAND" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT"/>
+            </jpa:basic>
+            <jpa:basic name="markup" optional="true" attribute-type="java.math.BigDecimal">
+                <jpa:column name="MARKUP" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT" precision="4" scale="2"/>
+            </jpa:basic>
+            <jpa:basic name="available" optional="true" attribute-type="String">
+                <jpa:column name="AVAILABLE" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT" length="5"/>
+            </jpa:basic>
+            <jpa:basic name="description" optional="true" attribute-type="String">
+                <jpa:column name="DESCRIPTION" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT" length="50"/>
+            </jpa:basic>
+            <jpa:many-to-one name="manufacturerId" optional="false">
+                <jpa:join-column name="MANUFACTURER_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:many-to-one>
+            <jpa:many-to-one name="mktProductCode" optional="false">
+                <jpa:join-column name="PRODUCT_CODE" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:many-to-one>
+            <jpa:one-to-many name="purchaseOrderCollection"/>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity class="MktCustomer">
+        <jpa:table name="CUSTOMER"/>
+        <jpa:attributes>
+            <jpa:id name="customerId" attribute-type="Integer">
+                <jpa:column name="CUSTOMER_ID" unique="false" nullable="false" insertable="true" updatable="true" table="CUSTOMER"/>
+            </jpa:id>
+            <jpa:basic name="name" optional="true" attribute-type="String">
+                <jpa:column name="NAME" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER" length="30"/>
+            </jpa:basic>
+            <jpa:basic name="addressline1" optional="true" attribute-type="String">
+                <jpa:column name="ADDRESSLINE1" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER" length="30"/>
+            </jpa:basic>
+            <jpa:basic name="addressline2" optional="true" attribute-type="String">
+                <jpa:column name="ADDRESSLINE2" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER" length="30"/>
+            </jpa:basic>
+            <jpa:basic name="city" optional="true" attribute-type="String">
+                <jpa:column name="CITY" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER" length="25"/>
+            </jpa:basic>
+            <jpa:basic name="state" optional="true" attribute-type="String">
+                <jpa:column name="STATE" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER" length="2"/>
+            </jpa:basic>
+            <jpa:basic name="phone" optional="true" attribute-type="String">
+                <jpa:column name="PHONE" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER" length="12"/>
+            </jpa:basic>
+            <jpa:basic name="fax" optional="true" attribute-type="String">
+                <jpa:column name="FAX" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER" length="12"/>
+            </jpa:basic>
+            <jpa:basic name="email" optional="true" attribute-type="String">
+                <jpa:column name="EMAIL" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER" length="40"/>
+            </jpa:basic>
+            <jpa:basic name="creditLimit" optional="true" attribute-type="Integer">
+                <jpa:column name="CREDIT_LIMIT" unique="false" nullable="true" insertable="true" updatable="true" table="CUSTOMER"/>
+            </jpa:basic>
+            <jpa:many-to-one name="mktDiscountCode" optional="false">
+                <jpa:join-column name="DISCOUNT_CODE" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:many-to-one>
+            <jpa:many-to-one name="zip" optional="false">
+                <jpa:join-column name="ZIP" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:many-to-one>
+            <jpa:one-to-many name="purchaseOrderCollection"/>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity class="MktManufacturer">
+        <jpa:table name="MANUFACTURER"/>
+        <jpa:attributes>
+            <jpa:id name="manufacturerId" attribute-type="Integer">
+                <jpa:column name="MANUFACTURER_ID" unique="false" nullable="false" insertable="true" updatable="true" table="MANUFACTURER"/>
+            </jpa:id>
+            <jpa:basic name="name" optional="true" attribute-type="String">
+                <jpa:column name="NAME" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="30"/>
+            </jpa:basic>
+            <jpa:basic name="addressline1" optional="true" attribute-type="String">
+                <jpa:column name="ADDRESSLINE1" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="30"/>
+            </jpa:basic>
+            <jpa:basic name="addressline2" optional="true" attribute-type="String">
+                <jpa:column name="ADDRESSLINE2" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="30"/>
+            </jpa:basic>
+            <jpa:basic name="city" optional="true" attribute-type="String">
+                <jpa:column name="CITY" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="25"/>
+            </jpa:basic>
+            <jpa:basic name="state" optional="true" attribute-type="String">
+                <jpa:column name="STATE" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="2"/>
+            </jpa:basic>
+            <jpa:basic name="zip" optional="true" attribute-type="String">
+                <jpa:column name="ZIP" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="10"/>
+            </jpa:basic>
+            <jpa:basic name="phone" optional="true" attribute-type="String">
+                <jpa:column name="PHONE" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="12"/>
+            </jpa:basic>
+            <jpa:basic name="fax" optional="true" attribute-type="String">
+                <jpa:column name="FAX" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="12"/>
+            </jpa:basic>
+            <jpa:basic name="email" optional="true" attribute-type="String">
+                <jpa:column name="EMAIL" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="40"/>
+            </jpa:basic>
+            <jpa:basic name="rep" optional="true" attribute-type="String">
+                <jpa:column name="REP" unique="false" nullable="true" insertable="true" updatable="true" table="MANUFACTURER" length="30"/>
+            </jpa:basic>
+            <jpa:one-to-many name="productCollection"/>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity class="MktProductCode">
+        <jpa:table name="PRODUCT_CODE"/>
+        <jpa:attributes>
+            <jpa:id name="prodCode" attribute-type="String">
+                <jpa:column name="PROD_CODE" unique="false" nullable="false" insertable="true" updatable="true" table="PRODUCT_CODE" length="2"/>
+            </jpa:id>
+            <jpa:basic name="discountCode" optional="false" attribute-type="Character">
+                <jpa:column name="DISCOUNT_CODE" unique="false" nullable="false" insertable="true" updatable="true" table="PRODUCT_CODE"/>
+            </jpa:basic>
+            <jpa:basic name="description2" optional="true" attribute-type="String">
+                <jpa:column name="DESCRIPTION" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT_CODE" length="255"/>
+            </jpa:basic>
+            <jpa:one-to-many name="productCollection"/>
+        </jpa:attributes>
+    </jpa:entity>
+</jpa:entity-mappings>

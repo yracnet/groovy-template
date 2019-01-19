@@ -79,6 +79,9 @@ public class Basic {
     protected Boolean optional;
     @XmlAttribute(name = "access")
     protected AccessType access;
+    @XmlAttribute(name = "attribute-type")
+    protected String attributeType;
+    
 
     /**
      * Gets the value of the column property.
@@ -294,6 +297,14 @@ public class Basic {
      */
     public void setAccess(AccessType value) {
         this.access = value;
+    }
+
+    public String getAttributeType() {
+        return attributeType;
+    }
+
+    public void setAttributeType(String attributeType) {
+        this.attributeType = attributeType;
     }
 
 }
