@@ -9,7 +9,6 @@
     def basics = it.attributes.basic
     def ids    = it.attributes.id
     %>
-    <!-- path: [layer]/[dir]/[package] -->
     <file name="${className}Serv" layer="serv" dir="." package="${groupId}.${artifactId}.${module}">
         interface ${className}Serv {
         
