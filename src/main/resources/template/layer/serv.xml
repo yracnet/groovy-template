@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files>
-    <% mapper.entity.each { %>
-    <%
+    <% mapper.entity.each {
     def className = fn.toName(it.clazz)
     def classVar  = fn.toNameVar(it.clazz)
     def classText = fn.toNameText(it.clazz)
@@ -12,19 +11,32 @@
     <file name="${className}Serv" layer="serv" dir="." package="${groupId}.${artifactId}.${module}">
         interface ${className}Serv {
         
-        List<${className}Data> filter${className}(${className}Filter ${classVar});
+        ListResult<${className}Data> filter${className}(${className}Filter ${classVar}Filter);
         
-        ${className}Data[] filter${className}(${className}Filter ${classVar});
+        DataResult<${className}Data> create${className}(${className}Data ${classVar}Data);
         
-        ${className}Data create${className}(${className}Data ${classVar});
+        DataResult<${className}Data> update${className}(${className}Data ${classVar}Data);
         
-        ${className}Data update${className}(${className}Data ${classVar});
-        
-        ${className}Data remove${className}(${className}Data ${classVar});
+        DataResult<${className}Data> remove${className}(${className}Data ${classVar}Data);
         
         }
     </file>
-    <file name="${className}Serv" layer="serv" dir="." package="${groupId}.${artifactId}.${module}.state">
+    <file name="ListResult" layer="serv" dir="." package="${groupId}.${artifactId}.${module}">
+        <![CDATA[
+        public class Result {
+        public String operation;
+        public String description;
+        public List<Message> messageList;
+        }
+        public class ListResult<T> extends Result {
+        public List<T> list;
+        }
+        public class DataResult<T> extends Result {
+        public T data;
+        }
+        ]]>
+    </file>
+    <file name="${className}Data" layer="serv" dir="." package="${groupId}.${artifactId}.${module}.state">
         public class ${className}Data implements Serialize{
         <% ids.each{  %>
         public Value<${it.attributeType}> ${it.name};

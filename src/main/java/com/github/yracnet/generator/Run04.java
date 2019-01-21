@@ -57,7 +57,7 @@ public class Run04 {
         Files.write(Paths.get(jsonModel.getPath()), jsonString.getBytes(), StandardOpenOption.CREATE);
 
         Object mapper = jsonSlurper.parseText(builder.toString());
-        File file = getTemplateFile("serv.xml");
+        File file = getTemplateFile("impl.xml");
         TemplateEngine engine = new SimpleTemplateEngine();
         Template template = engine.createTemplate(file);
         Map<String, Object> param = new HashMap<>();
