@@ -5,11 +5,44 @@
  */
 package com.github.yracnet.generator;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author yracnet
  */
 public class Fn {
+
+    public Map deduce(String name) {
+        return deduce(name, "");
+    }
+
+    public Map deduceName(String name) {
+        return deduceName(name, "");
+    }
+
+    public Map deduce(String name, String sufix) {
+        Map map = new HashMap();
+        String nameFull = name + sufix;
+        String var = toVar(nameFull);
+        map.put("type", nameFull);
+        map.put("var", var);
+        map.put("text", toText(nameFull));
+        map.put("const", toConst(nameFull));
+
+        map.put("varList", var + "List");
+        map.put("get", "get" + nameFull);
+        map.put("set", "set" + nameFull);
+        map.put("param", nameFull + " " + var);
+        
+        return map;
+    }
+
+    public Map deduceName(String name, String sufix) {
+        name = toName(name);
+        return deduce(name, sufix);
+    }
 
     public String toName(String name) {
         //System.out.println("--->" + name);
