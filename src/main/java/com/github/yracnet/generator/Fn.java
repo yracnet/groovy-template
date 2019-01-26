@@ -6,6 +6,7 @@
 package com.github.yracnet.generator;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,7 +36,7 @@ public class Fn {
         map.put("get", "get" + nameFull);
         map.put("set", "set" + nameFull);
         map.put("param", nameFull + " " + var);
-        
+
         return map;
     }
 
@@ -44,11 +45,37 @@ public class Fn {
         return deduce(name, sufix);
     }
 
+    public Map deduceAttrName(Map attr) {
+        String name = (String) attr.get("name");
+        Map map = deduceName(name);
+        map.put("type", attr.get("attributeType"));
+        map.put("it", attr);
+        return map;
+    }
+
+    public Map deduceRefName(Map attr, Map ref) {
+        String connectedEntityId = (String) attr.get("connectedEntityId");
+        ref = (Map)ref.get(connectedEntityId);
+        String clazz = (String) ref.get("clazz");
+        clazz = toName(clazz);
+        String name = (String) attr.get("name");
+        Map map = deduceName(name);
+        map.put("type", clazz);
+        map.put("it", attr);
+        return map;
+    }
+
     public String toName(String name) {
-        //System.out.println("--->" + name);
-        name = name.replace("Mkt", "");
-        //System.out.println("--->" + name);
+        name = name.replaceFirst("^Crm", "");
+        name = name.replaceFirst("^crm", "");
+        name = name.replaceFirst("^Mkt", "");
+        name = name.replaceFirst("^mkt", "");
         return name;
+    }
+
+    public boolean isName(String name) {
+        return name.startsWith("Crm") || name.startsWith("Mkt")
+                || name.startsWith("crm") || name.startsWith("mkt");
     }
 
     public String toNameVar(String name) {

@@ -36,10 +36,10 @@ public class Run04 {
 
     public static void main(String[] arg) throws Exception {
         File dir = getProjectPath();
-        File jpaModel = getTemplateFile("model.jpa");
-        File xmlModel = getTemplateFile("model.xml");
+        File jpaModel = getTemplateFile("model2.jpa");
+        File xmlModel = getTemplateFile("model2.xml");
         System.out.println("==>" + jpaModel);
-        File jsonModel = new File(dir, "/src/main/resources/template/layer/model.json");
+        File jsonModel = new File(dir, "/src/main/resources/template/layer/model2.json");
         JAXBContext jc = JAXBContext.newInstance(new Class<?>[]{EntityMappings.class, Entity.class});
         Unmarshaller unmarshaller = jc.createUnmarshaller();
         unmarshaller.setEventHandler(new ValidateJAXB());
@@ -57,7 +57,7 @@ public class Run04 {
         Files.write(Paths.get(jsonModel.getPath()), jsonString.getBytes(), StandardOpenOption.CREATE);
 
         Object mapper = jsonSlurper.parseText(builder.toString());
-        File file = getTemplateFile("local.xml");
+        File file = getTemplateFile("serv.xml");
         TemplateEngine engine = new SimpleTemplateEngine();
         Template template = engine.createTemplate(file);
         Map<String, Object> param = new HashMap<>();

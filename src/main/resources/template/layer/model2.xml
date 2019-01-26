@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jpa:entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm">
+    <jpa:entity class="CrmPerson" id="_154848556654723">
+        <jpa:attributes>
+            <jpa:id name="personId" attribute-type="Long">
+                <jpa:generated-value/>
+            </jpa:id>
+            <jpa:basic name="name" attribute-type="String"/>
+            <jpa:basic name="briday" attribute-type="String"/>
+            <jpa:many-to-one name="crmAddress" connected-entity-id="_154848556928826"/>
+            <jpa:one-to-one name="crmCustomer" connected-entity-id="_154848562413432"/>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity class="CrmAddress" id="_154848556928826">
+        <jpa:attributes>
+            <jpa:id name="addressId" attribute-type="Long">
+                <jpa:generated-value/>
+            </jpa:id>
+            <jpa:basic name="streat" attribute-type="String"/>
+            <jpa:one-to-many name="crmPersonList" collection-type="java.util.List" connected-entity-id="_154848556654723"/>
+            <jpa:element-collection name="phone" target-class="java.lang.String"/>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity class="CrmCustomer" id="_154848562413432">
+        <jpa:attributes>
+            <jpa:id name="customerId" attribute-type="Long">
+                <jpa:generated-value/>
+            </jpa:id>
+            <jpa:basic name="fullName" attribute-type="String"/>
+            <jpa:basic name="code" attribute-type="String"/>
+        </jpa:attributes>
+    </jpa:entity>
+</jpa:entity-mappings>

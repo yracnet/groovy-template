@@ -145,7 +145,7 @@ public class OneToMany {
     @XmlAttribute(name = "mapped-by")
     protected String mappedBy;
     @XmlAttribute(name = "orphan-removal")
-    protected Boolean orphanRemoval;
+    protected Boolean orphanRemoval;    
 
     /**
      * Gets the value of the orderBy property.
@@ -602,4 +602,24 @@ public class OneToMany {
         this.orphanRemoval = value;
     }
 
+    @XmlAttribute(name = "collection-type")
+    protected String collectionType;
+    @XmlAttribute(name = "connected-entity-id")
+    protected String connectedEntityId;
+
+    public String getCollectionType() {
+        return collectionType;
+    }
+
+    public void setCollectionType(String collectionType) {
+        this.collectionType = collectionType;
+    }
+
+    public String getConnectedEntityId() {
+        return connectedEntityId;
+    }
+
+    public void setConnectedEntityId(String connectedEntityId) {
+        this.connectedEntityId = connectedEntityId;
+    }
 }

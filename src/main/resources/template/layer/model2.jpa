@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jpa:entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm" v="5.2" rws="_154848556284822" Pws="_154848556284822" cws="_154848556284822" persistenceUnitName="DEFAULT_PU" sm="false" xs="false" id="_154848556284721" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd">
+    <jpa:entity compositePrimaryKeyClass="CrmPersonPK" abs="false" class="CrmPerson" pclass="Entity_1" v="true" xre="false" m="false" rootElement="_154848556284721" id="_154848556654723">
+        <jpa:ath>yracnet</jpa:ath>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" v="true" name="name" pname="attribute" id="_154848577851941"/>
+            <jpa:basic attribute-type="String" v="true" name="briday" pname="attribute" id="_154848578337642"/>
+            <jpa:many-to-one primaryKey="false" connected-entity-id="_154848556928826" connected-attribute-id="_154848557538831" v="true" name="crmAddress" pname="entity_2" id="_154848557538730"/>
+            <jpa:one-to-one own="true" primaryKey="false" connected-entity-id="_154848562413432" v="true" name="crmCustomer" pname="crmClient" id="_154848563849636"/>
+            <jpa:id attribute-type="Long" v="true" xvt="" name="personId" pname="id" id="_154848556657324">
+                <jpa:xwm/>
+                <jpa:xm/>
+                <jpa:generated-value strategy="DEFAULT"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="false" name="CrmPerson.findAll">
+            <jpa:query>Select e from CrmPerson e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="CrmPerson.findByName">
+            <jpa:query>Select c from CrmPerson c where c.name=:name</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="CrmPerson.findByBriday">
+            <jpa:query>Select c from CrmPerson c where c.briday=:briday</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="CrmAddressPK" abs="false" class="CrmAddress" pclass="Entity_2" v="true" xre="false" m="false" rootElement="_154848556284721" id="_154848556928826">
+        <jpa:ath>yracnet</jpa:ath>
+        <jpa:removedAttributes>
+            <jpa:i>attribute1</jpa:i>
+        </jpa:removedAttributes>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" v="true" xvt="" name="streat" pname="attribute" id="_154848569292138">
+                <jpa:xwm/>
+                <jpa:xm/>
+            </jpa:basic>
+            <jpa:element-collection target-class="java.lang.String" collection-type="java.util.List" cit="java.util.ArrayList" v="true" xvt="" name="phone" pname="attributes" id="_154848572906440">
+                <jpa:xwm/>
+                <jpa:xm/>
+            </jpa:element-collection>
+            <jpa:one-to-many orp="false" collection-type="java.util.List" cit="java.util.ArrayList" connected-entity-id="_154848556654723" connected-attribute-id="_154848557538730" v="true" xvt="" name="crmPersonList" pname="entity_1s" id="_154848557538831">
+                <jpa:xwm/>
+                <jpa:xm/>
+            </jpa:one-to-many>
+            <jpa:id attribute-type="Long" v="true" xvt="" name="addressId" pname="id" id="_154848556928927">
+                <jpa:xwm/>
+                <jpa:xm/>
+                <jpa:generated-value strategy="DEFAULT"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="false" name="CrmAddress.findAll">
+            <jpa:query>Select e from CrmAddress e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="CrmAddress.findByStreat">
+            <jpa:query>Select c from CrmAddress c where c.streat=:streat</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="CrmAddress.findByNumber">
+            <jpa:query>Select c from CrmAddress c where c.number=:number</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="CrmCustomerPK" abs="false" class="CrmCustomer" pclass="Entity_1" v="true" xre="false" m="false" rootElement="_154848556284721" id="_154848562413432">
+        <jpa:ath>yracnet</jpa:ath>
+        <jpa:attributes>
+            <jpa:basic attribute-type="String" v="true" name="fullName" pname="attribute" id="_154848564799937"/>
+            <jpa:basic attribute-type="String" v="true" name="code" pname="attribute" id="_154848581104043"/>
+            <jpa:id attribute-type="Long" v="true" xvt="" name="customerId" pname="id" id="_154848562413533">
+                <jpa:xwm/>
+                <jpa:xm/>
+                <jpa:generated-value strategy="DEFAULT"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:nq e="false" name="CrmCustomer.findAll">
+            <jpa:query>Select e from CrmCustomer e</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="CrmCustomer.findByFullName">
+            <jpa:query>Select c from CrmCustomer c where c.fullName=:fullName</jpa:query>
+        </jpa:nq>
+        <jpa:nq e="false" name="CrmCustomer.findByCode">
+            <jpa:query>Select c from CrmCustomer c where c.code=:code</jpa:query>
+        </jpa:nq>
+    </jpa:entity>
+    <jpa:c>
+        <ct>java.util.List</ct>
+        <ct>java.util.Set</ct>
+        <ct>java.util.Map</ct>
+        <ct>java.util.Collection</ct>
+        <cit>java.util.ArrayList</cit>
+        <cit>java.util.LinkedList</cit>
+        <cit>java.util.HashSet</cit>
+        <cit>java.util.TreeSet</cit>
+        <cit>java.util.HashMap</cit>
+    </jpa:c>
+    <jpa:wsl>
+        <jpa:ws n="Main" id="_154848556284822">
+            <i ref="_154848562413432" x="25" y="20"/>
+            <i ref="_154848556928826" x="481" y="79"/>
+            <i ref="_154848556654723" x="223" y="67"/>
+        </jpa:ws>
+    </jpa:wsl>
+</jpa:entity-mappings>

@@ -1,0 +1,508 @@
+{
+    "access": null,
+    "persistenceUnitMetadata": null,
+    "converter": [
+        
+    ],
+    "mappedSuperclass": [
+        
+    ],
+    "entity": [
+        {
+            "access": null,
+            "table": null,
+            "convert": [
+                
+            ],
+            "prePersist": null,
+            "postUpdate": null,
+            "primaryKeyForeignKey": null,
+            "discriminatorValue": null,
+            "preRemove": null,
+            "excludeDefaultListeners": null,
+            "inheritance": null,
+            "id": "_154848556654723",
+            "primaryKeyJoinColumn": [
+                
+            ],
+            "namedQuery": [
+                
+            ],
+            "attributes": {
+                "basic": [
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "attributeType": "String",
+                        "column": null,
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": null,
+                        "lob": null,
+                        "name": "name"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "attributeType": "String",
+                        "column": null,
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": null,
+                        "lob": null,
+                        "name": "briday"
+                    }
+                ],
+                "transient": [
+                    
+                ],
+                "oneToOne": [
+                    {
+                        "access": null,
+                        "primaryKeyForeignKey": null,
+                        "connectedEntityId": "_154848562413432",
+                        "targetEntity": null,
+                        "mapsId": null,
+                        "fetch": null,
+                        "joinColumn": [
+                            
+                        ],
+                        "cascade": null,
+                        "id": null,
+                        "orphanRemoval": null,
+                        "mappedBy": null,
+                        "primaryKeyJoinColumn": [
+                            
+                        ],
+                        "joinTable": null,
+                        "optional": null,
+                        "foreignKey": null,
+                        "name": "crmCustomer"
+                    }
+                ],
+                "manyToMany": [
+                    
+                ],
+                "oneToMany": [
+                    
+                ],
+                "id": [
+                    {
+                        "access": null,
+                        "attributeType": "Long",
+                        "column": null,
+                        "temporal": null,
+                        "generatedValue": {
+                            "strategy": null,
+                            "generator": null
+                        },
+                        "sequenceGenerator": null,
+                        "tableGenerator": null,
+                        "name": "personId"
+                    }
+                ],
+                "version": [
+                    
+                ],
+                "elementCollection": [
+                    
+                ],
+                "description": null,
+                "manyToOne": [
+                    {
+                        "access": null,
+                        "connectedEntityId": "_154848556928826",
+                        "targetEntity": null,
+                        "mapsId": null,
+                        "fetch": null,
+                        "joinColumn": [
+                            
+                        ],
+                        "cascade": null,
+                        "id": null,
+                        "joinTable": null,
+                        "optional": null,
+                        "foreignKey": null,
+                        "name": "crmAddress"
+                    }
+                ],
+                "embeddedId": null,
+                "embedded": [
+                    
+                ]
+            },
+            "namedNativeQuery": [
+                
+            ],
+            "namedEntityGraph": [
+                
+            ],
+            "sequenceGenerator": null,
+            "postLoad": null,
+            "idClass": null,
+            "namedStoredProcedureQuery": [
+                
+            ],
+            "metadataComplete": null,
+            "name": null,
+            "postRemove": null,
+            "postPersist": null,
+            "discriminatorColumn": null,
+            "preUpdate": null,
+            "secondaryTable": [
+                
+            ],
+            "sqlResultSetMapping": [
+                
+            ],
+            "associationOverride": [
+                
+            ],
+            "attributeOverride": [
+                
+            ],
+            "description": null,
+            "cacheable": null,
+            "clazz": "CrmPerson",
+            "tableGenerator": null,
+            "entityListeners": null,
+            "excludeSuperclassListeners": null
+        },
+        {
+            "access": null,
+            "table": null,
+            "convert": [
+                
+            ],
+            "prePersist": null,
+            "postUpdate": null,
+            "primaryKeyForeignKey": null,
+            "discriminatorValue": null,
+            "preRemove": null,
+            "excludeDefaultListeners": null,
+            "inheritance": null,
+            "id": "_154848556928826",
+            "primaryKeyJoinColumn": [
+                
+            ],
+            "namedQuery": [
+                
+            ],
+            "attributes": {
+                "basic": [
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "attributeType": "String",
+                        "column": null,
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": null,
+                        "lob": null,
+                        "name": "streat"
+                    }
+                ],
+                "transient": [
+                    
+                ],
+                "oneToOne": [
+                    
+                ],
+                "manyToMany": [
+                    
+                ],
+                "oneToMany": [
+                    {
+                        "access": null,
+                        "mapKeyColumn": null,
+                        "connectedEntityId": "_154848556654723",
+                        "mapKey": null,
+                        "fetch": null,
+                        "orderBy": null,
+                        "joinColumn": [
+                            
+                        ],
+                        "cascade": null,
+                        "orphanRemoval": null,
+                        "mapKeyTemporal": null,
+                        "name": "crmPersonList",
+                        "targetEntity": null,
+                        "mapKeyForeignKey": null,
+                        "mapKeyClass": null,
+                        "mapKeyConvert": [
+                            
+                        ],
+                        "mappedBy": null,
+                        "joinTable": null,
+                        "orderColumn": null,
+                        "mapKeyJoinColumn": [
+                            
+                        ],
+                        "foreignKey": null,
+                        "mapKeyEnumerated": null,
+                        "mapKeyAttributeOverride": [
+                            
+                        ],
+                        "collectionType": "java.util.List"
+                    }
+                ],
+                "id": [
+                    {
+                        "access": null,
+                        "attributeType": "Long",
+                        "column": null,
+                        "temporal": null,
+                        "generatedValue": {
+                            "strategy": null,
+                            "generator": null
+                        },
+                        "sequenceGenerator": null,
+                        "tableGenerator": null,
+                        "name": "addressId"
+                    }
+                ],
+                "version": [
+                    
+                ],
+                "elementCollection": [
+                    {
+                        "enumerated": null,
+                        "collectionTable": null,
+                        "access": null,
+                        "convert": [
+                            
+                        ],
+                        "mapKeyColumn": null,
+                        "mapKey": null,
+                        "column": null,
+                        "fetch": null,
+                        "orderBy": null,
+                        "mapKeyTemporal": null,
+                        "targetClass": "java.lang.String",
+                        "lob": null,
+                        "name": "phone",
+                        "mapKeyForeignKey": null,
+                        "mapKeyClass": null,
+                        "temporal": null,
+                        "mapKeyConvert": [
+                            
+                        ],
+                        "orderColumn": null,
+                        "mapKeyJoinColumn": [
+                            
+                        ],
+                        "associationOverride": [
+                            
+                        ],
+                        "attributeOverride": [
+                            
+                        ],
+                        "mapKeyEnumerated": null,
+                        "mapKeyAttributeOverride": [
+                            
+                        ]
+                    }
+                ],
+                "description": null,
+                "manyToOne": [
+                    
+                ],
+                "embeddedId": null,
+                "embedded": [
+                    
+                ]
+            },
+            "namedNativeQuery": [
+                
+            ],
+            "namedEntityGraph": [
+                
+            ],
+            "sequenceGenerator": null,
+            "postLoad": null,
+            "idClass": null,
+            "namedStoredProcedureQuery": [
+                
+            ],
+            "metadataComplete": null,
+            "name": null,
+            "postRemove": null,
+            "postPersist": null,
+            "discriminatorColumn": null,
+            "preUpdate": null,
+            "secondaryTable": [
+                
+            ],
+            "sqlResultSetMapping": [
+                
+            ],
+            "associationOverride": [
+                
+            ],
+            "attributeOverride": [
+                
+            ],
+            "description": null,
+            "cacheable": null,
+            "clazz": "CrmAddress",
+            "tableGenerator": null,
+            "entityListeners": null,
+            "excludeSuperclassListeners": null
+        },
+        {
+            "access": null,
+            "table": null,
+            "convert": [
+                
+            ],
+            "prePersist": null,
+            "postUpdate": null,
+            "primaryKeyForeignKey": null,
+            "discriminatorValue": null,
+            "preRemove": null,
+            "excludeDefaultListeners": null,
+            "inheritance": null,
+            "id": "_154848562413432",
+            "primaryKeyJoinColumn": [
+                
+            ],
+            "namedQuery": [
+                
+            ],
+            "attributes": {
+                "basic": [
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "attributeType": "String",
+                        "column": null,
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": null,
+                        "lob": null,
+                        "name": "fullName"
+                    },
+                    {
+                        "access": null,
+                        "enumerated": null,
+                        "convert": null,
+                        "attributeType": "String",
+                        "column": null,
+                        "fetch": null,
+                        "temporal": null,
+                        "optional": null,
+                        "lob": null,
+                        "name": "code"
+                    }
+                ],
+                "transient": [
+                    
+                ],
+                "oneToOne": [
+                    
+                ],
+                "manyToMany": [
+                    
+                ],
+                "oneToMany": [
+                    
+                ],
+                "id": [
+                    {
+                        "access": null,
+                        "attributeType": "Long",
+                        "column": null,
+                        "temporal": null,
+                        "generatedValue": {
+                            "strategy": null,
+                            "generator": null
+                        },
+                        "sequenceGenerator": null,
+                        "tableGenerator": null,
+                        "name": "customerId"
+                    }
+                ],
+                "version": [
+                    
+                ],
+                "elementCollection": [
+                    
+                ],
+                "description": null,
+                "manyToOne": [
+                    
+                ],
+                "embeddedId": null,
+                "embedded": [
+                    
+                ]
+            },
+            "namedNativeQuery": [
+                
+            ],
+            "namedEntityGraph": [
+                
+            ],
+            "sequenceGenerator": null,
+            "postLoad": null,
+            "idClass": null,
+            "namedStoredProcedureQuery": [
+                
+            ],
+            "metadataComplete": null,
+            "name": null,
+            "postRemove": null,
+            "postPersist": null,
+            "discriminatorColumn": null,
+            "preUpdate": null,
+            "secondaryTable": [
+                
+            ],
+            "sqlResultSetMapping": [
+                
+            ],
+            "associationOverride": [
+                
+            ],
+            "attributeOverride": [
+                
+            ],
+            "description": null,
+            "cacheable": null,
+            "clazz": "CrmCustomer",
+            "tableGenerator": null,
+            "entityListeners": null,
+            "excludeSuperclassListeners": null
+        }
+    ],
+    "schema": null,
+    "version": "2.2",
+    "namedQuery": [
+        
+    ],
+    "namedNativeQuery": [
+        
+    ],
+    "sqlResultSetMapping": [
+        
+    ],
+    "sequenceGenerator": [
+        
+    ],
+    "namedStoredProcedureQuery": [
+        
+    ],
+    "description": null,
+    "tableGenerator": [
+        
+    ],
+    "embeddable": [
+        
+    ],
+    "catalog": null,
+    "package": null
+}

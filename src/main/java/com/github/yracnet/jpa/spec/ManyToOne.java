@@ -362,4 +362,14 @@ public class ManyToOne {
         this.id = value;
     }
 
+    @XmlAttribute(name = "connected-entity-id")
+    protected String connectedEntityId;
+
+    public String getConnectedEntityId() {
+        return connectedEntityId;
+    }
+
+    public void setConnectedEntityId(String connectedEntityId) {
+        this.connectedEntityId = connectedEntityId;
+    }
 }

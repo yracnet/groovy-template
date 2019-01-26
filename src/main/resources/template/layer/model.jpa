@@ -189,7 +189,10 @@
                 <jpa:xm/>
                 <jpa:column name="DESCRIPTION" unique="false" nullable="true" insertable="true" updatable="true" table="PRODUCT_CODE" length="255"/>
             </jpa:basic>
-            <jpa:one-to-many own="false" collection-type="java.util.List" connected-entity-id="_154790630305191" connected-attribute-id="_1547906303052119" v="true" name="productCollection" id="_1547906303053148"/>
+            <jpa:one-to-many own="false" collection-type="java.util.List" connected-entity-id="_154790630305191" connected-attribute-id="_1547906303052119" v="true" xvt="" name="productCollection" pname="productCollection" id="_1547906303053148">
+                <jpa:xwm/>
+                <jpa:xm/>
+            </jpa:one-to-many>
             <jpa:id attribute-type="String" v="true" name="prodCode" id="_1547906303053145">
                 <jpa:column name="PROD_CODE" unique="false" nullable="false" insertable="true" updatable="true" table="PRODUCT_CODE" length="2"/>
             </jpa:id>
