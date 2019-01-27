@@ -27,6 +27,7 @@ public class FnContext {
     public Map deduce(String name, String sufix) {
         Map map = new HashMap();
         String nameFull = name + sufix;
+        nameFull = upperFirst(nameFull);
         String var = toVar(nameFull);
         map.put("type", nameFull);
         map.put("var", var);
@@ -145,5 +146,13 @@ public class FnContext {
         all = all.replace("-", ".");
         all = all.replace("/", ".");
         return all.substring(1);
+    }
+
+    private String lowerFirst(String name) {
+        return name.toLowerCase().charAt(0) + name.substring(1);
+    }
+
+    private String upperFirst(String name) {
+        return name.toUpperCase().charAt(0) + name.substring(1);
     }
 }

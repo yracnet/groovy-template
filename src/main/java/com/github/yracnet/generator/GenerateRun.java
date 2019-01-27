@@ -19,8 +19,8 @@ public class GenerateRun {
         gen.setArtifactId("app-fn");
         gen.setModule("manager");
         gen.addTemplate("simple.crud.serv");
-        //gen.addTemplate("simple.crud.impl");
-        //gen.addTemplate("simple.crud.local");
+        gen.addTemplate("simple.crud.impl");
+        gen.addTemplate("simple.crud.local");
         //gen.addTemplate("simple.crud.view");
         gen.removePrefix("Cap");
         gen.generate();

@@ -58,6 +58,18 @@ public class Util {
             File modelJson = new File(jpaModel.getParent(), "model.json");
 
             Unmarshaller unmarshaller = JAXB_CONTEXT.createUnmarshaller();
+            unmarshaller.setListener(new Unmarshaller.Listener() {
+
+                @Override
+                public void beforeUnmarshal(Object target, Object parent) {
+                    if (target instanceof Entity && parent instanceof EntityMappings) {
+                        EntityMappings ex = (EntityMappings) parent;
+                        Entity ei = (Entity) target;
+                        ei.setPkg(ex.getPpkg() + "." + ex.getEpkg());
+                    }
+                }
+
+            });
             Source source = new StreamSource(jpaModel);
             EntityMappings entityMapper = unmarshaller.unmarshal(source, EntityMappings.class).getValue();
             Marshaller marshaller = JAXB_CONTEXT.createMarshaller();

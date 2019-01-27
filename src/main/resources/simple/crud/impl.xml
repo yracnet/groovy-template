@@ -1,43 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files>
-    <% mapper.entity.each {
-    def entityName = it.clazz
-    def entityVar = fn.toVar(it.clazz)
-    def className = fn.toName(it.clazz)
-    def classVar  = fn.toNameVar(it.clazz)
-    def classText = fn.toNameText(it.clazz)
-    def classConst= fn.toNameConst(it.clazz)
-    def basics = it.attributes.basic
-    def ids    = it.attributes.id
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    entityRef.each {
+    id, entity ->
+    def pkg    = fn.pkg(groupId, artifactId, module);  
+    def clazz  = fn.deduce(entity.clazz)
+    def data   = fn.deduceName(entity.clazz)
+    def filter = fn.deduceName(entity.clazz, 'Filter')
+    def serv   = fn.deduceName(entity.clazz, 'Serv')
+    def impl   = fn.deduceName(entity.clazz, 'Impl')
+    def func   = fn.deduceName(entity.clazz, 'Func')
+    def local  = fn.deduceName(entity.clazz, 'Local')
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
     %>
-    <file name="${className}Impl" layer="impl" dir="." pkg="${groupId}.${artifactId}.${module}">
-        public class ${className}Impl implements ${className}Serv {
-        
-        private ${entityName}Local ${entityVar}Local;
-        
-        public List<${className}Data> filter${className}(${className}Filter ${classVar}Filter){
-        SimpleQuery ${entityVar}Filter = ${className}Mapper.to${classVar}Filter(${classVar}Filter);
-        List<${entityName}> ${entityVar}List = ${entityVar}Local.filter${entityName}(${entityVar}Filter, ${entityName}.class);
-        return ${className}Mapper.to${classVar}List(list);
-        }
-        
-        public ${className}Data create${className}(${className}Data ${classVar}){
-        ${className}Validate.create${className}Validate(${classVar});
-        ${entityName} ${entityVar} = ${className}Mapper.to${entityName}(${classVar});
-        ${entityVar} = ${entityVar}Local.create${entityName}(${entityVar});
-        ${classVar} = ${className}Mapper.to${className}(${entityVar});
-        return ${classVar};
-        }
-        
-        public ${className}Data update${className}(${className}Data ${classVar}){
-        return null;
-        }
-        
-        public ${className}Data remove${className}(${className}Data ${classVar}){
-        return null;
-        }
-        
-        }
-    </file>
+    <file name="${func.type}.java" layer="impl" dir="." pkg="${pkg}">
+<![CDATA[
+import ${pkg}.state.${data.type};
+import ${pkg}.state.${filter.type};
+import com.github.yracnet.state.Message;
+import com.github.yracnet.oper.QueryFilter;
+import com.github.yracnet.fn.FnMapper;
+import com.github.yracnet.fn.FnValidate;
+import ${entity.pkg}.${entity.clazz};
+
+public class ${func.type} {
+  
+    static FnValidate<${filter.type}> validateFilter = (filter) -> {
+        Message message = new Message("Filter Allowed");
+        //message.required(filter, "Filter ${data.text}");
+        <% attr.each{  %>
+        message.required(filter.${it.var}, "Required ${it.text}");<% } %>
+        return message;
+    };
+
+    static FnValidate<${data.type}> validateCreate = (value) -> {
+        Message message = new Message("Create ${data.text}");
+        //message.required(value, "Required Filter");
+        <% attr.each{  %>
+        message.required(value.${it.var}, "Required ${it.text}");<% } %>
+        return message;
+    };
+
+    static FnMapper<${filter.type}, QueryFilter> mapperQuery = (filter) -> {
+        QueryFilter query = new QueryFilter("Query ${data.text}");
+        <% attr.each{  %>
+        query.append("o.${it.var}", filter.${it.var});<% } %>
+        return query;
+    };
+
+    static FnMapper<${data.type}, ${clazz.type}> mapperEntity = (value) -> {
+        ${clazz.type} entity = new ${clazz.type}();
+        <% attr.each{  %>
+        entity.${it.set}(value.${it.var});<% } %>
+        return entity;
+    };
+
+    static FnMapper<${clazz.type}, ${data.type}> mapperData = (entity) -> {
+        ${data.type} value = new ${data.type}();
+        <% attr.each{  %>
+        value.${it.var} = entity.${it.get}();<% } %>
+        return value;
+    };
+}
+]]></file>
+    <file name="${impl.type}.java" layer="impl" dir="." pkg="${pkg}">
+<![CDATA[
+import ${pkg}.state.${data.type};
+import ${pkg}.state.${filter.type};
+import ${pkg}.${local.type};
+import com.github.yracnet.state.ResultNon;
+import com.github.yracnet.state.ResultSet;
+public class ${impl.type} implements ${serv.type} {
+
+    private ${local.type} local = new ${local.type}();
+
+    @Override
+  public ResultSet<${data.type}> ${data.var}Filter(${filter.type} filter){
+        ResultNon<${filter.type}> result = new ResultNon<>(filter);
+        ResultSet<${data.type}> resultSet = result.validate(${func.type}.validateFilter)
+                .mapper(${func.type}.mapperQuery)
+                .callSet(local.filter)
+                .mapper(${func.type}.mapperData);
+        return resultSet;
+  }
+    @Override
+  public ResultNon<${data.type}> ${data.var}Create(${data.type} value){
+        ResultNon<${data.type}> result = new ResultNon<>(value);
+        ResultNon<${data.type}> resultNon = result.validate(${func.type}.validateCreate)
+                .mapper(${func.type}.mapperEntity)
+                .callNon(local.create)
+                .mapper(${func.type}.mapperData);
+        return resultNon;
+  }
+    @Override
+  public ResultNon<${data.type}> ${data.var}Update(${data.type} value){
+        ResultNon<${data.type}> result = new ResultNon<>(value);
+        ResultNon<${data.type}> resultNon = result.validate(${func.type}.validateCreate)
+                .mapper(${func.type}.mapperEntity)
+                .callNon(local.update)
+                .mapper(${func.type}.mapperData);
+        return resultNon;
+  }
+    @Override
+  public ResultNon<${data.type}> ${data.var}Remove(${data.type} value){
+        ResultNon<${data.type}> result = new ResultNon<>(value);
+        ResultNon<${data.type}> resultNon = result.validate(${func.type}.validateCreate)
+                .mapper(${func.type}.mapperEntity)
+                .callNon(local.remove)
+                .mapper(${func.type}.mapperData);
+        return resultNon;
+  }
+}
+]]></file>
     <% } %>
 </files>

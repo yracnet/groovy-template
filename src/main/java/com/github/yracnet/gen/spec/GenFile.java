@@ -100,8 +100,10 @@ public class GenFile {
             mask = "/$project/$project-serv/src/main/java/$dir/$pkg/$name";
         } else if ("impl".endsWith(layer)) {
             mask = "/$project/$project-impl/src/main/java/$dir/$pkg/$name";
+        } else if ("local".endsWith(layer)) {
+            mask = "/$project/$project-local/src/main/java/$dir/$pkg/$name";
         } else if ("entity".endsWith(layer)) {
-            mask = "/$project/$project-impl/src/main/java/$dir/$pkg/$name";
+            mask = "/$project/$project-local/src/main/java/$dir/$pkg/$name";
         }
         
         mask = mask.replace("$project", project);

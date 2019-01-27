@@ -3,9 +3,6 @@
     <% 
     def entityRef = [:]
     mapper.entity.each { entityRef[it.id] = it }
-    %>
-    <!-- <%= entityRef %> -->
-    <%
     entityRef.each {
     id, entity ->
     def pkg    = fn.pkg(groupId, artifactId, module);  

@@ -1,21 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files>
-    <% mapper.entity.each {
-    def filter = fn.deduceName(it.clazz, 'Filter')
-    def data   = fn.deduceName(it.clazz, 'Data')
-    def serv   = fn.deduceName(it.clazz, 'Serv')
-    def impl   = fn.deduceName(it.clazz, 'Impl')
-    def local   = fn.deduce(it.clazz, 'Local')
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    entityRef.each {
+    id, entity ->
+    def pkg    = fn.pkg(groupId, artifactId, module);  
+    def clazz  = fn.deduce(entity.clazz)
+    def data   = fn.deduceName(entity.clazz)
+    def filter = fn.deduceName(entity.clazz, 'Filter')
+    def serv   = fn.deduceName(entity.clazz, 'Serv')
+    def impl   = fn.deduceName(entity.clazz, 'Impl')
+    def func   = fn.deduceName(entity.clazz, 'Func')
+    def local  = fn.deduceName(entity.clazz, 'Local')
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
     %>
-    ${filter}
-    ${data}
-    ${serv}
-    ${impl}
-    ${local}
-    <file name="${local.type}" pkg="demo" dir="." layer="xx" module="none">
-        public class ${local.type}{
-        
-        }
-    </file>
+    <file name="${local.type}.java" layer="local" dir="." pkg="${pkg}">
+<![CDATA[
+import ${entity.pkg}.${entity.clazz};
+import com.github.yracnet.fn.FnCallNon;
+import com.github.yracnet.fn.FnCallSet;
+import com.github.yracnet.oper.QueryFilter;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+public class ${local.type} {
+    private EntityManager em;
+    public FnCallSet<QueryFilter, ${clazz.type}> filter = (queryFilter) -> {
+        Query query = queryFilter.createJpql("SELECT o FROM ${clazz.type} o", em);
+        return query.getResultList();
+    };
+    public FnCallNon<${clazz.type}, ${clazz.type}> create = (${clazz.var}) -> {
+        em.persist(${clazz.var});
+        return ${clazz.var};
+    };
+    public FnCallNon<${clazz.type}, ${clazz.type}> update = (${clazz.var}) -> {
+        ${clazz.var} = em.merge(${clazz.var});
+        return ${clazz.var};
+    };
+    public FnCallNon<${clazz.type}, ${clazz.type}> remove = (${clazz.var}) -> {
+        em.remove(${clazz.var});
+        return ${clazz.var};
+    };
+}
+]]></file>
     <% } %>
 </files>
