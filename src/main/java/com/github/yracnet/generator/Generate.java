@@ -1,7 +1,7 @@
 package com.github.yracnet.generator;
 
 import com.github.yracnet.gen.spec.FnContext;
-import com.github.yracnet.gen.spec.GenFileRoot;
+import com.github.yracnet.gen.spec.GenRoot;
 import com.github.yracnet.gen.spec.Util;
 import groovy.json.JsonSlurper;
 import groovy.lang.Writable;
@@ -81,9 +81,13 @@ public class Generate {
                 Template template = engine.createTemplate(file);
                 Writable out = template.make(param);
                 File x = new File(parent, file.getName());
+                System.out.println("::::::::::::::::::--->" + x);
+                if (x.exists()) {
+                    x.delete();
+                }
                 //out.writeTo(new PrintWriter(System.out));
                 out.writeTo(new FileWriter(x));
-                GenFileRoot item = Util.readFileArray(x);
+                GenRoot item = Util.readRoot(x);
                 item.genFileEach(genFile -> {
                     File outFile = genFile.getFileOutput(output, artifactId, module);
                     String outContent = genFile.getGenerateContent();
@@ -91,6 +95,7 @@ public class Generate {
                 });
             } catch (IOException | JAXBException | ClassNotFoundException | CompilationFailedException e) {
                 System.out.println("Error Process: " + file + ":" + e.getMessage());
+                e.printStackTrace();
             }
         });
     }

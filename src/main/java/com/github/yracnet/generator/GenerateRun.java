@@ -12,7 +12,7 @@ package com.github.yracnet.generator;
 public class GenerateRun {
 
     public static void main(String[] args) {
-        String model = "/work/github/yracnet/app-fn/app-fn-local/src/main/java/dev/yracnet/app/local/model.jpa";
+        String model = "/work/github/yracnet/app-fn/app-fn-manager/app-fn-manager-local/src/main/java/dev/yracnet/app/local/model.jpa";
         String output = "/work/github/yracnet/app-fn/";
         Generate gen = new Generate(model, output);
         gen.setGroupId("dev.yracnet");

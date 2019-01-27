@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -18,10 +17,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author yracnet
  */
 @XmlRootElement(name = "files")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class GenFileRoot extends GenBase{
+@XmlAccessorType(XmlAccessType.NONE)
+public class GenRoot {
 
-    @XmlElement
+    @XmlElement(name = "file")
     private List<GenFile> genFileList;
 
     public List<GenFile> getGenFileList() {
@@ -34,7 +33,7 @@ public class GenFileRoot extends GenBase{
 
     public void genFileEach(Consumer<GenFile> it) {
         genFileList.forEach(x -> {
-            x.init(this);
+            //x.init(this);
             it.accept(x);
         });
     }

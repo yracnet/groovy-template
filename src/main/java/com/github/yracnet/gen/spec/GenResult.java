@@ -15,9 +15,9 @@ import java.util.function.Consumer;
  */
 public class GenResult {
 
-    private final List<GenFileRoot> genFileRoot = new ArrayList<>();
+    private final List<GenRoot> genFileRoot = new ArrayList<>();
 
-    public void genFileRootEach(Consumer<GenFileRoot> it) {
+    public void genFileRootEach(Consumer<GenRoot> it) {
         genFileRoot.forEach(it);
     }
 
@@ -25,7 +25,7 @@ public class GenResult {
         genFileRoot.forEach(x -> x.genFileEach(it));
     }
 
-    public void addGenFileRoot(GenFileRoot item) {
+    public void addGenFileRoot(GenRoot item) {
         genFileRoot.add(item);
     }
 }

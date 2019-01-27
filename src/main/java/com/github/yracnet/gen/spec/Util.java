@@ -8,7 +8,6 @@ package com.github.yracnet.gen.spec;
 import com.github.yracnet.jpa.spec.Entity;
 import com.github.yracnet.jpa.spec.EntityMappings;
 import groovy.json.JsonBuilder;
-import groovy.json.JsonSlurper;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,6 +25,16 @@ import javax.xml.transform.stream.StreamSource;
  * @author yracnet
  */
 public class Util {
+
+    private static final JAXBContext JAXB_CONTEXT;
+
+    static {
+        try {
+            JAXB_CONTEXT = JAXBContext.newInstance(new Class<?>[]{GenRoot.class, GenFile.class, EntityMappings.class, Entity.class});
+        } catch (Exception e) {
+            throw new RuntimeException("Error", e);
+        }
+    }
 
     public static File getProjectPath() {
         String path = Util.class.getResource("/").getPath();
@@ -48,11 +57,10 @@ public class Util {
             File modelXml = new File(jpaModel.getParent(), "model.xml");
             File modelJson = new File(jpaModel.getParent(), "model.json");
 
-            JAXBContext jc = JAXBContext.newInstance(new Class<?>[]{EntityMappings.class, Entity.class});
-            Unmarshaller unmarshaller = jc.createUnmarshaller();
+            Unmarshaller unmarshaller = JAXB_CONTEXT.createUnmarshaller();
             Source source = new StreamSource(jpaModel);
             EntityMappings entityMapper = unmarshaller.unmarshal(source, EntityMappings.class).getValue();
-            Marshaller marshaller = jc.createMarshaller();
+            Marshaller marshaller = JAXB_CONTEXT.createMarshaller();
 
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             marshaller.marshal(entityMapper, modelXml);
@@ -68,17 +76,22 @@ public class Util {
 
     public static void writeContent(String content, File file) {
         try {
+            if (file.exists()) {
+                file.delete();
+            } else {
+                file.getParentFile().mkdirs();
+            }
             Files.write(Paths.get(file.toURI()), content.getBytes(), StandardOpenOption.CREATE);
-        } catch (IOException e) {
+            System.out.println("Write: " + file);
+        } catch (IOException | NullPointerException e) {
             System.out.println("Error: " + file + " create: " + e.getMessage());
         }
     }
-//public static GenFileRoot read
+//public static GenRoot read
 
-    public static GenFileRoot readFileArray(File file) throws JAXBException {
-        JAXBContext jc = JAXBContext.newInstance(new Class<?>[]{GenFileRoot.class, GenFile.class});
-        Unmarshaller unmarshaller = jc.createUnmarshaller();
+    public static GenRoot readRoot(File file) throws JAXBException {
+        Unmarshaller unmarshaller = JAXB_CONTEXT.createUnmarshaller();
         Source source = new StreamSource(file);
-        return unmarshaller.unmarshal(source, GenFileRoot.class).getValue();
+        return unmarshaller.unmarshal(source, GenRoot.class).getValue();
     }
 }

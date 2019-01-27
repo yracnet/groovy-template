@@ -136,4 +136,14 @@ public class FnContext {
         }
         return false;
     }
+
+    public String pkg(String... part) {
+        String all = "";
+        for (String s : part) {
+            all = all + "." + s;
+        }
+        all = all.replace("-", ".");
+        all = all.replace("/", ".");
+        return all.substring(1);
+    }
 }
