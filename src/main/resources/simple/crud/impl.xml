@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <% mapper.entity.each {
+    def entityName = it.clazz
+    def entityVar = fn.toVar(it.clazz)
+    def className = fn.toName(it.clazz)
+    def classVar  = fn.toNameVar(it.clazz)
+    def classText = fn.toNameText(it.clazz)
+    def classConst= fn.toNameConst(it.clazz)
+    def basics = it.attributes.basic
+    def ids    = it.attributes.id
+    %>
+    <file name="${className}Impl" layer="impl" dir="." pkg="${groupId}.${artifactId}.${module}">
+        public class ${className}Impl implements ${className}Serv {
+        
+        private ${entityName}Local ${entityVar}Local;
+        
+        public List<${className}Data> filter${className}(${className}Filter ${classVar}Filter){
+        SimpleQuery ${entityVar}Filter = ${className}Mapper.to${classVar}Filter(${classVar}Filter);
+        List<${entityName}> ${entityVar}List = ${entityVar}Local.filter${entityName}(${entityVar}Filter, ${entityName}.class);
+        return ${className}Mapper.to${classVar}List(list);
+        }
+        
+        public ${className}Data create${className}(${className}Data ${classVar}){
+        ${className}Validate.create${className}Validate(${classVar});
+        ${entityName} ${entityVar} = ${className}Mapper.to${entityName}(${classVar});
+        ${entityVar} = ${entityVar}Local.create${entityName}(${entityVar});
+        ${classVar} = ${className}Mapper.to${className}(${entityVar});
+        return ${classVar};
+        }
+        
+        public ${className}Data update${className}(${className}Data ${classVar}){
+        return null;
+        }
+        
+        public ${className}Data remove${className}(${className}Data ${classVar}){
+        return null;
+        }
+        
+        }
+    </file>
+    <% } %>
+</files>

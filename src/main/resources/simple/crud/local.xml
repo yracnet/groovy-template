@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <% mapper.entity.each {
+    def filter = fn.deduceName(it.clazz, 'Filter')
+    def data   = fn.deduceName(it.clazz, 'Data')
+    def serv   = fn.deduceName(it.clazz, 'Serv')
+    def impl   = fn.deduceName(it.clazz, 'Impl')
+    def local   = fn.deduce(it.clazz, 'Local')
+    %>
+    ${filter}
+    ${data}
+    ${serv}
+    ${impl}
+    ${local}
+    <file name="${local.type}" pkg="demo" dir="." layer="xx" module="none">
+        public class ${local.type}{
+        
+        }
+    </file>
+    <% } %>
+</files>

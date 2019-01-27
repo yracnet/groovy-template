@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.yracnet.generator;
+package com.github.yracnet.gen.spec;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
  *
  * @author yracnet
  */
-public class Fn {
+public class FnContext {
 
     public Map deduce(String name) {
         return deduce(name, "");
@@ -55,7 +56,7 @@ public class Fn {
 
     public Map deduceRefName(Map attr, Map ref) {
         String connectedEntityId = (String) attr.get("connectedEntityId");
-        ref = (Map)ref.get(connectedEntityId);
+        ref = (Map) ref.get(connectedEntityId);
         String clazz = (String) ref.get("clazz");
         clazz = toName(clazz);
         String name = (String) attr.get("name");
@@ -63,19 +64,6 @@ public class Fn {
         map.put("type", clazz);
         map.put("it", attr);
         return map;
-    }
-
-    public String toName(String name) {
-        name = name.replaceFirst("^Crm", "");
-        name = name.replaceFirst("^crm", "");
-        name = name.replaceFirst("^Mkt", "");
-        name = name.replaceFirst("^mkt", "");
-        return name;
-    }
-
-    public boolean isName(String name) {
-        return name.startsWith("Crm") || name.startsWith("Mkt")
-                || name.startsWith("crm") || name.startsWith("mkt");
     }
 
     public String toNameVar(String name) {
@@ -116,7 +104,7 @@ public class Fn {
     }
 
     public static void main(String arg[]) {
-        Fn fn = new Fn();
+        FnContext fn = new FnContext();
         String values[] = {"AaaBbbb", "aaaBbbb", "xxxx"};
         for (String value : values) {
             System.out.println("===========>" + value);
@@ -125,5 +113,27 @@ public class Fn {
             System.out.println("---->" + fn.toNameConst(value));
             System.out.println("---->" + fn.toNameLiteral(value));
         }
+    }
+
+    private final List<String> prefix = new ArrayList<>();
+
+    public void addPrefix(List<String> list) {
+        prefix.addAll(list);
+    }
+
+    public String toName(String name) {
+        for (String pre : prefix) {
+            name = name.replaceFirst("^" + pre, "");
+        }
+        return name;
+    }
+
+    public boolean isName(String name) {
+        for (String pre : prefix) {
+            if (name.startsWith(pre)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

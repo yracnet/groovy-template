@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    print(entityRef)
+    entityRef.each {
+    id, entity ->
+    def data   = fn.deduceName(entity.clazz)
+    def filter = fn.deduceName(entity.clazz, 'Filter')
+    def serv   = fn.deduceName(entity.clazz, 'Serv')
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    %>
+    <file name="${serv.type}" layer="serv" dir="." pkg="${groupId}.${artifactId}.${module}">
+        <![CDATA[
+        interface ${serv.type} {
+        ResultList<${data.type}> ${data.var}Filter(${filter.type} ${filter.var});
+        ResultData<${data.type}> ${data.var}Create(${data.type} ${data.var});
+        ResultData<${data.type}> ${data.var}Update(${data.type} ${data.var});
+        ResultData<${data.type}> ${data.var}Remove(${data.type} ${data.var});
+        }
+        ]]>
+    </file>
+    <file name="${data.type}" layer="serv" dir="." package="${groupId}.${artifactId}.${module}.state">
+        <![CDATA[
+        public class ${data.type} implements Serialize{<%
+        attr.each{  %>
+        public ${it.type} ${it.var}; //${it.it}<% 
+        } %>
+        }
+        ]]>
+    </file>
+    <file name="${filter.type}" layer="serv" dir="." package="${groupId}.${artifactId}.${module}.state">
+        <![CDATA[
+        public class ${filter.type} implements Serialize{<%
+        attr.each{  %>
+        public Filter<${it.type}> ${it.var};<% 
+        } %>
+        }
+        ]]>
+    </file>
+    <% } %>
+</files>

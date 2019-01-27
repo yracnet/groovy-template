@@ -5,7 +5,8 @@
  */
 package com.github.yracnet.generator;
 
-import static com.github.yracnet.generator.Util.*;
+import com.github.yracnet.gen.spec.FnContext;
+import static com.github.yracnet.gen.spec.Util.*;
 import com.github.yracnet.jpa.spec.Entity;
 import com.github.yracnet.jpa.spec.EntityMappings;
 import groovy.json.JsonBuilder;
@@ -42,7 +43,6 @@ public class Run04 {
         File jsonModel = new File(dir, "/src/main/resources/template/layer/model2.json");
         JAXBContext jc = JAXBContext.newInstance(new Class<?>[]{EntityMappings.class, Entity.class});
         Unmarshaller unmarshaller = jc.createUnmarshaller();
-        unmarshaller.setEventHandler(new ValidateJAXB());
         Source source = new StreamSource(jpaModel);
         EntityMappings entityMapper = unmarshaller.unmarshal(source, EntityMappings.class).getValue();
         Marshaller marshaller = jc.createMarshaller();
@@ -65,7 +65,7 @@ public class Run04 {
         param.put("artifactId", "customer");
         param.put("module", "manager");
         param.put("mapper", mapper);
-        param.put("fn", new Fn());
+        param.put("fn", new FnContext());
         Writable output = template.make(param);
         Writer writer = new PrintWriter(System.out);
         output.writeTo(writer);
