@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    entityRef.each {
+    id, entity ->
+    def pkg    = fn.pkg(groupId, artifactId, module);  
+    def data   = fn.deduceName(entity.clazz)
+    def filter = fn.deduceName(entity.clazz, 'Filter')
+    def serv   = fn.deduceName(entity.clazz, 'Serv')
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    %>
+    <file name="${serv.type}.java" layer="serv" dir="." pkg="${pkg}">
+<![CDATA[
+import bo.central.result.ResultObject;
+import bo.central.result.ResultSet;
+import ${pkg}.data.${data.type};
+import ${pkg}.data.${filter.type};
+
+public interface ${serv.type} {
+
+  ResultSet<${data.type}> filtrar${data.type}(${filter.type} ${filter.var});
+
+  ResultObject<${data.type}> recargar${data.type}(${data.type} ${data.var});
+
+  ResultObject<${data.type}> registrar${data.type}(${data.type} ${data.var});
+
+  ResultObject<${data.type}> actualizar${data.type}(${data.type} ${data.var});
+
+  ResultObject<${data.type}> eliminar${data.type}(${data.type} ${data.var});
+}
+]]></file>
+    <file name="${data.type}.java" layer="serv:data" dir="." pkg="${pkg}.data">
+<![CDATA[
+import java.io.Serializable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
+public class ${data.type} implements Serializable {
+   private static final long serialVersionUID = 1L;
+<% attr.each{  %>
+   @XmlElement
+   private ${it.type} ${it.var};
+<% } %>
+<% attr.each{  %>
+   public ${it.type} ${it.get}(){
+     return ${it.var};
+   }
+   public void ${it.set}(${it.type} ${it.var}){
+     this.${it.var} = ${it.var};
+   }
+<% } %>
+}
+]]>
+    </file>
+    <file name="${filter.type}.java" layer="serv:filter" dir="." pkg="${pkg}.data">
+<![CDATA[
+import java.io.Serializable;
+import bo.central.filter.Config;
+import bo.central.filter.FilterElement;
+import bo.central.filter.FilterAbstract;
+import bo.central.filter.FilterValue;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
+public class ${filter.type} extends FilterAbstract implements Serializable {
+   private static final long serialVersionUID = 1L;
+<% attr.each{  %>
+   @FilterElement
+   private FilterValue<${it.type}> ${it.var};
+<% } %>
+<% attr.each{  %>
+
+   public FilterValue<${it.type}> ${it.get}() {
+      return ${it.var};
+   }
+
+   public void ${it.set}(FilterValue<${it.type}> ${it.var}) {
+      this.${it.var} = ${it.var};
+   }
+<% } %>
+}
+]]>
+    </file>
+    <% } %>
+</files>

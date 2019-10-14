@@ -26,6 +26,8 @@ public class Generate {
     private String groupId;
     private String artifactId;
     private String module;
+    private String contextPath;
+    private String namespace;
     private final List<File> templateList = new ArrayList<>();
     private final List<String> prefixList = new ArrayList<>();
 
@@ -58,6 +60,22 @@ public class Generate {
         this.module = module;
     }
 
+    public String getContextPath() {
+        return contextPath;
+    }
+
+    public void setContextPath(String contextPath) {
+        this.contextPath = contextPath;
+    }
+
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
+    }
+
     public void templateEach(Consumer<File> fn) {
         templateList.forEach(fn);
     }
@@ -74,6 +92,8 @@ public class Generate {
         param.put("groupId", groupId);
         param.put("artifactId", artifactId);
         param.put("module", module);
+        param.put("contextPath", contextPath);
+        param.put("ns", namespace);
         param.put("mapper", mapper);
         param.put("fn", fn);
         templateEach(file -> {
@@ -90,8 +110,12 @@ public class Generate {
                 GenRoot item = Util.readRoot(x);
                 item.genFileEach(genFile -> {
                     File outFile = genFile.getFileOutput(output, artifactId, module);
-                    String outContent = genFile.getGenerateContent();
-                    Util.writeContent(outContent, outFile);
+                    if(genFile.isSkip()){
+                        System.out.println("Write Skip: " + outFile);
+                    } else {
+                        String outContent = genFile.getGenerateContent();
+                        Util.writeContent(outContent, outFile);
+                    }
                 });
             } catch (IOException | JAXBException | ClassNotFoundException | CompilationFailedException e) {
                 System.out.println("Error Process: " + file + ":" + e.getMessage());

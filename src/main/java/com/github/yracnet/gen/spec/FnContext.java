@@ -24,27 +24,37 @@ public class FnContext {
         return deduceName(name, "");
     }
 
-    public Map deduce(String name, String sufix) {
+    public Map deduce(String name, String classifier) {
         Map map = new HashMap();
-        String nameFull = name + sufix;
-        nameFull = upperFirst(nameFull);
-        String var = toVar(nameFull);
-        map.put("type", nameFull);
-        map.put("var", var);
-        map.put("text", toText(nameFull));
-        map.put("const", toConst(nameFull));
-
-        map.put("varList", var + "List");
-        map.put("get", "get" + nameFull);
-        map.put("set", "set" + nameFull);
-        map.put("param", nameFull + " " + var);
-
+        String nameSufix = name + classifier;
+        nameSufix = nameSufix.replace("-", "$");
+        nameSufix = upperFirst(nameSufix);
+        String varSufix = toVar(nameSufix);
+        map.put("type", nameSufix);
+        map.put("var", varSufix);
+        //map.put("dollar", toDollar(nameSufix));
+        map.put("text", toText(nameSufix));
+        map.put("const", toConst(nameSufix));
+        map.put("path", toPath(nameSufix));
+        map.put("uscore", toUnderscore(nameSufix));
+        map.put("colon", toColon(nameSufix));
+        map.put("dash", toDash(nameSufix));
+        map.put("varList", varSufix + "List");
+        map.put("get", "get" + nameSufix);
+        map.put("set", "set" + nameSufix);
+        map.put("param", nameSufix + " " + varSufix);
         return map;
     }
 
-    public Map deduceName(String name, String sufix) {
+    public Map deduceName(String name, String classifier) {
         name = toName(name);
-        return deduce(name, sufix);
+        return deduce(name, classifier);
+    }
+
+    public Map deduceName(String name, String classifier, String ns) {
+        name = toName(name);
+        name = ns + name;
+        return deduce(name, classifier);
     }
 
     public Map deduceAttrName(Map attr) {
@@ -86,6 +96,16 @@ public class FnContext {
         return name.toUpperCase();
     }
 
+    public String toPath(String name) {
+        name = name.replaceAll("([a-z0-9]+)([A-Z0-9]+)", "$1/$2");
+        return name.toLowerCase();
+    }
+
+    public String toDollar(String name) {
+        name = name.replaceAll("([a-z0-9]+)([A-Z0-9]+)", "$1\\$$2");
+        return name.toLowerCase();
+    }
+
     public String toNameLiteral(String name) {
         name = toName(name);
         return toLiteral(name);
@@ -95,12 +115,25 @@ public class FnContext {
         return name.replaceAll("([a-z0-9]+)([A-Z0-9]+)", "$1 $2");
     }
 
+    public String toUnderscore(String name) {
+        return name.replaceAll("([a-z0-9]+)([A-Z0-9]+)", "$1_$2").toLowerCase();
+    }
+
+    public String toColon(String name) {
+        return name.replaceAll("([a-z0-9]+)([A-Z0-9]+)", "$1:$2").toLowerCase();
+    }
+
+    public String toDash(String name) {
+        return name.replaceAll("([a-z0-9]+)([A-Z0-9]+)", "$1-$2").toLowerCase();
+    }
+
     public String toNameText(String name) {
         name = toName(name);
         return toText(name);
     }
 
     public String toText(String name) {
+        name = name.replace("$", " ");
         return name.replaceAll("([a-z0-9]+)([A-Z0-9]+)", "$1 $2");
     }
 

@@ -12,17 +12,19 @@ package com.github.yracnet.generator;
 public class GenerateRun {
 
     public static void main(String[] args) {
-        String model = "/work/github/yracnet/app-fn/app-fn-manager/app-fn-manager-local/src/main/java/dev/yracnet/app/local/model.jpa";
-        String output = "/work/github/yracnet/app-fn/";
+        String model = "/work/dev/bcb-01/r1/temporal/modelo-v3.jpa";
+        String output = "/work/dev/bcb-01/r1/temporal2";
         Generate gen = new Generate(model, output);
-        gen.setGroupId("dev.yracnet");
-        gen.setArtifactId("app-fn");
-        gen.setModule("manager");
-        gen.addTemplate("simple.crud.serv");
-        gen.addTemplate("simple.crud.impl");
-        gen.addTemplate("simple.crud.local");
-        //gen.addTemplate("simple.crud.view");
-        gen.removePrefix("Cap");
+        gen.setGroupId("bo.gob.bcb.grh");
+        gen.setArtifactId("postulate");
+        gen.setModule("sitio");
+        gen.setNamespace("psv");
+        gen.setContextPath("postulate-sitio");
+        gen.addTemplate("simple.crud2.serv");
+        gen.addTemplate("simple.crud2.impl");
+        gen.addTemplate("simple.crud2.local");
+        gen.addTemplate("simple.crud2.view");
+        gen.removePrefix("Form");
         gen.generate();
     }
 }
