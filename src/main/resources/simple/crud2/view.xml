@@ -20,9 +20,15 @@
     attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
     attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
     %>
-    <file name="${rest.type}.java" layer="view:rest" dir="." pkg="${pkg}" skip="true"><![CDATA[
+    <file name="${rest.type}.java" layer="view:rest" dir="." pkg="${pkg}" skip="false"><![CDATA[
+import bo.central.Result;
+import bo.central.result.Message;
+import bo.central.result.ResultSet;
+import bo.central.result.ResultObject;
+import bo.central.result.ResultVoid;
 import bo.gob.bcb.grh.postulate.sitio.data.${data.type};
 import bo.gob.bcb.grh.postulate.sitio.data.${filter.type};
+import java.util.Date;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -30,8 +36,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import bo.central.result.ResultSet;
-import bo.central.result.ResultObject;
 import javax.interceptor.Interceptors;
 
 @Path("${data.path}")
@@ -45,8 +49,13 @@ public class ${rest.type} {
 
     @GET
     @Path("/")
-    public String ping() {
-        return "Info Service: " + this + " by " + serv;
+    public Result ping() {
+        Result result = ResultVoid.of();
+        Message message = result.addMessage("Ping Service");
+        message.addCause("This: " + this);
+        message.addCause("Serv: " + serv);
+        message.addCause("Date: " + new Date());
+        return result;
     }
 
     @POST
