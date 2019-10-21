@@ -12,18 +12,19 @@ package com.github.yracnet.generator;
 public class GenerateRun {
 
     public static void main(String[] args) {
-        String model = "/work/dev/bcb-01/r1/temporal/modelo-v3.jpa";
-        String output = "/work/dev/bcb-01/r1/temporal2";
+        String model = "/work/dev/bcb-01/temporal/modelo-v3.jpa";
+        String output = "/work/dev/bcb-01/temporal";
         Generate gen = new Generate(model, output);
         gen.setGroupId("bo.gob.bcb.grh");
         gen.setArtifactId("postulate");
         gen.setModule("sitio");
         gen.setNamespace("psv");
-        gen.setContextPath("postulate-sitio");
-        gen.addTemplate("simple.crud2.serv");
-        gen.addTemplate("simple.crud2.impl");
-        gen.addTemplate("simple.crud2.local");
-        gen.addTemplate("simple.crud2.view");
+        //gen.setContextPath("postulate-sitio");
+        //gen.addTemplate("simple.crud2.serv");
+        //gen.addTemplate("simple.crud2.impl");
+        //gen.addTemplate("simple.crud2.local");
+        //gen.addTemplate("simple.crud2.view");
+        gen.addTemplate("simple.crud2.react");
         gen.removePrefix("Form");
         gen.generate();
     }

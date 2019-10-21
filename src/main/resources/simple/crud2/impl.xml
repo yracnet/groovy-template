@@ -88,26 +88,18 @@ public class ${impl.type} implements ${serv.type} {
     <file name="${mapper.type}.java" layer="impl:mapper" dir="." pkg="${pkg}">
 <![CDATA[
 import ${pkg}.data.${data.type};
-import ${pkg}.data.${filter.type};
 import bo.gob.bcb.grh.postulate.modelo.${entity.clazz};
 
 public class ${mapper.type} {
   
-    static ${data.type} build${data.type}Query(${filter.type} ${filter.var}){
-        //QueryFilter query = new QueryFilter("Query ${data.text}");<% attr.each{  %>
-        //query.appendAnd("${it.var}", ${filter.var}.${it.get}());<% } %>
-        //return query;
-        return null;
-    }
-  
-    static ${data.type} mapperTo${data.type}(${clazz.type} ${clazz.var}){
+    public static ${data.type} mapperTo${data.type}(${clazz.type} ${clazz.var}){
         ${data.type} ${data.var} = new ${data.type}();
         <% attr.each{  %>
         ${data.var}.${it.set}(${clazz.var}.${it.get}());<% } %>
         return ${data.var};
     }
   
-    static ${clazz.type} mapperTo${clazz.type}(${data.type} ${data.var}){
+    public static ${clazz.type} mapperTo${clazz.type}(${data.type} ${data.var}){
         ${clazz.type} ${clazz.var} = new ${clazz.type}();
         <% attr.each{  %>
         ${clazz.var}.${it.set}(${data.var}.${it.get}());<% } %>
