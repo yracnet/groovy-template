@@ -86,15 +86,30 @@ public class Util {
         }
     }
 
-    public static void writeContent(String content, File file) {
+    public static void writeContent(String content, File file, boolean append, String comment) {
         try {
             if (file.exists()) {
-                file.delete();
+                if (append == false) {
+                    file.delete();
+                }
             } else {
                 file.getParentFile().mkdirs();
             }
-            Files.write(Paths.get(file.toURI()), content.getBytes(), StandardOpenOption.CREATE);
-            System.out.println("Write: " + file);
+            if (append == false) {
+                Files.write(Paths.get(file.toURI()), content.getBytes(), StandardOpenOption.CREATE);
+            } else {
+                comment = "============================ " + comment + " ============================";
+                String name = file.getName();
+                if (name.matches(".*(java|js|ts|tsx)")) {
+                    comment = "/* " + comment + " */";
+                } else if (name.matches(".*(html|xhtml|xml)")) {
+                    comment = "<!-- " + comment + " -->";
+                }
+                comment = "\n\n" + comment + "\n\n";
+                Files.write(Paths.get(file.toURI()), comment.getBytes(), StandardOpenOption.APPEND);
+                Files.write(Paths.get(file.toURI()), content.getBytes(), StandardOpenOption.APPEND);
+            }
+            System.out.println("Write: " + file + " Append: " + append);
         } catch (IOException | NullPointerException e) {
             System.out.println("Error: " + file + " create: " + e.getMessage());
         }

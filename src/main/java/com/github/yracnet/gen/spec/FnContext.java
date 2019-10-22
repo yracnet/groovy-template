@@ -60,7 +60,14 @@ public class FnContext {
     public Map deduceAttrName(Map attr) {
         String name = (String) attr.get("name");
         Map map = deduceName(name);
-        map.put("type", attr.get("attributeType"));
+        String type = attr.get("attributeType").toString();
+        map.put("type", type);
+        int i = type.lastIndexOf(".");
+        if (i > 0) {
+            type = type.substring(i + 1);
+        }
+        type = type.matches("(long|Long|Integer|int|Double|double)") ? "number" : type.matches("(String)") ? "string" : type;
+        map.put("jsType", type);
         map.put("it", attr);
         return map;
     }
@@ -68,12 +75,15 @@ public class FnContext {
     public Map deduceRefName(Map attr, Map ref) {
         String connectedEntityId = (String) attr.get("connectedEntityId");
         ref = (Map) ref.get(connectedEntityId);
+        boolean coll = attr.get("collectionType") != null;
         String clazz = (String) ref.get("clazz");
         clazz = toName(clazz);
         String name = (String) attr.get("name");
         Map map = deduceName(name);
         map.put("type", clazz);
         map.put("it", attr);
+        String jsClazz = coll? "Array<"+clazz+">" : clazz;
+        map.put("jsType", jsClazz);
         return map;
     }
 

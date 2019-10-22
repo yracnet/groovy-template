@@ -114,7 +114,7 @@ public class Generate {
                         System.out.println("Write Skip: " + outFile);
                     } else {
                         String outContent = genFile.getGenerateContent();
-                        Util.writeContent(outContent, outFile);
+                        Util.writeContent(outContent, outFile, genFile.isAppend(), genFile.getComment());
                     }
                 });
             } catch (IOException | JAXBException | ClassNotFoundException | CompilationFailedException e) {

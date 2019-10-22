@@ -32,6 +32,10 @@ public class GenFile {
     private String type;
     @XmlAttribute(name = "skip")
     private boolean skip;
+    @XmlAttribute(name = "append")
+    private boolean append;
+    @XmlAttribute(name = "comment")
+    private String comment;
     @XmlValue
     private String content;
 
@@ -164,6 +168,22 @@ public class GenFile {
 
     public void setSkip(boolean skip) {
         this.skip = skip;
+    }
+
+    public boolean isAppend() {
+        return append;
+    }
+
+    public void setAppend(boolean append) {
+        this.append = append;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public String getContent() {

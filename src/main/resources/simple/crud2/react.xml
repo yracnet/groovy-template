@@ -1,8 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files>
+    <file name="Endpoint.tsx" layer="view:serv" dir="." skip="false" append="false"><![CDATA[
+import axios, { AxiosResponse } from 'axios';
+import * as model from './Model';
+
+const urlServer: String = 'http://localhost:8080/postulate-sitio-view-0.1.0/rest';
+let defaultSuccess = function (data: any) {
+  console.debug('success:', data);
+};
+let defaultError = function (data: any) {
+  console.debug('error:', data);
+};
+let processCaller = function (caller: Promise<AxiosResponse>, success?: (data: any) => void, error?: (data: any) => void) {
+  let callerSuccess = success || defaultSuccess;
+  let callerError = error || defaultError;
+  caller.then(response => {
+    console.debug('Response-Success:', response);
+    let result: model.Result = response.data;
+    if (result.error === false) {
+      callerSuccess(result.value);
+    } else {
+      callerError(result);
+    }
+  }).catch(response => {
+    console.debug('Response-Error:', response);
+    let result: model.Result = {
+      error: true,
+      messages: [{
+        type: 'error',
+        message: 'Error al invocar al serivio',
+        causes: ['Vea el Log del servidor!']
+      }]
+    }
+    callerError(result);
+  });
+};
+
+]]></file>
+    <file name="Model.tsx" layer="view:serv" dir="." skip="false" append="false"><![CDATA[
+export interface FilterValue {
+    operator: string,
+    value?: any
+}
+export interface Message {
+  type: string,
+  message: string,
+  causes: Array<string>
+}
+export interface Result {
+  error: boolean,
+  messages: Array<Message>,
+  value?: T|Array<T>
+}
+]]></file>
     <% 
     def entityRef = [:]
     mapper.entity.each { entityRef[it.id] = it }
+    %>
+
+    <% 
     entityRef.each {
     id, entity ->
     def pkg    = fn.pkg(groupId, artifactId, module);  
@@ -20,81 +76,355 @@
     attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
     attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
     %>
-    <file name="${data.uscore}.xhtml" layer="view" dir="." skip="false"><![CDATA[
-<div ng-controller="${viewCtrl.uscore}">
-    <section ng-if="bloqueVisible('inbox')">
-        <header>Listado de ${data.text}</header>
-        <section
-            ${data.colon}-filter = "simple"
-            ${data.colon}-object = "data.filter"
-            ${data.colon}-option = "data.option">
-            Load Block Filter
-        </section>
-        <div>
-            <button ng-click="abrirBloqueClick('create', data.origin)">Crear<button>
-            <button ng-click="abrirBloqueClick('update', data.select)">Editar<button>
-            <button ng-click="abrirBloqueClick'detail', data.select)">Detalle<button>
-            <button ng-click="abrirBloqueClick('delete', data.select)">Eliminar<button>
-        </div>
-        <section
-            ${data.colon}-grid = "simple"
-            ${data.colon}-values = "data.values"
-            ${data.colon}-select = "data.select">
-            Load Block Form
-        </section>
-    <section>
-    <section ng-if="bloqueVisible('create')">
-        <header>Registro ${data.text}</header>
-        <section
-            ${data.colon}-form  = "enabled"
-            ${data.colon}-object = "data.object"
-            ${data.colon}-option = "data.option">
-            Load Block Form
-        </section>
-        <footer>
-            <button ng-click="registrar${data.type}Click()">Guardar<button>
-            <button ng-click="cancelar${data.type}Click()">Cancelar<button>
-        </footer>
-    <section>
-    <section ng-if="bloqueVisible('update')">
-        <header>Actualizar ${data.text} #<b ng-bind="data.object.id"/></header>
-        <section
-            ${data.colon}-form  = "enabled"
-            ${data.colon}-object = "data.object"
-            ${data.colon}-option = "data.option">
-            Load Block Form
-        </section>
-        <footer>
-            <button ng-click="actualizar${data.type}Click()">Guardar<button>
-            <button ng-click="cancelar${data.type}Click()">Cancelar<button>
-        </footer>
-    <section>
-    <section ng-if="bloqueVisible('detail')">
-        <header>Detalle ${data.text} #<b ng-bind="data.object.id"/></header>
-        <section
-            ${data.colon}-form  = "disabled"
-            ${data.colon}-object = "data.object"
-            ${data.colon}-option = "data.option">
-            Load Block Form
-        </section>
-        <footer>
-            <button ng-click="cancelar${data.type}Click()">Cancelar<button>
-        </footer>
-    <section>
-    <section ng-if="bloqueVisible('remove')">
-        <header>Eliminar ${data.text} #<b ng-bind="data.object.id"/></header>
-        <section
-            ${data.colon}-form  = "disabled"
-            ${data.colon}-object = "data.object"
-            ${data.colon}-option = "data.option">
-            Load Block Form
-        </section>
-        <footer>
-            <button ng-click="eliminar${data.type}Click()">Eliminar<button>
-            <button ng-click="cancelar${data.type}Click()">Cancelar<button>
-        </footer>
-    <section>
-</div>
+    <file name="Model.tsx" layer="view:serv" dir="." skip="false" append="true" comment="${data.const}"><![CDATA[
+export interface ${data.type} {<% attr.each{  %>
+   ${it.var}?: ${it.jsType},<% } %>
+}
+
+export interface ${filter.type} {<% attr.each{  %>
+   ${it.var}?: FilterValue,<% } %>
+}
 ]]></file>
+    <file name="Endpoint.tsx" layer="view:serv" dir="." skip="false" append="true" comment="${data.const}"><![CDATA[
+
+export const ${rest.var} = {
+  ping(callback?: (response: any) => void) {
+    let caller = axios.get(urlServer + '/${data.path}/');
+    processCaller(caller, callback, callback);
+  },
+  filter(data: model.${filter.type}, success?: (values: Array<model.${data.type}>) => void, error?: (response: any) => void) {
+    let caller = axios.post(urlServer + '/${data.path}/filtrar', data);
+    processCaller(caller, success, error);
+  },
+  reload(data: model.${data.type}, success?: (value: model.${data.type}) => void, error?: (response: any) => void) {
+    let caller = axios.post(urlServer + '/${data.path}/recargar', data);
+    processCaller(caller, success, error);
+  },
+  create(data: model.${data.type}, success?: (value: model.${data.type}) => void, error?: (response: any) => void) {
+    let caller = axios.post(urlServer + '/${data.path}/registrar', data);
+    processCaller(caller, success, error);
+  },
+  update(data: model.${data.type}, success?: (value: model.${data.type}) => void, error?: (response: any) => void) {
+    let caller = axios.post(urlServer + '/${data.path}/actualizar', data);
+    processCaller(caller, success, error);
+  },
+  remove(data: model.${data.type}, success?: (value: model.${data.type}) => void, error?: (response: any) => void) {
+    let caller = axios.post(urlServer + '/${data.path}/eliminar', data);
+    processCaller(caller, success, error);
+  }
+}
+]]></file>
+    <file name="${data.type}Component.tsx" layer="view:ctrl" dir="." skip="false"><![CDATA[
+//==============================================
+const UsuarioForm: React.FC<{
+  object?: Usuario,
+  objectChange: (e: InputEvent) => void
+}> = (props) => {
+  let { object, objectChange } = props;
+  return object ? <Grid cols="4, 8">
+    <OutputText name="id" value="ID" />
+    <InputText name="id" defaultValue={object.id} onChange={objectChange} />
+    <OutputText name="correoElectronico" value="Correo Electronico" />
+    <InputText name="correoElectronico" defaultValue={object.correoElectronico} onChange={objectChange} />
+  </Grid> : <p className="alert alert-warning">Sin objecto seleccioando</p>;
+}
+const UsuarioView: React.FC<{
+  object?: Usuario
+}> = (props) => {
+  let { object } = props;
+  return object ? <Grid cols="4, 8">
+    <OutputText name="id" value="ID" />
+    <OutputText name="id" value={object.id} />
+    <OutputText name="correoElectronico" value="Correo Electronico" />
+    <OutputText name="correoElectronico" value={object.correoElectronico} />
+  </Grid> : <p className="alert alert-warning">Sin objecto seleccioando</p>;
+}
+//==============================================
+export const UsuarioInbox: React.FC<{
+  hide?: boolean,
+  filtro: UsuarioFilter,
+  values: Array<Usuario>,
+  filtroChange: (e: FilterEvent) => void,
+  selectObject: (e: TableEvent) => void,
+  children: any | Array<any>
+}> = (props) => {
+  let { hide, values, filtro, selectObject, filtroChange, children } = props;
+  return hide ? null : <Panel>
+    <title>Listado de Usuarios</title>
+    <Grid cols="4, 6">
+      <FilterText name="id" value={filtro.id} onChange={filtroChange} label="#" option="number" />
+      <FilterText name="correoElectronico" value={filtro.correoElectronico} onChange={filtroChange} label="Correo Electronico" />
+    </Grid>
+    {children}
+    <DataTable name="t1" pk="id" values={values} onSelect={selectObject}>
+      <Column title="#" attr="id" align="right" />
+      <Column title="Correo Electronico" attr="correoElectronico" align="left" />
+    </DataTable>
+  </Panel>;
+}
+        
+        
+]]></file>
+    <file name="${data.type}Module.tsx" layer="view:ctrl" dir="." skip="true"><![CDATA[
+
+export interface ${data.type}Props { }
+interface ${data.type}State {
+  panel: 'inbox' | 'create' | 'update' | 'remove' | 'detail',
+  filtro: ${filter.type},
+  values: Array<${data.type}>
+  select?: ${data.type},
+  objeto?: ${data.type},
+}
+
+export class ${data.type}Module extends React.PureComponent<${data.type}Props, ${data.type}State> {
+  constructor(props: ${data.type}Props) {
+    super(props);
+    this.state = {
+      panel: 'inbox',
+      filtro: {},
+      values: [],
+      select: undefined,
+      objeto: undefined,
+    };
+    //Select Row
+    this.selectObject = this.selectObject.bind(this);
+    //Change
+    this.filtroChange = this.filtroChange.bind(this);
+    this.objetoChange = this.objetoChange.bind(this);
+    //CRUD
+    this.createClick = this.createClick.bind(this);
+    this.updateClick = this.updateClick.bind(this);
+    this.removeClick = this.removeClick.bind(this);
+    this.detailClick = this.detailClick.bind(this);
+    //Filtro
+    this.filterClick = this.filterClick.bind(this);
+    this.cancelClick = this.cancelClick.bind(this);
+    //Ping
+    this.pingClick = this.pingClick.bind(this);
+  }
+
+  selectObject(event: TableEvent) {
+    let select: ${data.type} = event.value;
+    this.setState({ select });
+  }
+
+  filtroChange(event: FilterEvent) {
+    let filtro: any = Object.assign({}, this.state.filtro);
+    filtro[event.name] = event.value;
+    this.setState({ filtro });
+  }
+
+  objetoChange(event: InputEvent) {
+    let objeto: any = Object.assign({}, this.state.objeto);
+    objeto[event.name] = event.value;
+    this.setState({ objeto });
+  }
+
+  filterClick(event: ButtonEvent) {
+    let filtro = { ...this.state.filtro };
+    if (event.name === 'clean') {
+      filtro = {};
+    }
+    ${rest.var}.filter(filtro, (values: Array<${data.type}>) => {
+      this.setState({ values, filtro });
+    }, () => {
+      this.setState({ values: [], filtro });
+    });
+  }
+
+  pingClick(event: ButtonEvent) {
+    ${rest.var}.ping();
+  }
+
+  createClick(event: ButtonEvent) {
+    if (event.name === 'open') {
+      this.setState({
+        panel: 'create',
+        objeto: {
+          id: '?'
+        }
+      });
+    } else if (event.name === 'apply') {
+      let objeto = this.state.objeto || {};
+      ${rest.var}.create(objeto, (value: ${data.type}) => {
+        let filtro: ${filter.type} = {
+          id: {
+            operator: 'eq',
+            value: value.id
+          }
+        };
+        this.setState({
+          panel: 'inbox',
+          objeto: undefined,
+          filtro
+        }, () => {
+          this.filterClick(event);
+        });
+      });
+    }
+  }
+
+  updateClick(event: ButtonEvent) {
+    if (event.name === 'open') {
+      this.setState({
+        panel: 'update',
+        objeto: this.state.select
+      });
+    } else if (event.name === 'apply') {
+      let objeto = this.state.objeto || {};
+      ${rest.var}.update(objeto, (value: ${data.type}) => {
+        let filtro: ${filter.type} = {
+          id: {
+            operator: 'eq',
+            value: value.id
+          }
+        };
+        this.setState({
+          panel: 'inbox',
+          objeto: undefined,
+          filtro
+        }, () => {
+          this.filterClick(event);
+        });
+      });
+    }
+  }
+
+  removeClick(event: ButtonEvent) {
+    if (event.name === 'open') {
+      this.setState({
+        panel: 'remove',
+        objeto: this.state.select
+      });
+    } else if (event.name === 'apply') {
+      let objeto = this.state.objeto || {};
+      ${rest.var}.remove(objeto, () => {
+        this.setState({
+          panel: 'inbox',
+          objeto: undefined
+        }, () => {
+          this.filterClick(event);
+        });
+      });
+    }
+  }
+
+  detailClick(event: ButtonEvent) {
+    this.setState({
+      panel: 'detail',
+      objeto: this.state.select
+    });
+  }
+  cancelClick(event: ButtonEvent) {
+    this.setState({ panel: 'inbox', objeto: undefined });
+  }
+
+
+  render(): React.ReactNode {
+    let { panel, filtro, select, objeto, values } = this.state;
+    let disabled = !select;
+    return (
+      <div>
+        <Panel>
+          <header>
+            <Button name='apply'
+              onClick={this.pingClick}
+              icon="bell"
+              level="primary"
+              mode="link"
+              text="" />
+            Administracion de ${data.literal}
+          </header>
+          <${data.type}Inbox
+            hide={panel !== 'inbox'}
+            filtro={filtro}
+            values={values}
+            selectObject={this.selectObject}
+            filtroChange={this.filtroChange}>
+            <Action>
+              <Button name='apply'
+                onClick={this.filterClick}
+                icon="search"
+                level="primary"
+                text="Buscar" />
+              <Button name='clean'
+                onClick={this.filterClick}
+                icon="eraser"
+                level="secondary"
+                text="Limpiar" />
+              <Button name='open'
+                onClick={this.createClick}
+                icon="plus-circle"
+                level="success"
+                text="Crear" />
+              <Button name='open'
+                onClick={this.updateClick}
+                icon="pencil"
+                disabled={disabled}
+                level="primary"
+                text="Modificar" />
+              <Button name='open'
+                onClick={this.detailClick}
+                icon="eye"
+                disabled={disabled}
+                level="primary"
+                text="Detalle" />
+              <Button name='open'
+                onClick={this.removeClick}
+                icon="trash"
+                disabled={disabled}
+                level="danger"
+                text="Eliminar" />
+            </Action>
+          </${data.type}Inbox>
+          <Panel hide={panel !== 'create'} width="50" level='success'>
+            <header>Crear nuevo ${data.type}</header>
+            <${data.type}Form object={objeto} objectChange={this.objetoChange} />
+            <footer>
+              <Action>
+                <Button name='apply' level="primary" onClick={this.createClick} confirm="Esta seguro de crear el registro?">Guardar</Button>
+                <Button name='apply' level="danger" onClick={this.cancelClick} confirm="Esta seguro de cancelar el registro?">Cancelar</Button>
+              </Action>
+            </footer>
+          </Panel>
+          <Panel hide={panel !== 'update'} width="50" level='secondary'>
+            <header>Modificar al ${data.type} #{objeto ? objeto.id : '?'}</header>
+            <${data.type}Form object={objeto} objectChange={this.objetoChange} />
+            <footer>
+              <Action>
+                <Button name='apply' level="primary" onClick={this.updateClick} confirm="Esta seguro de guardar los datos?">Guardar</Button>
+                <Button name='apply' level="danger" onClick={this.cancelClick} confirm="Esta seguro de cancelar la edicion?">Cancelar</Button>
+              </Action>
+            </footer>
+          </Panel>
+          <Panel hide={panel !== 'detail'} width="50" level='success'>
+            <header>Datos del ${data.type} #{objeto ? objeto.id : '?'}</header>
+            <${data.type}View object={objeto} />
+            <footer>
+              <Action>
+                <Button name='apply' level="danger" onClick={this.cancelClick} >Retornar</Button>
+              </Action>
+            </footer>
+          </Panel>
+          <Panel hide={panel !== 'remove'} width="50" level="danger">
+            <header>Eliminar al ${data.type} #{objeto ? objeto.id : '?'}</header>
+            <${data.type}View object={objeto} />
+            <footer>
+              <Action>
+                <Button name='apply' level="primary" onClick={this.removeClick} confirm="Esta seguro de eliminar el Registro?">Eliminar</Button>
+                <Button name='apply' level="danger" onClick={this.cancelClick} >Retornar</Button>
+              </Action>
+            </footer>
+          </Panel>
+        </Panel>
+      </div>
+    );
+  };
+};
+]]></file>
+
+
     <% } %>
+    
+    
 </files>
