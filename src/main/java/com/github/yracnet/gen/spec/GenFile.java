@@ -88,6 +88,9 @@ public class GenFile {
             case "view:part":
                 mask = "/$project/$project-view/src/main/webapp/part/$dir/$name";
                 break;
+            case "view:domain":
+                mask = "/temp/$dir/$name";
+                break;
             case "view:ctrl":
                 mask = "/$project/$project-view/src/main/webapp/ctrl/$name";
                 break;
