@@ -81,7 +81,7 @@ export interface FilterAbstract {
    }
 }
 ]]></file>
-    <file name="Validator.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
+    <file name="Validate.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
 import { InputTextValue } from 'ui-fast';
 
 export const isRequired = function (name: string, inputValue: InputTextValue): InputTextValue {
@@ -98,6 +98,19 @@ export const isEmail = function (name: string, inputValue: InputTextValue): Inpu
     inputValue.message = 'Correo invalido';
   }
   return inputValue;
+}
+]]></file>
+    <file name="Convert.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
+export const toString = function (value: any): string {
+  return '' + value;
+}
+
+export const toDateFormat = function (value: date|number): string {
+  return '01/01/9999';
+}
+
+export const toMoneyFormat = function (value: number): string {
+  return '12.456,56';
 }
 ]]></file>
     <% 
@@ -167,8 +180,9 @@ export const ${rest.var} = {
 import React from 'react';
 import { Grid, Table, Column, TableConfig, FilterText, FilterTextValue } from 'ui-fast';
 import { InputText, InputTextValue, OutputText, Alert } from 'ui-fast';
-import { ${data.type}, ${data.type}Filter, ${data.type}Message } from './Model';
-import { isRequired, isEmail } from './Validator';
+import { ${data.type}, ${data.type}Filter, ${data.type}Message } from '../Model';
+import { isRequired } from '../Validate';
+import { toString } from '../Convert';
 
 //============================================================
 
@@ -183,11 +197,16 @@ export const ${data.type}Form: React.SFC<${data.type}FormProps> = (props) => {
   message = message || {};
   return (
     value ?
-      <Grid cols="4, 8">
-        <OutputText name="id" value="ID" />
-        <InputText name="id" value={value.id} onChange={onValue} message={message.id} />
-        <OutputText name="correoElectronico" value="Correo Electronico" />
-        <InputText name="correoElectronico" value={value.correoElectronico} onChange={onValue} message={message.correoElectronico} onValidate={[isRequired, isEmail]} />
+      <Grid cols="4, 8"><% attr.each{  %>
+        <OutputText name="${it.var}" value="${it.text}" />
+        <InputText name="${it.var}"
+                   value={value.${it.var}} 
+                   onChange={onValue}
+                   message={message.${it.var}}
+                   onValidate={[isRequired]}
+                   onFormat={toString}
+                   onConvert={toString} />
+        <% } %>
       </Grid>
       :
       <Alert variant="danger" message="Se requiere un objeto instanciado" icon="warning" />
@@ -204,11 +223,10 @@ export const ${data.type}View: React.SFC<${data.type}ViewProps> = (props) => {
   let { value } = props;
   return (
     value ?
-      <Grid cols="4, 8">
-        <OutputText name="id" value="ID" />
-        <OutputText name="id" value={value.id} />
-        <OutputText name="correoElectronico" value="Correo Electronico" />
-        <OutputText name="correoElectronico" value={value.correoElectronico} />
+      <Grid cols="4, 8"><% attr.each{  %>
+        <OutputText name="${it.var}" value="${it.text}" />
+        <OutputText name="${it.var}" value={value.${it.var}} onFormat={toString}/>
+        <% } %>
       </Grid>
       :
       <Alert variant="danger" message="Se requiere un objeto instanciado" icon="warning" />
@@ -228,9 +246,9 @@ export interface ${data.type}Table {
 export const ${data.type}Table: React.SFC<${data.type}Table> = (props) => {
   let { values, select, config, onSelect, onConfig } = props;
   return (
-    <Table pk="id" values={values} select={select} config={config} onSelect={onSelect} onConfig={onConfig}>
-      <Column title="#" attr="id" align="right" width="5" />
-      <Column title="Correo Electronico" attr="correoElectronico" align="left" width="95" />
+    <Table pk="id" values={values} select={select} config={config} onSelect={onSelect} onConfig={onConfig}><% attr.each{  %>
+      <Column title="${it.text}" attr="${it.var}" onFormat={toString} align="right" />
+      <% } %>
     </Table>
   );
 }
@@ -245,9 +263,9 @@ export interface ${data.type}QueryProps {
 export const ${data.type}Query: React.SFC<${data.type}QueryProps> = (props) => {
   let { value, onChange } = props;
   return (
-    <Grid cols="4, 8">
-      <FilterText name="id" value={value.id} onChange={onChange} label="#" option="number" />
-      <FilterText name="correoElectronico" value={value.correoElectronico} onChange={onChange} label="Correo Electronico" />
+    <Grid cols="4, 8"><% attr.each{  %>
+      <FilterText name="${it.var}" value={value.${it.var}} onChange={onChange} label="${it.text}" onConvert={toString} option="number"/>
+      <% } %>
     </Grid>
   );
 }
