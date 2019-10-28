@@ -52,14 +52,20 @@ let processCaller = function (caller: Promise<AxiosResponse>, success?: (data: a
 
 ]]></file>
     <file name="Model.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
-export interface FilterValue {
+export interface FieldFilter {
     operator: string,
     value?: any
 }
+export interface FieldMessage {
+   type: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+   icon?: string;
+   message: string;
+}
 export interface Message {
-  type: string,
-  message: string,
-  causes: Array<string>
+   type: string,
+   description: string,
+   action?: string,
+   causes: Array<string>
 }
 export interface Result {
   error: boolean,
@@ -75,17 +81,34 @@ export interface FilterAbstract {
    }
 }
 ]]></file>
+    <file name="Validator.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
+import { InputTextValue } from 'ui-fast';
+
+export const isRequired = function (name: string, inputValue: InputTextValue): InputTextValue {
+  if (!inputValue.value) {
+    inputValue.state = 'error';
+    inputValue.message = 'Se requiere un valor';
+  }
+  return inputValue;
+}
+
+export const isEmail = function (name: string, inputValue: InputTextValue): InputTextValue {
+  if (inputValue.value && !inputValue.value.includes('@')) {
+    inputValue.state = 'error';
+    inputValue.message = 'Correo invalido';
+  }
+  return inputValue;
+}
+]]></file>
     <% 
     def entityRef = [:]
     mapper.entity.each { entityRef[it.id] = it }
-    %>
-
-    <% 
     entityRef.each {
     id, entity ->
     def pkg    = fn.pkg(groupId, artifactId, module);  
     def data   = fn.deduceName(entity.clazz)
     def filter = fn.deduceName(entity.clazz, 'Filter')
+    def message = fn.deduceName(entity.clazz, 'Message')
     def serv   = fn.deduceName(entity.clazz, 'Serv')
     def rest   = fn.deduceName(entity.clazz, 'Rest')
     def viewCtrl = fn.deduceName(entity.clazz, '-ctrl')
@@ -104,7 +127,11 @@ export interface ${data.type} {<% attr.each{  %>
 }
 
 export interface ${filter.type} extends FilterAbstract {<% attr.each{  %>
-   ${it.var}?: FilterValue,<% } %>
+   ${it.var}?: FieldFilter,<% } %>
+}
+
+export interface ${message.type} {<% attr.each{  %>
+   ${it.var}?: string | FieldMessage,<% } %>
 }
 ]]></file>
     <file name="Endpoint.tsx" layer="view:domain" dir="." skip="false" append="true" comment="${data.const}"><![CDATA[
@@ -136,10 +163,114 @@ export const ${rest.var} = {
   }
 }
 ]]></file>
-    <file name="${data.type}\$Part.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+    <file name="${data.type}Common.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+import React from 'react';
+import { Grid, Table, Column, TableConfig, FilterText, FilterTextValue } from 'ui-fast';
+import { InputText, InputTextValue, OutputText, Alert } from 'ui-fast';
+import { ${data.type}, ${data.type}Filter, ${data.type}Message } from './Model';
+import { isRequired, isEmail } from './Validator';
+
+//============================================================
+
+export interface ${data.type}FormProps {
+  value?: ${data.type},
+  message?: ${data.type}Message,
+  onValue: (name: string, e: InputTextValue) => void
+}
+
+export const ${data.type}Form: React.SFC<${data.type}FormProps> = (props) => {
+  let { value, onValue, message } = props;
+  message = message || {};
+  return (
+    value ?
+      <Grid cols="4, 8">
+        <OutputText name="id" value="ID" />
+        <InputText name="id" value={value.id} onChange={onValue} message={message.id} />
+        <OutputText name="correoElectronico" value="Correo Electronico" />
+        <InputText name="correoElectronico" value={value.correoElectronico} onChange={onValue} message={message.correoElectronico} onValidate={[isRequired, isEmail]} />
+      </Grid>
+      :
+      <Alert variant="danger" message="Se requiere un objeto instanciado" icon="warning" />
+  );
+}
+
+// ====================================================================
+
+export interface ${data.type}ViewProps {
+  value?: ${data.type}
+}
+
+export const ${data.type}View: React.SFC<${data.type}ViewProps> = (props) => {
+  let { value } = props;
+  return (
+    value ?
+      <Grid cols="4, 8">
+        <OutputText name="id" value="ID" />
+        <OutputText name="id" value={value.id} />
+        <OutputText name="correoElectronico" value="Correo Electronico" />
+        <OutputText name="correoElectronico" value={value.correoElectronico} />
+      </Grid>
+      :
+      <Alert variant="danger" message="Se requiere un objeto instanciado" icon="warning" />
+  );
+}
+
+// ====================================================================
+
+export interface ${data.type}Table {
+  values: ${data.type}[],
+  select?: ${data.type} | ${data.type}[],
+  onSelect?: (e: ${data.type}) => void,
+  config?: TableConfig,
+  onConfig?: (e: TableConfig) => void
+}
+
+export const ${data.type}Table: React.SFC<${data.type}Table> = (props) => {
+  let { values, select, config, onSelect, onConfig } = props;
+  return (
+    <Table pk="id" values={values} select={select} config={config} onSelect={onSelect} onConfig={onConfig}>
+      <Column title="#" attr="id" align="right" width="5" />
+      <Column title="Correo Electronico" attr="correoElectronico" align="left" width="95" />
+    </Table>
+  );
+}
+
+// ====================================================================
+
+export interface ${data.type}QueryProps {
+  value: ${data.type}Filter,
+  onChange: (name: string, value: FilterTextValue) => void
+}
+
+export const ${data.type}Query: React.SFC<${data.type}QueryProps> = (props) => {
+  let { value, onChange } = props;
+  return (
+    <Grid cols="4, 8">
+      <FilterText name="id" value={value.id} onChange={onChange} label="#" option="number" />
+      <FilterText name="correoElectronico" value={value.correoElectronico} onChange={onChange} label="Correo Electronico" />
+    </Grid>
+  );
+}
+]]></file>
+    <file name="${data.type}Inbox.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
 //ejemplo 1
 ]]></file>
-    <file name="${data.type}\$Page.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+    <file name="${data.type}Create.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+//ejemplo 1
+]]></file>
+    <file name="${data.type}Update.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+//ejemplo 1
+]]></file>
+    <file name="${data.type}Detail.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+//ejemplo 1
+]]></file>
+    <file name="${data.type}Remove.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+//ejemplo 1
+]]></file>
+    <file name="${data.type}Search.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+//ejemplo 1
+]]></file>
+    <file name="${data.type}Proc01.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
 //ejemplo 1
 ]]></file>
     <% } %>

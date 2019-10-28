@@ -12,12 +12,12 @@ package com.github.yracnet.generator;
 public class GenerateRun {
 
     public static void main(String[] args) {
-        String model = "/work/dev/bcb-01/temporal/modelo-v3.jpa";
-        String output = "/work/dev/bcb-01/temporal";
+        String model = "/work/dev/bcb-02/sirepo/sirepo-modelo/src/main/resources/modelo.jpa";
+        String output = "/work/dev/bcb-02/temporal";
         Generate gen = new Generate(model, output);
-        gen.setGroupId("bo.gob.bcb.grh");
-        gen.setArtifactId("postulate");
-        gen.setModule("sitio");
+        gen.setGroupId("bo.gob.bcb.grh.sirepo");
+        gen.setArtifactId("sirepo");
+        gen.setModule("portal");
         gen.setNamespace("psv");
         //gen.setContextPath("postulate-sitio");
         //gen.addTemplate("simple.crud2.serv");
