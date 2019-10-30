@@ -19,6 +19,7 @@ public class GenerateRun {
         gen.setArtifactId("sirepo");
         gen.setModule("portal");
         gen.setNamespace("psv");
+        gen.setContextPath("/sirepo-portal-rest-0.1.0-01");
         //gen.setContextPath("postulate-sitio");
         //gen.addTemplate("simple.crud2.serv");
         //gen.addTemplate("simple.crud2.impl");

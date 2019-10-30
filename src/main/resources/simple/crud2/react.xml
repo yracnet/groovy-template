@@ -24,40 +24,66 @@ let processMessage = function (result: Result) {
   }));
   FlashContext.flashMessage(message);
 };
-        
+
 const server: String = 'http://127.0.0.1:8080/${contextPath}/rest';
-        
-export const createCaller = function(path: string){
-    return axios.post(`\${server}/\${path}/`);
+
+export const createCaller = function (path: string) {
+  return axios.post(`\${server}/\${path}/`);
 }
 
 export const processCaller = function (caller: Promise<AxiosResponse>, success?: (data: any) => void, error?: (data: any) => void) {
   let callerSuccess = success || defaultSuccess;
   let callerError = error || defaultError;
   caller.then(response => {
-    console.debug('Response-Success:', response);
-    let result: model.Result = response.data;
+    console.debug("Response-Success:", response);
+    let result: Result = response.data;
     processMessage(result);
     if (result.error === false) {
       callerSuccess(result.value);
     } else {
       callerError(result);
     }
-  }).catch(response => {
-    console.debug('Response-Error:', response);
-    let result: model.Result = {
+  }).catch(error => {
+    console.debug("Response-Error:", error.toJSON());
+    let result: Result = {
       error: true,
-      messages: [{
-        type: 'error',
-        message: 'Error al invocar al serivio',
-        causes: ['Vea el Log del servidor!', response.code + ': ' +response.data]
-      }]
+      messages: []
+    }
+    if (error.response && error.response.data) {
+      let response = error.response;
+      let data = response.data;
+      if (typeof data === 'object' && data.messages) {
+        result.error = data.error;
+        result.value = data.value;
+        result.messages = data.messages;
+      } else {
+        result.messages.push({
+          type: "error",
+          description: "Error al invocar al servicio",
+          causes: [
+            "Servicio:  " + error.config.url,
+            "Respuesta: " + response.status + ": " + response.statusText,
+            unescape('Contenido: ' + data)
+          ],
+          action: "Vea el Log del servidor!"
+        });
+      }
+    }
+    if (result.messages.length === 0) {
+      result.messages.push({
+        type: "error",
+        description: "Error al invocar al servicio",
+        causes: [
+          "Servicio:  " + error.config.url,
+          "Respuesta: " + (error.code || "999") + ": " + error.message
+        ],
+        action: "Vea el Log del servidor!"
+      });
     }
     processMessage(result);
     callerError(result);
   });
-};
-
+}
 ]]></file>
     <file name="Model.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
 export interface FieldFilter {
