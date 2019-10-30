@@ -2,18 +2,19 @@
 <files>
     <file name="Endpoint.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
 import axios, { AxiosResponse } from 'axios';
-import * as model from './Model';
-import Context, { FlashMessage } from '../spa/Spa';
+import { FlashContext, Message } from '../plataforma/Plataforma';
+//import { FlashContext, Message } from "bcb-platform";
+import { Result } from "./Model";
 
-const urlServer: String = 'http://localhost:8080/postulate-sitio-view-0.1.0/rest';
 let defaultSuccess = function (data: any) {
   console.debug("success:", data);
 };
 let defaultError = function (data: any) {
   console.debug("error:", data);
 };
-let processMessage = function (result: model.Result) {
-  let flashMessage: Array<FlashMessage> = result.messages.map(it => ({
+let processMessage = function (result: Result) {
+  console.debug('processMessage:', result);
+  let message: Array<Message> = result.messages.map(it => ({
     type: it.type || 'info',
     title: 'Respuesta del Servidor',
     description: it.description,
@@ -21,9 +22,16 @@ let processMessage = function (result: model.Result) {
     causes: it.causes,
     duration: 5000
   }));
-  Context.flashMessage(flashMessage);
+  FlashContext.flashMessage(message);
 };
-let processCaller = function (caller: Promise<AxiosResponse>, success?: (data: any) => void, error?: (data: any) => void) {
+        
+const server: String = 'http://127.0.0.1:8080/${contextPath}/rest';
+        
+export const createCaller = function(path: string){
+    return axios.post(`\${server}/\${path}/`);
+}
+
+export const processCaller = function (caller: Promise<AxiosResponse>, success?: (data: any) => void, error?: (data: any) => void) {
   let callerSuccess = success || defaultSuccess;
   let callerError = error || defaultError;
   caller.then(response => {
@@ -134,7 +142,10 @@ export const toMoneyFormat = function (value: number): string {
     attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
     attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
     %>
-    <file name="Model.tsx" layer="view:domain" dir="." skip="false" append="true" comment="${data.const}"><![CDATA[
+    <file name="${data.type}Model.tsx" layer="view:domain" dir="${data.path}" skip="false"><![CDATA[
+
+import { FieldFilter, FieldMessage, FilterAbstract } from "../Model";
+
 export interface ${data.type} {<% attr.each{  %>
    ${it.var}?: ${it.jsType},<% } %>
 }
@@ -149,31 +160,35 @@ export interface ${message.type} {<% attr.each{  %>
 ]]></file>
     <file name="${rest.type}.tsx" layer="view:domain" dir="${data.path}" skip="false"><![CDATA[
 
-import { URL_SERVER, processCaller } from "../Endpoint";
-        
+import { createCaller, processCaller } from "../Endpoint";
+import { ${data.type}, ${filter.type} } from "./${data.type}Model";
+
+type fnSuccess = (value: Usuario) => void;
+type fnError = (response: any) => void;
+
 export const ${rest.var} = {
   ping(callback?: (response: any) => void) {
-    let caller = axios.post(`\${URL_SERVER}/${data.path}/`);
+    let caller = createCaller("/${data.path}/");
     processCaller(caller, callback, callback);
   },
-  filter(data: model.${filter.type}, success?: (values: Array<model.${data.type}>) => void, error?: (response: any) => void) {
-    let caller = axios.post(`\${URL_SERVER}/${data.path}/filtrar`, data);
+  filter(payload: ${filter.type}, success?: fnSuccess, error?: fnError) {
+    let caller = createCaller("/${data.path}/filtrar", payload);
     processCaller(caller, success, error);
   },
-  reload(data: model.${data.type}, success?: (value: model.${data.type}) => void, error?: (response: any) => void) {
-    let caller = axios.post(`\${URL_SERVER}/${data.path}/recargar`, data);
+  reload(payload: ${data.type}, success?: fnSuccess, error?: fnError) {
+    let caller = createCaller("/${data.path}/recargar", payload);
     processCaller(caller, success, error);
   },
-  create(data: model.${data.type}, success?: (value: model.${data.type}) => void, error?: (response: any) => void) {
-    let caller = axios.post(`\${URL_SERVER}/${data.path}/registrar`, data);
+  create(payload: ${data.type}, success?: fnSuccess, error?: fnError) {
+    let caller = createCaller("/${data.path}/registrar", payload);
     processCaller(caller, success, error);
   },
-  update(data: model.${data.type}, success?: (value: model.${data.type}) => void, error?: (response: any) => void) {
-    let caller = axios.post(`\${URL_SERVER}/${data.path}/actualizar`, data);
+  update(payload: ${data.type}, success?: fnSuccess, error?: fnError) {
+    let caller = createCaller("/${data.path}/actualizar", payload);
     processCaller(caller, success, error);
   },
-  remove(data: model.${data.type}, success?: (value: model.${data.type}) => void, error?: (response: any) => void) {
-    let caller = axios.post(`\${URL_SERVER}/${data.path}/eliminar`, data);
+  remove(payload: ${data.type}, success?: fnSuccess, error?: fnError) {
+    let caller = createCaller("/${data.path}/eliminar", payload);
     processCaller(caller, success, error);
   }
 }
