@@ -25,11 +25,7 @@ let processMessage = function (result: Result) {
   FlashContext.flashMessage(message);
 };
 
-const server: String = 'http://127.0.0.1:8080/${contextPath}/rest';
-
-export const createCaller = function (path: string) {
-  return axios.post(`\${server}/\${path}/`);
-}
+export const endpoint: String = 'http://127.0.0.1:8080/${contextPath}/rest';
 
 export const processCaller = function (caller: Promise<AxiosResponse>, success?: (data: any) => void, error?: (data: any) => void) {
   let callerSuccess = success || defaultSuccess;
@@ -87,24 +83,24 @@ export const processCaller = function (caller: Promise<AxiosResponse>, success?:
 ]]></file>
     <file name="Model.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
 export interface FieldFilter {
-    operator: string,
-    value?: any
+   operator: string,
+   value?: any
 }
 export interface FieldMessage {
    type: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
    icon?: string;
    message: string;
 }
-export interface Message {
+export interface ResultMessage {
    type: string,
    description: string,
    action?: string,
    causes: Array<string>
 }
 export interface Result {
-  error: boolean,
-  messages: Array<Message>,
-  value?: any | Array<any>,
+   error: boolean,
+   messages: Array<ResultMessage>,
+   value?: any | Array<any>,
 }
 export interface FilterAbstract {
    config?: {
@@ -186,35 +182,37 @@ export interface ${message.type} {<% attr.each{  %>
 ]]></file>
     <file name="${rest.type}.tsx" layer="view:domain" dir="${data.path}" skip="false"><![CDATA[
 
-import { createCaller, processCaller } from "../Endpoint";
+import { endpoint, processCaller } from "../Endpoint";
 import { ${data.type}, ${filter.type} } from "./${data.type}Model";
+import axios from 'axios';
 
+type fnSuccessArray = (values: Usuario[]) => void;
 type fnSuccess = (value: Usuario) => void;
 type fnError = (response: any) => void;
 
 export const ${rest.var} = {
   ping(callback?: (response: any) => void) {
-    let caller = createCaller("/${data.path}/");
+    let caller = axios.get(`\${endpoint}/${data.path}`);
     processCaller(caller, callback, callback);
   },
-  filter(payload: ${filter.type}, success?: fnSuccess, error?: fnError) {
-    let caller = createCaller("/${data.path}/filtrar", payload);
+  filter(payload: ${filter.type}, success?: fnSuccessArray, error?: fnError) {
+    let caller = axios.post(`\${endpoint}/${data.path}/filtrar`, payload);
     processCaller(caller, success, error);
   },
   reload(payload: ${data.type}, success?: fnSuccess, error?: fnError) {
-    let caller = createCaller("/${data.path}/recargar", payload);
+    let caller = axios.post(`\${endpoint}/${data.path}/recargar`, payload);
     processCaller(caller, success, error);
   },
   create(payload: ${data.type}, success?: fnSuccess, error?: fnError) {
-    let caller = createCaller("/${data.path}/registrar", payload);
+    let caller = axios.post(`\${endpoint}/${data.path}/registrar`, payload);
     processCaller(caller, success, error);
   },
   update(payload: ${data.type}, success?: fnSuccess, error?: fnError) {
-    let caller = createCaller("/${data.path}/actualizar", payload);
+    let caller = axios.post(`\${endpoint}/${data.path}/actualizar`, payload);
     processCaller(caller, success, error);
   },
   remove(payload: ${data.type}, success?: fnSuccess, error?: fnError) {
-    let caller = createCaller("/${data.path}/eliminar", payload);
+    let caller = axios.post(`\${endpoint}/${data.path}/eliminar`, payload);
     processCaller(caller, success, error);
   }
 }
@@ -222,7 +220,7 @@ export const ${rest.var} = {
     <file name="${data.type}Form.tsx" layer="view:domain" dir="${data.path}/part"><![CDATA[
 import React from "react";
 import { Grid, InputText, InputTextValue, OutputText, Alert } from "ui-fast";
-import { ${data.type}, ${data.type}Message } from "../../Model";
+import { ${data.type}, ${data.type}Message } from "../${data.type}Model";
 import { isRequired } from "../../Validate";
 import { toString } from "../../Convert";
 
@@ -259,7 +257,7 @@ export const ${data.type}Form: React.SFC<${data.type}FormProps> = (props) => {
     <file name="${data.type}View.tsx" layer="view:domain" dir="${data.path}/part"><![CDATA[
 import React from "react";
 import { Grid, OutputText, Alert } from "ui-fast";
-import { ${data.type} } from "../../Model";
+import { ${data.type} } from "../${data.type}Model";
 import { toString } from "../../Convert";
 
 export interface ${data.type}ViewProps {
@@ -275,7 +273,7 @@ export const ${data.type}View: React.SFC<${data.type}ViewProps> = (props) => {
           value="${it.text}" />
         <OutputText name="${it.var}"
           value={value.${it.var}}
-          onFormat={toString}/>
+          onFormat={toString} />
         <% } %>
       </Grid>
       :
@@ -288,7 +286,7 @@ export const ${data.type}View: React.SFC<${data.type}ViewProps> = (props) => {
     <file name="${data.type}Table.tsx" layer="view:domain" dir="${data.path}/part"><![CDATA[
 import React from "react";
 import { Table, Column, TableConfig } from "ui-fast";
-import { ${data.type} } from "../../Model";
+import { ${data.type} } from "../${data.type}Model";
 import { toString } from "../../Convert";
 
 export interface ${data.type}Table {
@@ -315,7 +313,7 @@ export const ${data.type}Table: React.SFC<${data.type}Table> = (props) => {
     <file name="${data.type}Query.tsx" layer="view:domain" dir="${data.path}/part"><![CDATA[
 import React from "react";
 import { Grid, FilterText, FilterTextValue } from "ui-fast";
-import { ${data.type}Filter } from "../../Model";
+import { ${data.type}Filter } from "../${data.type}Model";
 import { toString } from "../../Convert";
 
 export interface ${data.type}QueryProps {
@@ -332,14 +330,14 @@ export const ${data.type}Query: React.SFC<${data.type}QueryProps> = (props) => {
         onChange={onChange}
         label="${it.text}"
         onConvert={toString}
-        option="number"/>
+        option="number" />
       <% } %>
     </Grid>
   );
 }
 ]]></file>
     <file name="${data.type}Manager.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
-//ejemplo 1
+
 ]]></file>
     <file name="${data.type}Inbox.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
 //ejemplo 1
