@@ -176,15 +176,12 @@ export const ${rest.var} = {
   }
 }
 ]]></file>
-    <file name="${data.type}Common.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+    <file name="${data.type}Form.tsx" layer="view:domain" dir="${data.path}/part"><![CDATA[
 import React from 'react';
-import { Grid, Table, Column, TableConfig, FilterText, FilterTextValue } from 'ui-fast';
-import { InputText, InputTextValue, OutputText, Alert } from 'ui-fast';
-import { ${data.type}, ${data.type}Filter, ${data.type}Message } from '../Model';
-import { isRequired } from '../Validate';
-import { toString } from '../Convert';
-
-//============================================================
+import { Grid, InputText, InputTextValue, OutputText, Alert } from 'ui-fast';
+import { ${data.type}, ${data.type}Message } from '../../Model';
+import { isRequired } from '../../Validate';
+import { toString } from '../../Convert';
 
 export interface ${data.type}FormProps {
   value?: ${data.type},
@@ -212,8 +209,12 @@ export const ${data.type}Form: React.SFC<${data.type}FormProps> = (props) => {
       <Alert variant="danger" message="Se requiere un objeto instanciado" icon="warning" />
   );
 }
-
-// ====================================================================
+]]></file>
+    <file name="${data.type}View.tsx" layer="view:domain" dir="${data.path}/part"><![CDATA[
+import React from 'react';
+import { Grid, OutputText, Alert } from 'ui-fast';
+import { ${data.type} } from '../../Model';
+import { toString } from '../../Convert';
 
 export interface ${data.type}ViewProps {
   value?: ${data.type}
@@ -232,8 +233,12 @@ export const ${data.type}View: React.SFC<${data.type}ViewProps> = (props) => {
       <Alert variant="danger" message="Se requiere un objeto instanciado" icon="warning" />
   );
 }
-
-// ====================================================================
+]]></file>
+    <file name="${data.type}Table.tsx" layer="view:domain" dir="${data.path}/part"><![CDATA[
+import React from 'react';
+import { Table, Column, TableConfig } from 'ui-fast';
+import { ${data.type} } from '../../Model';
+import { toString } from '../../Convert';
 
 export interface ${data.type}Table {
   values: ${data.type}[],
@@ -252,8 +257,12 @@ export const ${data.type}Table: React.SFC<${data.type}Table> = (props) => {
     </Table>
   );
 }
-
-// ====================================================================
+]]></file>
+    <file name="${data.type}Query.tsx" layer="view:domain" dir="${data.path}/part"><![CDATA[
+import React from 'react';
+import { Grid, FilterText, FilterTextValue } from 'ui-fast';
+import { ${data.type}Filter } from '../../Model';
+import { toString } from '../../Convert';
 
 export interface ${data.type}QueryProps {
   value: ${data.type}Filter,
@@ -270,26 +279,44 @@ export const ${data.type}Query: React.SFC<${data.type}QueryProps> = (props) => {
   );
 }
 ]]></file>
-    <file name="${data.type}Inbox.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+    <file name="${data.type}Part.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+export * from './part/${data.type}Table';
+export * from './part/${data.type}Query';
+export * from './part/${data.type}Form';
+export * from './part/${data.type}View';
+]]></file>
+    <file name="${data.type}Manager.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
 //ejemplo 1
 ]]></file>
-    <file name="${data.type}Create.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+    <file name="${data.type}Inbox.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
 //ejemplo 1
 ]]></file>
-    <file name="${data.type}Update.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+    <file name="${data.type}Create.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
 //ejemplo 1
 ]]></file>
-    <file name="${data.type}Detail.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+    <file name="${data.type}Update.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
 //ejemplo 1
 ]]></file>
-    <file name="${data.type}Remove.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+    <file name="${data.type}Detail.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
 //ejemplo 1
 ]]></file>
-    <file name="${data.type}Search.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+    <file name="${data.type}Remove.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
 //ejemplo 1
 ]]></file>
-    <file name="${data.type}Proc01.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+    <file name="${data.type}Search.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
 //ejemplo 1
+]]></file>
+    <file name="${data.type}Proc01.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
+//ejemplo 1
+]]></file>
+    <file name="${data.type}Page.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+export * from './page/${data.type}Manager';
+export * from './page/${data.type}Inbox';
+export * from './page/${data.type}Create';
+export * from './page/${data.type}Update';
+export * from './page/${data.type}Remove';
+export * from './page/${data.type}Search';
+export * from './page/${data.type}Proc01';
 ]]></file>
     <% } %>
 </files>
