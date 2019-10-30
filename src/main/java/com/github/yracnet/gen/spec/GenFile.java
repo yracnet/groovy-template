@@ -132,12 +132,12 @@ public class GenFile {
                 break;
             //default:
             //    mask = "/$project/error/$name";
-                //} else if ("conf".equals(layer)) {
-                //    mask = "/$project/$project-view/src/main/webapp/WEB-INF/$name";
-                //} else if ("web-inf".equals(layer)) {
-                //    mask = "/$project/$project-view/src/main/webapp/WEB-INF/$dir/$name";
-                //} else if ("meta-inf".equals(layer)) {
-                //    mask = "/$project/$project-impl/src/main/resources/META-INF/$dir/$name";
+            //} else if ("conf".equals(layer)) {
+            //    mask = "/$project/$project-view/src/main/webapp/WEB-INF/$name";
+            //} else if ("web-inf".equals(layer)) {
+            //    mask = "/$project/$project-view/src/main/webapp/WEB-INF/$dir/$name";
+            //} else if ("meta-inf".equals(layer)) {
+            //    mask = "/$project/$project-impl/src/main/resources/META-INF/$dir/$name";
         }
 
         mask = mask.replace("$project", project);
@@ -208,6 +208,7 @@ public class GenFile {
         if ("java".equals(type) || name.endsWith(".java")) {
             generateContent = "package " + getPkg() + ";\n" + generateContent;
         }
+        generateContent = generateContent.replaceAll("[ \t]+(\r\n?|\n)", "$1");
         return generateContent;
     }
 

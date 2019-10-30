@@ -7,10 +7,10 @@ import Context, { FlashMessage } from '../spa/Spa';
 
 const urlServer: String = 'http://localhost:8080/postulate-sitio-view-0.1.0/rest';
 let defaultSuccess = function (data: any) {
-  console.debug('success:', data);
+  console.debug("success:", data);
 };
 let defaultError = function (data: any) {
-  console.debug('error:', data);
+  console.debug("error:", data);
 };
 let processMessage = function (result: model.Result) {
   let flashMessage: Array<FlashMessage> = result.messages.map(it => ({
@@ -82,7 +82,7 @@ export interface FilterAbstract {
 }
 ]]></file>
     <file name="Validate.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
-import { InputTextValue } from 'ui-fast';
+import { InputTextValue } from "ui-fast";
 
 export const isRequired = function (name: string, inputValue: InputTextValue): InputTextValue {
   if (!inputValue.value) {
@@ -147,41 +147,43 @@ export interface ${message.type} {<% attr.each{  %>
    ${it.var}?: string | FieldMessage,<% } %>
 }
 ]]></file>
-    <file name="Endpoint.tsx" layer="view:domain" dir="." skip="false" append="true" comment="${data.const}"><![CDATA[
+    <file name="${rest.type}.tsx" layer="view:domain" dir="${data.path}" skip="false"><![CDATA[
 
+import { URL_SERVER, processCaller } from "../Endpoint";
+        
 export const ${rest.var} = {
   ping(callback?: (response: any) => void) {
-    let caller = axios.get(urlServer + '/${data.path}/');
+    let caller = axios.post(`\${URL_SERVER}/${data.path}/`);
     processCaller(caller, callback, callback);
   },
   filter(data: model.${filter.type}, success?: (values: Array<model.${data.type}>) => void, error?: (response: any) => void) {
-    let caller = axios.post(urlServer + '/${data.path}/filtrar', data);
+    let caller = axios.post(`\${URL_SERVER}/${data.path}/filtrar`, data);
     processCaller(caller, success, error);
   },
   reload(data: model.${data.type}, success?: (value: model.${data.type}) => void, error?: (response: any) => void) {
-    let caller = axios.post(urlServer + '/${data.path}/recargar', data);
+    let caller = axios.post(`\${URL_SERVER}/${data.path}/recargar`, data);
     processCaller(caller, success, error);
   },
   create(data: model.${data.type}, success?: (value: model.${data.type}) => void, error?: (response: any) => void) {
-    let caller = axios.post(urlServer + '/${data.path}/registrar', data);
+    let caller = axios.post(`\${URL_SERVER}/${data.path}/registrar`, data);
     processCaller(caller, success, error);
   },
   update(data: model.${data.type}, success?: (value: model.${data.type}) => void, error?: (response: any) => void) {
-    let caller = axios.post(urlServer + '/${data.path}/actualizar', data);
+    let caller = axios.post(`\${URL_SERVER}/${data.path}/actualizar`, data);
     processCaller(caller, success, error);
   },
   remove(data: model.${data.type}, success?: (value: model.${data.type}) => void, error?: (response: any) => void) {
-    let caller = axios.post(urlServer + '/${data.path}/eliminar', data);
+    let caller = axios.post(`\${URL_SERVER}/${data.path}/eliminar`, data);
     processCaller(caller, success, error);
   }
 }
 ]]></file>
     <file name="${data.type}Form.tsx" layer="view:domain" dir="${data.path}/part"><![CDATA[
-import React from 'react';
-import { Grid, InputText, InputTextValue, OutputText, Alert } from 'ui-fast';
-import { ${data.type}, ${data.type}Message } from '../../Model';
-import { isRequired } from '../../Validate';
-import { toString } from '../../Convert';
+import React from "react";
+import { Grid, InputText, InputTextValue, OutputText, Alert } from "ui-fast";
+import { ${data.type}, ${data.type}Message } from "../../Model";
+import { isRequired } from "../../Validate";
+import { toString } from "../../Convert";
 
 export interface ${data.type}FormProps {
   value?: ${data.type},
@@ -195,26 +197,29 @@ export const ${data.type}Form: React.SFC<${data.type}FormProps> = (props) => {
   return (
     value ?
       <Grid cols="4, 8"><% attr.each{  %>
-        <OutputText name="${it.var}" value="${it.text}" />
+        <OutputText name="${it.var}"
+          value="${it.text}" />
         <InputText name="${it.var}"
-                   value={value.${it.var}} 
-                   onChange={onValue}
-                   message={message.${it.var}}
-                   onValidate={[isRequired]}
-                   onFormat={toString}
-                   onConvert={toString} />
+          value={value.${it.var}} 
+          onChange={onValue}
+          message={message.${it.var}}
+          onValidate={[isRequired]}
+          onFormat={toString}
+          onConvert={toString} />
         <% } %>
       </Grid>
       :
-      <Alert variant="danger" message="Se requiere un objeto instanciado" icon="warning" />
+      <Alert variant="danger"
+        message="Se requiere un objeto instanciado"
+        icon="warning" />
   );
 }
 ]]></file>
     <file name="${data.type}View.tsx" layer="view:domain" dir="${data.path}/part"><![CDATA[
-import React from 'react';
-import { Grid, OutputText, Alert } from 'ui-fast';
-import { ${data.type} } from '../../Model';
-import { toString } from '../../Convert';
+import React from "react";
+import { Grid, OutputText, Alert } from "ui-fast";
+import { ${data.type} } from "../../Model";
+import { toString } from "../../Convert";
 
 export interface ${data.type}ViewProps {
   value?: ${data.type}
@@ -225,20 +230,25 @@ export const ${data.type}View: React.SFC<${data.type}ViewProps> = (props) => {
   return (
     value ?
       <Grid cols="4, 8"><% attr.each{  %>
-        <OutputText name="${it.var}" value="${it.text}" />
-        <OutputText name="${it.var}" value={value.${it.var}} onFormat={toString}/>
+        <OutputText name="${it.var}"
+          value="${it.text}" />
+        <OutputText name="${it.var}"
+          value={value.${it.var}}
+          onFormat={toString}/>
         <% } %>
       </Grid>
       :
-      <Alert variant="danger" message="Se requiere un objeto instanciado" icon="warning" />
+      <Alert variant="danger"
+        message="Se requiere un objeto instanciado"
+        icon="warning" />
   );
 }
 ]]></file>
     <file name="${data.type}Table.tsx" layer="view:domain" dir="${data.path}/part"><![CDATA[
-import React from 'react';
-import { Table, Column, TableConfig } from 'ui-fast';
-import { ${data.type} } from '../../Model';
-import { toString } from '../../Convert';
+import React from "react";
+import { Table, Column, TableConfig } from "ui-fast";
+import { ${data.type} } from "../../Model";
+import { toString } from "../../Convert";
 
 export interface ${data.type}Table {
   values: ${data.type}[],
@@ -252,17 +262,20 @@ export const ${data.type}Table: React.SFC<${data.type}Table> = (props) => {
   let { values, select, config, onSelect, onConfig } = props;
   return (
     <Table pk="id" values={values} select={select} config={config} onSelect={onSelect} onConfig={onConfig}><% attr.each{  %>
-      <Column title="${it.text}" attr="${it.var}" onFormat={toString} align="right" />
+      <Column title="${it.text}"
+        attr="${it.var}"
+        onFormat={toString}
+        align="right" />
       <% } %>
     </Table>
   );
 }
 ]]></file>
     <file name="${data.type}Query.tsx" layer="view:domain" dir="${data.path}/part"><![CDATA[
-import React from 'react';
-import { Grid, FilterText, FilterTextValue } from 'ui-fast';
-import { ${data.type}Filter } from '../../Model';
-import { toString } from '../../Convert';
+import React from "react";
+import { Grid, FilterText, FilterTextValue } from "ui-fast";
+import { ${data.type}Filter } from "../../Model";
+import { toString } from "../../Convert";
 
 export interface ${data.type}QueryProps {
   value: ${data.type}Filter,
@@ -273,17 +286,16 @@ export const ${data.type}Query: React.SFC<${data.type}QueryProps> = (props) => {
   let { value, onChange } = props;
   return (
     <Grid cols="4, 8"><% attr.each{  %>
-      <FilterText name="${it.var}" value={value.${it.var}} onChange={onChange} label="${it.text}" onConvert={toString} option="number"/>
+      <FilterText name="${it.var}"
+        value={value.${it.var}}
+        onChange={onChange}
+        label="${it.text}"
+        onConvert={toString}
+        option="number"/>
       <% } %>
     </Grid>
   );
 }
-]]></file>
-    <file name="${data.type}Part.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
-export * from './part/${data.type}Table';
-export * from './part/${data.type}Query';
-export * from './part/${data.type}Form';
-export * from './part/${data.type}View';
 ]]></file>
     <file name="${data.type}Manager.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
 //ejemplo 1
@@ -309,14 +321,61 @@ export * from './part/${data.type}View';
     <file name="${data.type}Proc01.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
 //ejemplo 1
 ]]></file>
+    <file name="${data.type}Part.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+export * from "./part/${data.type}Table";
+export * from "./part/${data.type}Query";
+export * from "./part/${data.type}Form";
+export * from "./part/${data.type}View";
+]]></file>
     <file name="${data.type}Page.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
-export * from './page/${data.type}Manager';
-export * from './page/${data.type}Inbox';
-export * from './page/${data.type}Create';
-export * from './page/${data.type}Update';
-export * from './page/${data.type}Remove';
-export * from './page/${data.type}Search';
-export * from './page/${data.type}Proc01';
+
+import React from "react";
+import { Panel, Button } from "ui-fast";
+import { Route, Switch } from "react-router-dom";
+import { ${data.type}Inbox } from "./page/${data.type}Inbox";
+import { ${data.type}Create } from "./page/${data.type}Create";
+import { ${data.type}Update } from "./page/${data.type}Update";
+import { ${data.type}Detail } from "./page/${data.type}Detail";
+import { ${data.type}Remove } from "./page/${data.type}Remove";
+import { ${rest.var} } from "./${rest.type}";
+
+
+
+export const ${data.type}Manager: React.SFC = () => {
+
+
+    let pingClick = function (name: string) {
+        ${rest.var}.ping();
+    }
+    return (
+        <Panel>
+            <header>
+                <Button name="apply"
+                    onClick={pingClick}
+                    icon="bell"
+                    variant="primary"
+                    mode="link"/>
+                Administracion de ${data.type}s
+            </header>
+            <Switch>
+                <Route path="/${data.var}/create" component={${data.type}Create} />
+                <Route path="/${data.var}/update/:id${data.type}" component={${data.type}Update} />
+                <Route path="/${data.var}/detail/:id${data.type}" component={${data.type}Detail} />
+                <Route path="/${data.var}/remove/:id${data.type}" component={${data.type}Remove} />
+                <Route path="/${data.var}/inbox/:id${data.type}" component={${data.type}Inbox} />
+                <Route path="/${data.var}" component={${data.type}Inbox} />
+            </Switch>
+        </Panel>
+    );
+}
+export {
+    ${data.type}Inbox,
+    ${data.type}Create,
+    ${data.type}Update,
+    ${data.type}Detail,
+    ${data.type}Remove
+};
+
 ]]></file>
     <% } %>
 </files>
