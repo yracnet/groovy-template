@@ -186,8 +186,8 @@ import { endpoint, processCaller } from "../Endpoint";
 import { ${data.type}, ${filter.type} } from "./${data.type}Model";
 import axios from 'axios';
 
-type fnSuccessArray = (values: Usuario[]) => void;
-type fnSuccess = (value: Usuario) => void;
+type fnSuccessArray = (values: ${data.type}[]) => void;
+type fnSuccess = (value: ${data.type}) => void;
 type fnError = (response: any) => void;
 
 export const ${rest.var} = {
@@ -340,13 +340,114 @@ export const ${data.type}Query: React.SFC<${data.type}QueryProps> = (props) => {
 
 ]]></file>
     <file name="${data.type}Inbox.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
-//ejemplo 1
+
 ]]></file>
     <file name="${data.type}Create.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
 //ejemplo 1
 ]]></file>
     <file name="${data.type}Update.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
-//ejemplo 1
+import React from "react";
+import { InputTextValue } from "ui-fast";
+import { Panel, Action, Button } from "ui-fast";
+import { ${data.type}, ${data.type}Message } from "../${data.type}Model";
+import { ${data.var}Rest } from "../${data.type}Rest";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+import { ${data.type}Form } from "../${data.type}Part";
+
+
+
+export interface ${data.type}UpdateProps extends RouteComponentProps<{ id${data.type}: string }> {
+    hide?: boolean
+}
+interface ${data.type}UpdateState {
+    message: ${data.type}Message;
+    ${data.var}?: ${data.type};
+}
+
+class ${data.type}UpdateImpl extends React.PureComponent<${data.type}UpdateProps, ${data.type}UpdateState> {
+    constructor(props: ${data.type}UpdateProps) {
+        super(props);
+        this.state = {
+            message: {},
+            ${data.var}: undefined
+        };
+        let { id${data.type} } = this.props.match.params;
+        ${data.var}Rest.reload({ id: id${data.type} }, (${data.var}: ${data.type}) => {
+            this.setState({ ${data.var} });
+        })
+        //Change
+        this.onValue = this.onValue.bind(this);
+        this.refuseMessage = this.refuseMessage.bind(this);
+        //CRUD
+        this.updateClick = this.updateClick.bind(this);
+        this.cancelClick = this.cancelClick.bind(this);
+    }
+
+    onValue(name: string, value: InputTextValue) {
+        let ${data.var}: any = Object.assign({}, this.state.${data.var});
+        let message: any = Object.assign({}, this.state.message);
+        ${data.var}[name] = value.value;
+        message[name] = value.message;
+        this.setState({ ${data.var}, message });
+    }
+
+    refuseMessage(): string {
+        let { message } = this.state;
+        if (message) {
+            if (message.correoElectronico) {
+                return "Debe corregir el valor del codrreo electronico";
+            }
+        }
+        return "";
+    }
+
+    updateClick(name: string) {
+        let value = this.state.${data.var} || {};
+        ${data.var}Rest.update(value, (${data.var}: ${data.type}) => {
+            this.setState({ ${data.var}: ${data.var} });
+            this.cancelClick("");
+        });
+    }
+
+    cancelClick(name: string) {
+        this.props.history.push("/${data.var}/inbox");
+    }
+
+    render(): React.ReactNode {
+        if (this.props.hide === true) {
+            return false;
+        }
+        let { ${data.var}, message } = this.state;
+        let { updateClick, cancelClick, refuseMessage, onValue } = this;
+        return (
+            <Panel icon="pencil" variant="warning" width="50">
+                <title>Modificar ${data.type} #{${data.var} ? ${data.var}.id : "?"}</title>
+                <${data.type}Form value={${data.var}}
+                    onValue={onValue}
+                    message={message} />
+                <footer>
+                    <Action>
+                        <Button name="apply"
+                            onClick={cancelClick}
+                            text="Cancelar"
+                            icon="arrow-circle-left"
+                            variant="warning" />
+                        <Button name="apply"
+                            onClick={updateClick}
+                            text="Guardar"
+                            icon="check-circle"
+                            variant="primary"
+                            refuse={refuseMessage}
+                            confirm="Esta seguro de actualizar el registro?"
+                            hide={!${data.var}} />
+                    </Action>
+                </footer>
+            </Panel>
+        );
+    };
+};
+
+export const ${data.type}Update = withRouter(${data.type}UpdateImpl);
 ]]></file>
     <file name="${data.type}Detail.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
 //ejemplo 1

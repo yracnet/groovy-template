@@ -65,6 +65,9 @@ public class Generate {
     }
 
     public void setContextPath(String contextPath) {
+        if(contextPath != null){
+            contextPath = contextPath.replaceAll("(^[/]*)|([/]*$)", "");
+        }
         this.contextPath = contextPath;
     }
 
