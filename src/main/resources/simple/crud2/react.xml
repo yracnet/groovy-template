@@ -346,9 +346,6 @@ export const ${data.type}Query: React.SFC<${data.type}QueryProps> = (props) => {
   );
 }
 ]]></file>
-    <file name="${data.type}Manager.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
-
-]]></file>
     <file name="${data.type}Inbox.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[import React from "react";
 
 import { Panel, Action, Button } from "ui-fast";
@@ -473,8 +470,7 @@ class ${data.type}InboxLocal extends React.Component<${data.type}InboxProps, ${d
         if (name === "clean") {
             filter = { config: filter.config };
             this.setState({
-                select: undefined,
-                values: []
+                select: undefined
             });
         }
         ${data.var}Filter(filter, (values: Array<${data.type}>) => {
@@ -877,7 +873,140 @@ export const ${data.type}Remove = withRouter(${data.type}RemoveLocal);
 
 ]]></file>
     <file name="${data.type}Search.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
-//ejemplo 1
+import React from "react";
+
+import { Panel, Action, Button } from "ui-fast";
+import { FilterTextState, TableConfig } from "ui-fast";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+
+import { ${data.var}Filter } from "../${data.type}Rest";
+import { ${data.type}, ${data.type}Filter, ${data.type}Validate } from "../${data.type}Model";
+import { ${data.type}Table, ${data.type}Query } from "../${data.type}Part";
+
+export interface ${data.type}SearchProps extends RouteComponentProps {
+    hide?: boolean,
+    selectClick: (${data.var}: ${data.type}) => void,
+    cancelClick: () => void
+}
+
+interface ${data.type}SearchState {
+    filter: ${data.type}Filter;
+    values: Array<${data.type}>;
+    select?: ${data.type};
+}
+
+class ${data.type}SearchLocal extends React.Component<${data.type}SearchProps, ${data.type}SearchState> {
+
+    constructor(props: ${data.type}SearchProps) {
+        super(props);
+        this.state = {
+            filter: {},
+            values: [],
+            select: undefined
+        };
+        this.onSelect = this.onSelect.bind(this);
+        this.onFilter = this.onFilter.bind(this);
+        this.onConfig = this.onConfig.bind(this);
+        this.filterClick = this.filterClick.bind(this);
+        this.selectClickInvoke = this.selectClickInvoke.bind(this);
+        this.cancelClickInvoke = this.cancelClickInvoke.bind(this);
+    }
+
+    render(): React.ReactNode {
+        if (this.props.hide === true) {
+            return null;
+        }
+        let { onFilter, filterClick, onConfig, onSelect, cancelClickInvoke, selectClickInvoke } = this;
+        let { filter, values, select } = this.state;
+        let config = Object.assign({}, filter.config);
+        let disabled = !select;
+        return (
+            <Panel mode="modal" width="80" variant="primary">
+                <header>Buscar ${data.type}</header>
+                <${data.type}Query value={filter}
+                    onChange={onFilter} />
+                <Action>
+                    <Button name="apply"
+                        onClick={filterClick}
+                        icon="filter"
+                        variant="primary"
+                        text="Buscar" />
+                    <Button name="clean"
+                        onClick={filterClick}
+                        icon="eraser"
+                        variant="secondary"
+                        text="Limpiar" />
+                    <Button name="open"
+                        icon="check"
+                        disabled={disabled}
+                        onClick={selectClickInvoke}
+                        variant="primary"
+                        text="Aceptar" />
+                    <Button name="open"
+                        icon="trash"
+                        onClick={cancelClickInvoke}
+                        variant="danger"
+                        text="Cancelar" />
+                </Action>
+                <${data.type}Table values={values}
+                    select={select}
+                    config={config}
+                    onSelect={onSelect}
+                    onConfig={onConfig} />
+            </Panel>
+        );
+    }
+
+    selectClickInvoke() {
+        let { selectClick } = this.props;
+        let { select } = this.state;
+        if (selectClick && select) {
+            selectClick(select);
+        }
+    }
+
+    cancelClickInvoke() {
+        let { cancelClick } = this.props;
+        if (cancelClick) {
+            cancelClick();
+        }
+    }
+
+    onFilter(state: FilterTextState) {
+        let filter: any = Object.assign({}, this.state.filter);
+        filter[state.name] = { operator: state.operator, value: state.value };
+        this.setState({ filter });
+    }
+
+    onSelect(value: ${data.type}) {
+        let select = this.state.select === value ? undefined : value;
+        this.setState({ select });
+    }
+
+    onConfig(value: TableConfig) {
+        let filter = { ...this.state.filter };
+        let config = filter.config || {};
+        filter.config = Object.assign(config, value);
+        this.setState({ filter }, () => {
+            this.filterClick("sort");
+        });
+    }
+
+    filterClick(name: string) {
+        let filter = { ...this.state.filter };
+        if (name === "clean") {
+            filter = { config: filter.config };
+        }
+        ${data.var}Filter(filter, (values: Array<${data.type}>) => {
+            this.setState({ values, filter, select: undefined });
+        }, () => {
+            this.setState({ values: [], filter, select: undefined });
+        });
+    }
+}
+
+export const ${data.type}Search = withRouter(${data.type}SearchLocal);
+
 ]]></file>
     <file name="${data.type}Proc01.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
 //ejemplo 1
@@ -898,6 +1027,8 @@ import { ${data.type}Create } from "./page/${data.type}Create";
 import { ${data.type}Update } from "./page/${data.type}Update";
 import { ${data.type}Detail } from "./page/${data.type}Detail";
 import { ${data.type}Remove } from "./page/${data.type}Remove";
+import { ${data.type}Search } from "./page/${data.type}Search";
+import { ${data.type}Proc01 } from "./page/${data.type}Proc01";
 import { ${data.var}Ping } from "./${rest.type}";
 
 export const ${data.type}Manager: React.SFC = () => {
@@ -917,6 +1048,8 @@ export const ${data.type}Manager: React.SFC = () => {
                 Administracion de ${data.type}(s)
             </header>
             <Switch>
+                <Route path="/${data.var}/search" component={${data.type}Search} />
+                <Route path="/${data.var}/proc01" component={${data.type}Proc01} />
                 <Route path="/${data.var}/create" component={${data.type}Create} />
                 <Route path="/${data.var}/update/:id${data.type}" component={${data.type}Update} />
                 <Route path="/${data.var}/detail/:id${data.type}" component={${data.type}Detail} />
