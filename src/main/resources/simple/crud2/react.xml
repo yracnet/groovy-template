@@ -739,10 +739,142 @@ class ${data.type}UpdateLocal extends React.PureComponent<${data.type}UpdateProp
 export const ${data.type}Update = withRouter(${data.type}UpdateLocal);
 ]]></file>
     <file name="${data.type}Detail.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
-//ejemplo 1
+import React from "react";
+import { Panel, Action, Button } from "ui-fast";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+
+import { ${data.type} } from "../${data.type}Model";
+import { ${data.var}Reload } from "../${data.type}Rest";
+import { ${data.type}View } from "../${data.type}Part";
+
+export interface ${data.type}DetailProps extends RouteComponentProps<{ id${data.type}: string }> {
+    hide?: boolean
+}
+
+interface ${data.type}DetailState {
+    ${data.var}?: ${data.type};
+}
+
+class ${data.type}DetailLocal extends React.PureComponent<${data.type}DetailProps, ${data.type}DetailState> {
+    constructor(props: ${data.type}DetailProps) {
+        super(props);
+        this.state = {};
+        let { id${data.type} } = this.props.match.params;
+        ${data.var}Reload({ id: id${data.type} }, (${data.var}: ${data.type}) => {
+            this.setState({ ${data.var} });
+        })
+        this.cancelClick = this.cancelClick.bind(this);
+    }
+
+    cancelClick() {
+        this.props.history.push("/${data.var}/inbox");
+    }
+
+    render(): React.ReactNode {
+        if (this.props.hide === true) {
+            return false;
+        }
+        let { cancelClick } = this;
+        let { ${data.var} } = this.state;
+        return (
+            <Panel icon="pencil" variant="warning" width="50">
+                <title>Detalle ${data.type} #{${data.var} ? ${data.var}.id : "?"}</title>
+                <${data.type}View value={${data.var}} />
+                <footer>
+                    <Action>
+                        <Button name="apply"
+                            onClick={cancelClick}
+                            text="Cancelar"
+                            icon="arrow-circle-left"
+                            variant="warning" />
+                    </Action>
+                </footer>
+            </Panel>
+        );
+    };
+};
+
+export const ${data.type}Detail = withRouter(${data.type}DetailLocal);
+
 ]]></file>
     <file name="${data.type}Remove.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
-//ejemplo 1
+import React from "react";
+import { Panel, Action, Button } from "ui-fast";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+
+import { ${data.type} } from "../${data.type}Model";
+import { ${data.var}Reload, ${data.var}Remove } from "../${data.type}Rest";
+import { ${data.type}View } from "../${data.type}Part";
+
+export interface ${data.type}RemoveProps extends RouteComponentProps<{ id${data.type}: string }> {
+    hide?: boolean
+}
+
+interface ${data.type}RemoveState {
+    ${data.var}?: ${data.type};
+}
+
+class ${data.type}RemoveLocal extends React.PureComponent<${data.type}RemoveProps, ${data.type}RemoveState> {
+
+    constructor(props: ${data.type}RemoveProps) {
+        super(props);
+        this.state = {};
+        let { id${data.type} } = this.props.match.params;
+        ${data.var}Reload({ id: id${data.type} }, (${data.var}: ${data.type}) => {
+            this.setState({ ${data.var} });
+        })
+        this.removeClick = this.removeClick.bind(this);
+        this.cancelClick = this.cancelClick.bind(this);
+    }
+
+    removeClick() {
+        let value = this.state.${data.var} || {};
+        ${data.var}Remove(value, (${data.var}: ${data.type}) => {
+            this.setState({ ${data.var}: ${data.var} });
+            this.cancelClick();
+        });
+    }
+
+    cancelClick() {
+        this.props.history.push("/${data.var}/inbox");
+    }
+
+
+    render(): React.ReactNode {
+        if (this.props.hide === true) {
+            return false;
+        }
+        let { ${data.var} } = this.state;
+        let { cancelClick, removeClick } = this;
+        return (
+            <Panel icon="pencil"
+                variant="warning"
+                width="50">
+                <title>Eliminacion ${data.type} #{${data.var} ? ${data.var}.id : "?"}</title>
+                <${data.type}View value={${data.var}} />
+                <footer>
+                    <Action>
+                        <Button name="apply"
+                            onClick={cancelClick}
+                            text="Cancelar"
+                            icon="arrow-circle-left"
+                            variant="warning" />
+                        <Button name="apply"
+                            onClick={removeClick}
+                            text="Eliminar"
+                            icon="check-circle"
+                            variant="danger"
+                            confirm="Esta seguro de eliminar el registro?"
+                            hide={!${data.var}} />
+                    </Action>
+                </footer>
+            </Panel>
+        );
+    };
+};
+
+export const ${data.type}Remove = withRouter(${data.type}RemoveLocal);
+
 ]]></file>
     <file name="${data.type}Search.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
 //ejemplo 1
