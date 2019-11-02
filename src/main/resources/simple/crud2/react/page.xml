@@ -916,7 +916,112 @@ export class ${data.type}CRUD extends React.PureComponent<${data.type}CRUDProps,
 }
 ]]></file>
     <file name="${data.type}Proc01.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
-//ejemplo 1
+import React from "react";
+import Help, { Panel, Increase } from "ui-fast";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+
+import { ${data.type}CRUD, ${data.type}CRUDEvent } from "./${data.type}CRUD";
+import { ${data.type} } from "../${data.type}Model";
+import { ${data.var}Remove, ${data.var}Filter } from "../${data.type}Rest";
+export interface ${data.type}Proc01Props extends RouteComponentProps {
+    hide?: boolean,
+}
+
+interface ${data.type}Proc01State {
+    values: Array<${data.type}>;
+}
+
+class ${data.type}Proc01Local extends React.PureComponent<${data.type}Proc01Props, ${data.type}Proc01State> {
+
+    constructor(props: ${data.type}Proc01Props) {
+        super(props);
+        this.state = {
+            values: []
+        };
+        this.${data.var}Append = this.${data.var}Append.bind(this);
+        this.${data.var}Remove = this.${data.var}Remove.bind(this);
+        this.setValues = this.setValues.bind(this);
+        this.eventListener = this.eventListener.bind(this);
+        ${data.var}Filter({}, (data) => {
+            this.setValues(data);
+        });
+    }
+
+    ${data.var}Append(index: number) {
+        let { values } = this.state;
+        values = Help.insertArray(values, index, {});
+        this.setValues(values);
+    }
+
+    ${data.var}Remove(${data.var}: ${data.type}, index: number) {
+        let { values } = this.state;
+        if (${data.var}.id) {
+            ${data.var}Remove(${data.var}, () => {
+                values = values.filter(it => it !== ${data.var});
+                this.setValues(values);
+            });
+        } else {
+            values = values.filter(it => it !== ${data.var});
+            this.setValues(values);
+        }
+    }
+
+    eventListener(event: ${data.type}CRUDEvent) {
+        let { values } = this.state;
+        let ${data.var} = values[event.index];
+        if (${data.var} && event.state === "REMOVE") {
+            values = values.filter(it => it !== ${data.var});
+            this.setValues(values);
+        } else if (${data.var} && event.state !== "ERROR") {
+            values[event.index] = event.${data.var};
+            this.setValues(values);
+        }
+    }
+
+    setValues(values: ${data.type}[]) {
+        //force clear
+        this.setState({ values: [] }, () => {
+            //restore new values
+            this.setState({ values: values }, () => {
+                //this.forceUpdate();
+            });
+        });
+    }
+
+    render(): React.ReactNode {
+        if (this.props.hide === true) {
+            return false;
+        }
+        let { values } = this.state;
+        let { ${data.var}Append, ${data.var}Remove, eventListener } = this;
+        let ${data.var}Form = (${data.var}: ${data.type}, index: number) => {
+            return (
+                <${data.type}CRUD
+                    ${data.var}={${data.var}}
+                    index={index}
+                    allowUpdate={true}
+                    allowRemove={false}
+                    eventListener={eventListener}
+                />
+            )
+        }
+        return (
+            <Panel icon="pencil" variant="warning" width="90">
+                <title>Correos Electronicos</title>
+                <Increase values={values}
+                    onContent={${data.var}Form}
+                    appendMode="row"
+                    onAppend={${data.var}Append}
+                    onRemove={${data.var}Remove}
+                    minimum={0}
+                    maximum={5}>
+                </Increase>
+            </Panel>
+        );
+    };
+}
+
+export const ${data.type}Proc01 = withRouter(${data.type}Proc01Local);
 ]]></file>
     <file name="${data.type}Page.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
 
