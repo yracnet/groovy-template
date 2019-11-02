@@ -20,6 +20,7 @@ public class GenerateRun {
         gen.setModule("portal");
         gen.setNamespace("psv");
         gen.setContextPath("sirepo-portal-rest-0.1.0-01");
+        gen.addTemplateDirectory("app.javaee");
         gen.addTemplateDirectory("app.react");
         gen.addTemplateDirectory("app.react.module");
         gen.addTemplateDirectory("app.react.module.page");

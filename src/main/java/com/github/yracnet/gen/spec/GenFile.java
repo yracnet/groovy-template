@@ -83,25 +83,10 @@ public class GenFile {
         layer = layer == null ? "error" : layer;
         switch (layer) {
             case "view":
-                mask = "/$project/$project-view/src/main/webapp/view/$name";
+                mask = "/$project/$project-view/src/$dir/$name";
                 break;
-            case "view:part":
-                mask = "/$project/$project-view/src/main/webapp/part/$dir/$name";
-                break;
-            case "view:domain":
-                mask = "/temp/$dir/$name";
-                break;
-            case "view:ctrl":
-                mask = "/$project/$project-view/src/main/webapp/ctrl/$name";
-                break;
-            case "view:comp":
-                mask = "/$project/$project-view/src/main/webapp/comp/$name";
-                break;
-            case "view:serv":
-                mask = "/$project/$project-view/src/main/webapp/serv/$name";
-                break;
-            case "view:rest":
-                mask = "/$project/$project-view/src/main/java/$dir/$pkg/$name";
+            case "rest":
+                mask = "/$project/$project-rest/src/main/java/$dir/$pkg/$name";
                 break;
             case "test":
                 mask = "/$project/$project-view/src/test/java/$dir/$pkg/$name";
@@ -130,14 +115,14 @@ public class GenFile {
             case "model:entity":
                 mask = "/$project-model/src/main/java/$dir/$pkg/$name";
                 break;
-            //default:
-            //    mask = "/$project/error/$name";
             //} else if ("conf".equals(layer)) {
             //    mask = "/$project/$project-view/src/main/webapp/WEB-INF/$name";
             //} else if ("web-inf".equals(layer)) {
             //    mask = "/$project/$project-view/src/main/webapp/WEB-INF/$dir/$name";
             //} else if ("meta-inf".equals(layer)) {
             //    mask = "/$project/$project-impl/src/main/resources/META-INF/$dir/$name";
+            default:
+                System.out.println("ERROR====>" + layer);
         }
 
         mask = mask.replace("$project", project);

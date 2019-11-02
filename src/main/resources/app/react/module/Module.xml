@@ -14,7 +14,7 @@
     attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
     attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
     %>
-    <file name="${data.type}Model.tsx" layer="view:domain" dir="${data.path}" skip="false"><![CDATA[
+    <file name="${data.type}Model.tsx" layer="view" dir="${data.path}" skip="false"><![CDATA[
 import { FieldFilter, FieldMessage, FilterAbstract } from "../Model";
 import { InputTextValidate } from "ui-fast";
 
@@ -36,7 +36,7 @@ export interface ${data.type}Validate {<% attr.each{  %>
    [attr: string]: any
 }
 ]]></file>
-    <file name="${data.type}Rest.tsx" layer="view:domain" dir="${data.path}" skip="false"><![CDATA[
+    <file name="${data.type}Rest.tsx" layer="view" dir="${data.path}" skip="false"><![CDATA[
 
 import { endpoint, processCaller } from "../Endpoint";
 import { ${data.type}, ${data.type}Filter } from "./${data.type}Model";
@@ -76,7 +76,7 @@ export const ${data.var}Remove = function (payload: ${data.type}, success?: fnSu
   processCaller(caller, success, error);
 }
 ]]></file>
-    <file name="${data.type}Page.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+    <file name="${data.type}Page.tsx" layer="view" dir="${data.path}"><![CDATA[
 
 import React from "react";
 import { Panel, Button } from "ui-fast";
@@ -129,7 +129,7 @@ export {
 };
 
 ]]></file>
-    <file name="${data.type}Part.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+    <file name="${data.type}Part.tsx" layer="view" dir="${data.path}"><![CDATA[
 export * from "./part/${data.type}Table";
 export * from "./part/${data.type}Query";
 export * from "./part/${data.type}Form";

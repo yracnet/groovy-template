@@ -26,7 +26,7 @@
     attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
     attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
     %>
-    <file name="${crud.type}.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
+    <file name="${crud.type}.tsx" layer="view" dir="${data.path}/page"><![CDATA[
 import React from "react";
 import { Panel, Action, Button } from "ui-fast";
 import { InputTextValidate, InputTextState } from "ui-fast";

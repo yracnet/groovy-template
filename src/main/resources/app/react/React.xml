@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files>
-    <file name="Endpoint.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
+    <file name="Endpoint.tsx" layer="view" dir="." skip="false" append="false"><![CDATA[
 import axios, { AxiosResponse } from 'axios';
 import { FlashContext, Message } from '../plataforma/Plataforma';
 //import { FlashContext, Message } from "bcb-platform";
@@ -81,7 +81,7 @@ export const processCaller = function (caller: Promise<AxiosResponse>, success?:
   });
 }
 ]]></file>
-    <file name="Model.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
+    <file name="Model.tsx" layer="view" dir="." skip="false" append="false"><![CDATA[
 export interface FieldFilter {
    operator: string,
    value?: any
@@ -111,7 +111,7 @@ export interface FilterAbstract {
    }
 }
 ]]></file>
-    <file name="Validate.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
+    <file name="Validate.tsx" layer="view" dir="." skip="false" append="false"><![CDATA[
 import { InputTextState } from "ui-fast";
 
 export const isRequired = function (name: string, inputValue: InputTextState): InputTextState {
@@ -130,7 +130,7 @@ export const isEmail = function (name: string, inputValue: InputTextState): Inpu
   return inputValue;
 }
 ]]></file>
-    <file name="Convert.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
+    <file name="Convert.tsx" layer="view" dir="." skip="false" append="false"><![CDATA[
 export const toString = function (value: any): string {
   return '' + value;
 }

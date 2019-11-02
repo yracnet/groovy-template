@@ -26,7 +26,7 @@
     attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
     attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
     %>
-    <file name="${proc01.type}.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
+    <file name="${proc01.type}.tsx" layer="view" dir="${data.path}/page"><![CDATA[
 import React from "react";
 import Help, { Panel, Increase } from "ui-fast";
 import { withRouter, RouteComponentProps } from "react-router-dom";

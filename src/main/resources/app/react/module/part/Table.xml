@@ -21,7 +21,7 @@
     attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
     attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
     %>
-    <file name="${data.type}Table.tsx" layer="view:domain" dir="${data.path}/part"><![CDATA[
+    <file name="${data.type}Table.tsx" layer="view" dir="${data.path}/part"><![CDATA[
 import React from "react";
 import { Table, Column, TableConfig } from "ui-fast";
 import { ${data.type} } from "../${data.type}Model";
