@@ -12,8 +12,8 @@ package com.github.yracnet.generator;
 public class GenerateRun {
 
     public static void main(String[] args) {
-        String model = "/work/dev/bcb-02/sirepo/sirepo-modelo/src/main/resources/modelo.jpa";
-        String output = "/work/dev/bcb-02/temporal";
+        String model = "/work/dev/bcb-01/r3/2019A-01/sirepo-modelo/src/main/resources/modelo.jpa";
+        String output = "/work/dev/bcb-01/r3/generate";
         Generate gen = new Generate(model, output);
         gen.setGroupId("bo.gob.bcb.grh.sirepo");
         gen.setArtifactId("sirepo");
@@ -27,7 +27,7 @@ public class GenerateRun {
         //gen.addTemplate("simple.crud2.view");
         gen.addTemplate("simple.crud2.react.part");
         gen.addTemplate("simple.crud2.react.page");
-        gen.addTemplate("simple.crud2.react.serv");
+        gen.addTemplate("simple.crud2.react.base");
         gen.removePrefix("Form");
         gen.generate();
     }

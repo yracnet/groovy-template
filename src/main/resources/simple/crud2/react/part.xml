@@ -23,7 +23,7 @@
     %>
     <file name="${data.type}Form.tsx" layer="view:domain" dir="${data.path}/part"><![CDATA[
 import React from "react";
-import { Grid, InputText, InputTextChange, OutputText, Alert } from "ui-fast";
+import { Grid, InputText, InputTextChange, LabelText, Alert } from "ui-fast";
 import { ${data.type}, ${data.type}Message, ${data.type}Validate } from "../${data.type}Model";
 import { toString } from "../../Convert";
 
@@ -40,17 +40,21 @@ export const ${data.type}Form: React.SFC<${data.type}FormProps> = (props) => {
   validate = validate ? validate : {};
   return (
     value ?
-      <Grid cols="4, 8"><% attr.each{  %>
-        <OutputText name="${it.var}"
-          value="${it.text}" />
-        <InputText name="${it.var}"
-          value={value.${it.var}} 
-          onChange={onValue}
-          message={message.${it.var}}
-          onValidate={validate.${it.var}}
-          onFormat={toString}
-          onConvert={toString} />
-        <% } %>
+      <Grid
+        lgcols={[4, 2, 2, 2, 2, 2]}
+        cols={[12]}
+        mdcols={[12, 6, 6, 6, 6, 6]}>
+<% attr.each{  %>
+        <LabelText value="${it.text}" >
+          <InputText name="${it.var}"
+            value={value.${it.var}} 
+            onChange={onValue}
+            message={message.${it.var}}
+            onValidate={validate.${it.var}}
+            onFormat={toString}
+            onConvert={toString} />
+        </LabelText>
+<% } %>
       </Grid>
       :
       <Alert variant="danger"
@@ -61,7 +65,7 @@ export const ${data.type}Form: React.SFC<${data.type}FormProps> = (props) => {
 ]]></file>
     <file name="${data.type}View.tsx" layer="view:domain" dir="${data.path}/part"><![CDATA[
 import React from "react";
-import { Grid, OutputText, Alert } from "ui-fast";
+import { Grid, LabelText, OutputText, Alert } from "ui-fast";
 import { ${data.type} } from "../${data.type}Model";
 import { toString } from "../../Convert";
 
@@ -73,13 +77,17 @@ export const ${data.type}View: React.SFC<${data.type}ViewProps> = (props) => {
   let { value } = props;
   return (
     value ?
-      <Grid cols="4, 8"><% attr.each{  %>
-        <OutputText name="${it.var}"
-          value="${it.text}" />
-        <OutputText name="${it.var}"
-          value={value.${it.var}}
-          onFormat={toString} />
-        <% } %>
+      <Grid
+        lgcols={[4, 2, 2, 2, 2, 2]}
+        cols={[12]}
+        mdcols={[12, 6, 6, 6, 6, 6]}>
+<% attr.each{  %>
+        <LabelText value="${it.text}" >
+          <OutputText name="${it.var}"
+            value={value.${it.var}}
+            onFormat={toString} />
+        </LabelText>
+<% } %>
       </Grid>
       :
       <Alert variant="danger"
@@ -140,6 +148,12 @@ export const ${data.type}Query: React.SFC<${data.type}QueryProps> = (props) => {
     </Grid>
   );
 }
+]]></file>
+    <file name="${data.type}Part.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+export * from "./part/${data.type}Table";
+export * from "./part/${data.type}Query";
+export * from "./part/${data.type}Form";
+export * from "./part/${data.type}View";
 ]]></file>
 
     <% } %>
