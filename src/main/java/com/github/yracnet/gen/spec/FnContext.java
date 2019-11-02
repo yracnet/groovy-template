@@ -97,17 +97,15 @@ public class FnContext {
         nameSufix = upperFirst(nameSufix);
         String varSufix = toVar(nameSufix);
         map.put("type", nameSufix);
+        map.put("props", nameSufix + "Props");
+        map.put("state", nameSufix + "State");
+        map.put("local", nameSufix + "Local");
+        map.put("filter", nameSufix + "Filter");
+        map.put("query", nameSufix + "Query");
+        map.put("table", nameSufix + "Table");
         map.put("var", varSufix);
-        //map.put("text", toText(nameSufix));
-        //map.put("const", toConst(nameSufix));
-        //map.put("path", toPath(nameSufix));
-        //map.put("uscore", toUnderscore(nameSufix));
-        //map.put("colon", toColon(nameSufix));
-        //map.put("dash", toDash(nameSufix));
-        //map.put("varList", varSufix + "List");
-        //map.put("get", "get" + nameSufix);
-        //map.put("set", "set" + nameSufix);
-        //map.put("param", nameSufix + " " + varSufix);
+        map.put("text", toText(nameSufix));
+        map.put("path", toPath(nameSufix));
         return map;
     }
 
