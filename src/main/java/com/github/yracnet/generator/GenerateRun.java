@@ -20,15 +20,10 @@ public class GenerateRun {
         gen.setModule("portal");
         gen.setNamespace("psv");
         gen.setContextPath("sirepo-portal-rest-0.1.0-01");
-        //gen.setContextPath("postulate-sitio");
-        //gen.addTemplate("simple.crud2.serv");
-        //gen.addTemplate("simple.crud2.impl");
-        //gen.addTemplate("simple.crud2.local");
-        //gen.addTemplate("simple.crud2.view");
-        gen.addTemplate("simple.crud2.react.part");
-        gen.addTemplate("simple.crud2.react.page");
-        gen.addTemplate("simple.crud2.react.proc01");
-        gen.addTemplate("simple.crud2.react.base");
+        gen.addTemplateDirectory("app.react");
+        gen.addTemplateDirectory("app.react.module");
+        gen.addTemplateDirectory("app.react.module.page");
+        gen.addTemplateDirectory("app.react.module.part");
         gen.removePrefix("Form");
         gen.generate();
     }

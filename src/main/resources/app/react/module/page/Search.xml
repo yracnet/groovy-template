@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    entityRef.each {
+    id, entity ->
+    def pkg    = fn.pkg(groupId, artifactId, module);  
+    def data   = fn.deduceName(entity.clazz)
+    def filter = fn.deduceName(entity.clazz, 'Filter')
+    def message = fn.deduceName(entity.clazz, 'Message')
+    def crud    = fn.deduceName(entity.clazz, 'CRUD')
+    def inbox   = fn.deduceName(entity.clazz, 'Inbox')
+    def create  = fn.deduceName(entity.clazz, 'Create')
+    def update  = fn.deduceName(entity.clazz, 'Update')
+    def remove  = fn.deduceName(entity.clazz, 'Remove')
+    def detail  = fn.deduceName(entity.clazz, 'Detail')
+    def search  = fn.deduceName(entity.clazz, 'Search')
+    def proc01 = fn.deduceName(entity.clazz, 'Proc01')
+    def serv   = fn.deduceName(entity.clazz, 'Serv')
+    def rest   = fn.deduceName(entity.clazz, 'Rest')
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    %>
+    <file name="${search.type}.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
+import React from "react";
+
+import { Panel, Action, Button } from "ui-fast";
+import { FilterTextState, TableConfig } from "ui-fast";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+
+import { ${data.var}Filter } from "../${data.type}Rest";
+import { ${data.type}, ${data.type}Filter } from "../${data.type}Model";
+import { ${data.type}Table, ${data.type}Query } from "../${data.type}Part";
+
+export interface ${search.type}Props extends RouteComponentProps {
+    hide?: boolean,
+    selectClick: (${data.var}: ${data.type}) => void,
+    cancelClick: () => void
+}
+
+interface ${search.type}State {
+    filter: ${data.type}Filter;
+    values: Array<${data.type}>;
+    select?: ${data.type};
+}
+
+class ${search.type}Local extends React.Component<${search.type}Props, ${search.type}State> {
+
+    constructor(props: ${search.type}Props) {
+        super(props);
+        this.state = {
+            filter: {},
+            values: [],
+            select: undefined
+        };
+        this.onSelect = this.onSelect.bind(this);
+        this.onFilter = this.onFilter.bind(this);
+        this.onConfig = this.onConfig.bind(this);
+        this.filterClick = this.filterClick.bind(this);
+        this.selectClickInvoke = this.selectClickInvoke.bind(this);
+        this.cancelClickInvoke = this.cancelClickInvoke.bind(this);
+    }
+
+    render(): React.ReactNode {
+        if (this.props.hide === true) {
+            return null;
+        }
+        let { onFilter, filterClick, onConfig, onSelect, cancelClickInvoke, selectClickInvoke } = this;
+        let { filter, values, select } = this.state;
+        let config = Object.assign({}, filter.config);
+        let disabled = !select;
+        return (
+            <Panel mode="modal" width="80" variant="primary">
+                <header>Buscar ${data.type}</header>
+                <${data.type}Query value={filter}
+                    onChange={onFilter} />
+                <Action>
+                    <Button name="apply"
+                        onClick={filterClick}
+                        icon="filter"
+                        variant="primary"
+                        text="Buscar" />
+                    <Button name="clean"
+                        onClick={filterClick}
+                        icon="eraser"
+                        variant="secondary"
+                        text="Limpiar" />
+                    <Button name="open"
+                        icon="check"
+                        disabled={disabled}
+                        onClick={selectClickInvoke}
+                        variant="primary"
+                        text="Aceptar" />
+                    <Button name="open"
+                        icon="trash"
+                        onClick={cancelClickInvoke}
+                        variant="danger"
+                        text="Cancelar" />
+                </Action>
+                <${data.type}Table values={values}
+                    select={select}
+                    config={config}
+                    onSelect={onSelect}
+                    onConfig={onConfig} />
+            </Panel>
+        );
+    }
+
+    selectClickInvoke() {
+        let { selectClick } = this.props;
+        let { select } = this.state;
+        if (selectClick && select) {
+            selectClick(select);
+        }
+    }
+
+    cancelClickInvoke() {
+        let { cancelClick } = this.props;
+        if (cancelClick) {
+            cancelClick();
+        }
+    }
+
+    onFilter(state: FilterTextState) {
+        let filter: any = Object.assign({}, this.state.filter);
+        filter[state.name] = { operator: state.operator, value: state.value };
+        this.setState({ filter });
+    }
+
+    onSelect(value: ${data.type}) {
+        let select = this.state.select === value ? undefined : value;
+        this.setState({ select });
+    }
+
+    onConfig(value: TableConfig) {
+        let filter = { ...this.state.filter };
+        let config = filter.config || {};
+        filter.config = Object.assign(config, value);
+        this.setState({ filter }, () => {
+            this.filterClick("sort");
+        });
+    }
+
+    filterClick(name: string) {
+        let filter = { ...this.state.filter };
+        if (name === "clean") {
+            filter = { config: filter.config };
+        }
+        ${data.var}Filter(filter, (values: Array<${data.type}>) => {
+            this.setState({ values, filter, select: undefined });
+        }, () => {
+            this.setState({ values: [], filter, select: undefined });
+        });
+    }
+}
+
+export const ${search.type} = withRouter(${search.type}Local);
+
+]]></file>
+    <% } %>
+</files>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    entityRef.each {
+    id, entity ->
+    def pkg    = fn.pkg(groupId, artifactId, module);  
+    def data   = fn.deduceName(entity.clazz)
+    def filter = fn.deduceName(entity.clazz, 'Filter')
+    def message = fn.deduceName(entity.clazz, 'Message')
+    def crud    = fn.deduceName(entity.clazz, 'CRUD')
+    def inbox   = fn.deduceName(entity.clazz, 'Inbox')
+    def create  = fn.deduceName(entity.clazz, 'Create')
+    def update  = fn.deduceName(entity.clazz, 'Update')
+    def remove  = fn.deduceName(entity.clazz, 'Remove')
+    def detail  = fn.deduceName(entity.clazz, 'Detail')
+    def search  = fn.deduceName(entity.clazz, 'Search')
+    def proc01 = fn.deduceName(entity.clazz, 'Proc01')
+    def serv   = fn.deduceName(entity.clazz, 'Serv')
+    def rest   = fn.deduceName(entity.clazz, 'Rest')
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    %>
+    <file name="${inbox.type}.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[import React from "react";
+
+import { Panel, Action, Button } from "ui-fast";
+import { FilterTextState, TableConfig } from "ui-fast";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+
+import { ${data.var}Filter } from "../${data.type}Rest";
+import { ${data.type}, ${data.type}Filter } from "../${data.type}Model";
+import { ${data.type}Table, ${data.type}Query } from "../${data.type}Part";
+
+export interface ${inbox.type}Props extends RouteComponentProps {
+    hide?: boolean
+}
+
+interface ${inbox.type}State {
+    filter: ${data.type}Filter;
+    values: Array<${data.type}>;
+    select?: ${data.type};
+}
+
+class ${inbox.type}Local extends React.Component<${inbox.type}Props, ${inbox.type}State> {
+
+    constructor(props: ${inbox.type}Props) {
+        super(props);
+        this.state = {
+            filter: {},
+            values: [],
+            select: undefined
+        };
+        this.onSelect = this.onSelect.bind(this);
+        this.onFilter = this.onFilter.bind(this);
+        this.onConfig = this.onConfig.bind(this);
+        this.filterClick = this.filterClick.bind(this);
+        this.filterClick("apply");
+    }
+
+    render(): React.ReactNode {
+        if (this.props.hide === true) {
+            return null;
+        }
+        let { history } = this.props;
+        let { onFilter, filterClick, onConfig, onSelect } = this;
+        let { filter, values, select } = this.state;
+        let id = select ? select.id : '#ID#';
+        let config = Object.assign({}, filter.config);
+        let disabled = !select;
+        return (
+            <Panel>
+                <title>Listado de ${data.type}s</title>
+                <${data.type}Query value={filter}
+                    onChange={onFilter} />
+                <Action>
+                    <Button name="apply"
+                        onClick={filterClick}
+                        icon="filter"
+                        variant="primary"
+                        text="Buscar" />
+                    <Button name="clean"
+                        onClick={filterClick}
+                        icon="eraser"
+                        variant="secondary"
+                        text="Limpiar" />
+                    <Button name="open"
+                        to="/${data.var}/create"
+                        history={history}
+                        icon="plus-circle"
+                        variant="success"
+                        text="Crear" />
+                    <Button name="open"
+                        to={"/${data.var}/update/" + id}
+                        history={history}
+                        icon="pencil"
+                        disabled={disabled}
+                        variant="primary"
+                        text="Modificar" />
+                    <Button name="open"
+                        to={"/${data.var}/detail/" + id}
+                        history={history}
+                        icon="eye"
+                        disabled={disabled}
+                        variant="primary"
+                        text="Detalle" />
+                    <Button name="open"
+                        to={"/${data.var}/remove/" + id}
+                        history={history}
+                        icon="trash"
+                        disabled={disabled}
+                        variant="danger"
+                        text="Eliminar" />
+                </Action>
+                <${data.type}Table values={values}
+                    select={select}
+                    config={config}
+                    onSelect={onSelect}
+                    onConfig={onConfig} />
+            </Panel>
+        );
+    }
+
+    onFilter(state: FilterTextState) {
+        let filter: any = Object.assign({}, this.state.filter);
+        filter[state.name] = { operator: state.operator, value: state.value };
+        this.setState({ filter });
+    }
+
+    onSelect(value: ${data.type}) {
+        let select = this.state.select === value ? undefined : value;
+        this.setState({ select });
+    }
+
+    onConfig(value: TableConfig) {
+        let filter = { ...this.state.filter };
+        let config = filter.config || {};
+        filter.config = Object.assign(config, value);
+        this.setState({ filter }, () => {
+            this.filterClick("sort");
+        });
+    }
+
+    filterClick(name: string) {
+        let filter = { ...this.state.filter };
+        if (name === "clean") {
+            filter = { config: filter.config };
+            this.setState({
+                select: undefined
+            });
+        }
+        ${data.var}Filter(filter, (values: Array<${data.type}>) => {
+            this.setState({ values, filter });
+        }, () => {
+            this.setState({ values: [], filter });
+        });
+    }
+}
+
+export const ${inbox.type} = withRouter(${inbox.type}Local);
+]]></file>
+    <% } %>
+</files>

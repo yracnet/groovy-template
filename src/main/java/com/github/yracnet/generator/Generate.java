@@ -66,7 +66,7 @@ public class Generate {
     }
 
     public void setContextPath(String contextPath) {
-        if(contextPath != null){
+        if (contextPath != null) {
             contextPath = contextPath.replaceAll("(^[/]*)|([/]*$)", "");
         }
         this.contextPath = contextPath;
@@ -114,7 +114,7 @@ public class Generate {
                 GenRoot item = Util.readRoot(x);
                 item.genFileEach(genFile -> {
                     File outFile = genFile.getFileOutput(output, artifactId, module);
-                    if(genFile.isSkip()){
+                    if (genFile.isSkip()) {
                         System.out.println("Write Skip: " + outFile);
                     } else {
                         String outContent = genFile.getGenerateContent();
@@ -132,6 +132,17 @@ public class Generate {
         template = template.replace(".", "/") + ".xml";
         File it = Util.getResourceFile(template);
         templateList.add(it);
+    }
+
+    public void addTemplateDirectory(String template) {
+        template = template.replace(".", "/");
+        File directory = Util.getResourceFile(template);
+        if (directory.isDirectory()) {
+            File files[] = directory.listFiles(it -> it.isFile());
+            for (File it : files) {
+                templateList.add(it);
+            }
+        }
     }
 
     public void removePrefix(String prefix) {

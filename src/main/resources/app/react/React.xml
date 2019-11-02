@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <file name="Endpoint.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
+import axios, { AxiosResponse } from 'axios';
+import { FlashContext, Message } from '../plataforma/Plataforma';
+//import { FlashContext, Message } from "bcb-platform";
+import { Result } from "./Model";
+
+let defaultSuccess = function (data: any) {
+  console.debug("success:", data);
+};
+let defaultError = function (data: any) {
+  console.debug("error:", data);
+};
+let processMessage = function (result: Result) {
+  console.debug('processMessage:', result);
+  let message: Array<Message> = result.messages.map(it => ({
+    type: it.type || 'info',
+    title: 'Respuesta del Servidor',
+    description: it.description,
+    action: it.action,
+    causes: it.causes,
+    duration: 5000
+  }));
+  FlashContext.flashMessage(message);
+};
+
+export const endpoint: String = 'http://127.0.0.1:8080/${contextPath}/rest';
+
+export const processCaller = function (caller: Promise<AxiosResponse>, success?: (data: any) => void, error?: (data: any) => void) {
+  let callerSuccess = success || defaultSuccess;
+  let callerError = error || defaultError;
+  caller.then(response => {
+    console.debug("Response-Success:", response);
+    let result: Result = response.data;
+    processMessage(result);
+    if (result.error === false) {
+      callerSuccess(result.value);
+    } else {
+      callerError(result);
+    }
+  }).catch(error => {
+    console.debug("Response-Error:", error.toJSON());
+    let result: Result = {
+      error: true,
+      messages: []
+    }
+    if (error.response && error.response.data) {
+      let response = error.response;
+      let data = response.data;
+      if (typeof data === 'object' && data.messages) {
+        result.error = data.error;
+        result.value = data.value;
+        result.messages = data.messages;
+      } else {
+        result.messages.push({
+          type: "error",
+          description: "Error al invocar al servicio",
+          causes: [
+            "Servicio:  " + error.config.url,
+            "Respuesta: " + response.status + ": " + response.statusText,
+            unescape('Contenido: ' + data)
+          ],
+          action: "Vea el Log del servidor!"
+        });
+      }
+    }
+    if (result.messages.length === 0) {
+      result.messages.push({
+        type: "error",
+        description: "Error al invocar al servicio",
+        causes: [
+          "Servicio:  " + error.config.url,
+          "Respuesta: " + (error.code || "999") + ": " + error.message
+        ],
+        action: "Vea el Log del servidor!"
+      });
+    }
+    processMessage(result);
+    callerError(result);
+  });
+}
+]]></file>
+    <file name="Model.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
+export interface FieldFilter {
+   operator: string,
+   value?: any
+}
+export interface FieldMessage {
+   type: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+   icon?: string;
+   message: string;
+}
+export interface ResultMessage {
+   type: string,
+   description: string,
+   action?: string,
+   causes: Array<string>
+}
+export interface Result {
+   error: boolean,
+   messages: Array<ResultMessage>,
+   value?: any | Array<any>,
+}
+export interface FilterAbstract {
+   config?: {
+      index?: number,
+      size?: number,
+      column?: string,
+      sort?: 'asc' | 'desc' | 'none'
+   }
+}
+]]></file>
+    <file name="Validate.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
+import { InputTextState } from "ui-fast";
+
+export const isRequired = function (name: string, inputValue: InputTextState): InputTextState {
+  if (!inputValue.value) {
+    inputValue.state = 'error';
+    inputValue.message = 'Se requiere un valor';
+  }
+  return inputValue;
+}
+
+export const isEmail = function (name: string, inputValue: InputTextState): InputTextState {
+  if (inputValue.value && !inputValue.value.includes('@')) {
+    inputValue.state = 'error';
+    inputValue.message = 'Correo invalido';
+  }
+  return inputValue;
+}
+]]></file>
+    <file name="Convert.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
+export const toString = function (value: any): string {
+  return '' + value;
+}
+
+export const toDateFormat = function (value: date|number): string {
+  return '01/01/9999';
+}
+
+export const toMoneyFormat = function (value: number): string {
+  return '12.456,56';
+}
+]]></file>
+</files>

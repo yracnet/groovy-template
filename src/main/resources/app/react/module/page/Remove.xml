@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    entityRef.each {
+    id, entity ->
+    def pkg    = fn.pkg(groupId, artifactId, module);  
+    def data   = fn.deduceName(entity.clazz)
+    def filter = fn.deduceName(entity.clazz, 'Filter')
+    def message = fn.deduceName(entity.clazz, 'Message')
+    def crud    = fn.deduceName(entity.clazz, 'CRUD')
+    def inbox   = fn.deduceName(entity.clazz, 'Inbox')
+    def create  = fn.deduceName(entity.clazz, 'Create')
+    def update  = fn.deduceName(entity.clazz, 'Update')
+    def remove  = fn.deduceName(entity.clazz, 'Remove')
+    def detail  = fn.deduceName(entity.clazz, 'Detail')
+    def search  = fn.deduceName(entity.clazz, 'Search')
+    def proc01 = fn.deduceName(entity.clazz, 'Proc01')
+    def serv   = fn.deduceName(entity.clazz, 'Serv')
+    def rest   = fn.deduceName(entity.clazz, 'Rest')
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    %>
+    <file name="${remove.type}.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
+import React from "react";
+import { Panel, Action, Button } from "ui-fast";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+
+import { ${data.type} } from "../${data.type}Model";
+import { ${data.var}Reload, ${data.var}Remove } from "../${data.type}Rest";
+import { ${data.type}View } from "../${data.type}Part";
+
+export interface ${remove.type}Props extends RouteComponentProps<{ id${data.type}: string }> {
+    hide?: boolean
+}
+
+interface ${remove.type}State {
+    ${data.var}?: ${data.type};
+}
+
+class ${remove.type}Local extends React.PureComponent<${remove.type}Props, ${remove.type}State> {
+
+    constructor(props: ${remove.type}Props) {
+        super(props);
+        this.state = {};
+        let { id${data.type} } = this.props.match.params;
+        ${data.var}Reload({ id: id${data.type} }, (${data.var}: ${data.type}) => {
+            this.setState({ ${data.var} });
+        })
+        this.removeClick = this.removeClick.bind(this);
+        this.cancelClick = this.cancelClick.bind(this);
+    }
+
+    removeClick() {
+        let value = this.state.${data.var} || {};
+        ${data.var}Remove(value, (${data.var}: ${data.type}) => {
+            this.setState({ ${data.var}: ${data.var} });
+            this.cancelClick();
+        });
+    }
+
+    cancelClick() {
+        this.props.history.push("/${data.var}/inbox");
+    }
+
+
+    render(): React.ReactNode {
+        if (this.props.hide === true) {
+            return false;
+        }
+        let { ${data.var} } = this.state;
+        let { cancelClick, removeClick } = this;
+        return (
+            <Panel icon="pencil"
+                variant="warning"
+                width="50">
+                <title>Eliminacion ${data.type} #{${data.var} ? ${data.var}.id : "?"}</title>
+                <${data.type}View value={${data.var}} />
+                <footer>
+                    <Action>
+                        <Button name="apply"
+                            onClick={cancelClick}
+                            text="Cancelar"
+                            icon="arrow-circle-left"
+                            variant="warning" />
+                        <Button name="apply"
+                            onClick={removeClick}
+                            text="Eliminar"
+                            icon="check-circle"
+                            variant="danger"
+                            confirm="Esta seguro de eliminar el registro?"
+                            hide={!${data.var}} />
+                    </Action>
+                </footer>
+            </Panel>
+        );
+    };
+};
+
+export const ${remove.type} = withRouter(${remove.type}Local);
+
+]]></file>
+    <% } %>
+</files>

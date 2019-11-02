@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    entityRef.each {
+    id, entity ->
+    def pkg    = fn.pkg(groupId, artifactId, module);  
+    def data   = fn.deduceName(entity.clazz)
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    %>
+    <file name="${data.type}Model.tsx" layer="view:domain" dir="${data.path}" skip="false"><![CDATA[
+import { FieldFilter, FieldMessage, FilterAbstract } from "../Model";
+import { InputTextValidate } from "ui-fast";
+
+export interface ${data.type} {<% attr.each{  %>
+   ${it.var}?: ${it.jsType},<% } %>
+}
+
+export interface ${data.type}Filter extends FilterAbstract {<% attr.each{  %>
+   ${it.var}?: FieldFilter,<% } %>
+}
+
+export interface ${data.type}Message {<% attr.each{  %>
+   ${it.var}?: string | FieldMessage,<% } %>
+   [attr: string]: any
+}
+
+export interface ${data.type}Validate {<% attr.each{  %>
+   ${it.var}?: Array<InputTextValidate>,<% } %>
+   [attr: string]: any
+}
+]]></file>
+    <file name="${data.type}Rest.tsx" layer="view:domain" dir="${data.path}" skip="false"><![CDATA[
+
+import { endpoint, processCaller } from "../Endpoint";
+import { ${data.type}, ${data.type}Filter } from "./${data.type}Model";
+import axios from 'axios';
+
+type fnSuccessArray = (values: ${data.type}[]) => void;
+type fnSuccess = (value: ${data.type}) => void;
+type fnError = (response: any) => void;
+
+export const ${data.var}Ping = function (callback?: (response: any) => void) {
+  let caller = axios.get(`\${endpoint}/${data.path}`);
+  processCaller(caller, callback, callback);
+}
+
+export const ${data.var}Filter = function (payload: ${data.type}Filter, success?: fnSuccessArray, error?: fnError) {
+  let caller = axios.post(`\${endpoint}/${data.path}/filtrar`, payload);
+  processCaller(caller, success, error);
+}
+
+export const ${data.var}Reload = function (payload: ${data.type}, success?: fnSuccess, error?: fnError) {
+  let caller = axios.post(`\${endpoint}/${data.path}/recargar`, payload);
+  processCaller(caller, success, error);
+}
+
+export const ${data.var}Create = function (payload: ${data.type}, success?: fnSuccess, error?: fnError) {
+  let caller = axios.post(`\${endpoint}/${data.path}/registrar`, payload);
+  processCaller(caller, success, error);
+}
+
+export const ${data.var}Update = function (payload: ${data.type}, success?: fnSuccess, error?: fnError) {
+  let caller = axios.post(`\${endpoint}/${data.path}/actualizar`, payload);
+  processCaller(caller, success, error);
+}
+
+export const ${data.var}Remove = function (payload: ${data.type}, success?: fnSuccess, error?: fnError) {
+  let caller = axios.post(`\${endpoint}/${data.path}/eliminar`, payload);
+  processCaller(caller, success, error);
+}
+]]></file>
+    <file name="${data.type}Page.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+
+import React from "react";
+import { Panel, Button } from "ui-fast";
+import { Route, Switch } from "react-router-dom";
+import { ${data.type}Inbox } from "./page/${data.type}Inbox";
+import { ${data.type}Create } from "./page/${data.type}Create";
+import { ${data.type}Update } from "./page/${data.type}Update";
+import { ${data.type}Detail } from "./page/${data.type}Detail";
+import { ${data.type}Remove } from "./page/${data.type}Remove";
+import { ${data.type}Search } from "./page/${data.type}Search";
+import { ${data.type}Proc01 } from "./page/${data.type}Proc01";
+import { ${data.var}Ping } from "./${data.type}Rest";
+
+export const ${data.type}Manager: React.SFC = () => {
+
+    let pingClick = function (name: string) {
+        ${data.var}Ping();
+    }
+
+    return (
+        <Panel>
+            <header>
+                <Button name="apply"
+                    onClick={pingClick}
+                    icon="bell"
+                    variant="primary"
+                    mode="link" />
+                Administracion de ${data.type}(s)
+            </header>
+            <Switch>
+                <Route path="/${data.var}/search" component={${data.type}Search} />
+                <Route path="/${data.var}/proc01" component={${data.type}Proc01} />
+                <Route path="/${data.var}/create" component={${data.type}Create} />
+                <Route path="/${data.var}/update/:id${data.type}" component={${data.type}Update} />
+                <Route path="/${data.var}/detail/:id${data.type}" component={${data.type}Detail} />
+                <Route path="/${data.var}/remove/:id${data.type}" component={${data.type}Remove} />
+                <Route path="/${data.var}/inbox/:id${data.type}" component={${data.type}Inbox} />
+                <Route path="/${data.var}" component={${data.type}Inbox} />
+            </Switch>
+        </Panel>
+    );
+}
+export {
+    ${data.type}Inbox,
+    ${data.type}Create,
+    ${data.type}Update,
+    ${data.type}Detail,
+    ${data.type}Remove,
+    ${data.type}Search
+};
+
+]]></file>
+    <file name="${data.type}Part.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
+export * from "./part/${data.type}Table";
+export * from "./part/${data.type}Query";
+export * from "./part/${data.type}Form";
+export * from "./part/${data.type}View";
+]]></file>
+    <% } %>
+</files>

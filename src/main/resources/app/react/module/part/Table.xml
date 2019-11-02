@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    entityRef.each {
+    id, entity ->
+    def pkg    = fn.pkg(groupId, artifactId, module);  
+    def data   = fn.deduceName(entity.clazz)
+    def filter = fn.deduceName(entity.clazz, 'Filter')
+    def message = fn.deduceName(entity.clazz, 'Message')
+    def serv   = fn.deduceName(entity.clazz, 'Serv')
+    def rest   = fn.deduceName(entity.clazz, 'Rest')
+    def viewCtrl = fn.deduceName(entity.clazz, '-ctrl')
+    def viewPart = fn.deduceName(entity.clazz, '-part')
+    def viewServ = fn.deduceName(entity.clazz, '-serv')
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    %>
+    <file name="${data.type}Table.tsx" layer="view:domain" dir="${data.path}/part"><![CDATA[
+import React from "react";
+import { Table, Column, TableConfig } from "ui-fast";
+import { ${data.type} } from "../${data.type}Model";
+import { toString } from "../../Convert";
+
+export interface ${data.type}Table {
+  values: ${data.type}[],
+  select?: ${data.type} | ${data.type}[],
+  onSelect?: (e: ${data.type}) => void,
+  config?: TableConfig,
+  onConfig?: (e: TableConfig) => void
+}
+
+export const ${data.type}Table: React.SFC<${data.type}Table> = (props) => {
+  let { values, select, config, onSelect, onConfig } = props;
+  return (
+    <Table pk="id" values={values} select={select} config={config} onSelect={onSelect} onConfig={onConfig}><% attr.each{  %>
+      <Column title="${it.text}"
+        attr="${it.var}"
+        onFormat={toString}
+        align="right" />
+      <% } %>
+    </Table>
+  );
+}
+]]></file>
+    <% } %>
+</files>
