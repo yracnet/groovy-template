@@ -9,22 +9,18 @@
     def data    = fn.deduceNameReact(entity.clazz)
     def filter  = fn.deduceNameReact(entity.clazz, 'Filter')
     def message = fn.deduceNameReact(entity.clazz, 'Message')
-    def crud    = fn.deduceNameReact(entity.clazz, 'CRUD')
-    def inbox   = fn.deduceNameReact(entity.clazz, 'Inbox')
-    def create  = fn.deduceNameReact(entity.clazz, 'Create')
-    def update  = fn.deduceNameReact(entity.clazz, 'Update')
-    def remove  = fn.deduceNameReact(entity.clazz, 'Remove')
-    def detail  = fn.deduceNameReact(entity.clazz, 'Detail')
-    def search  = fn.deduceNameReact(entity.clazz, 'Search')
-    def proc01  = fn.deduceNameReact(entity.clazz, 'Proc01')
-    def part    = fn.deduceNameReact(entity.clazz, 'Part')
-    def model   = fn.deduceNameReact(entity.clazz, 'Model')
+    
     def form    = fn.deduceNameReact(entity.clazz, 'Form')
     def view    = fn.deduceNameReact(entity.clazz, 'View')
     def table   = fn.deduceNameReact(entity.clazz, 'Table')
     def query   = fn.deduceNameReact(entity.clazz, 'Query')
     def serv    = fn.deduceName(entity.clazz, 'Serv')
     def rest    = fn.deduceName(entity.clazz, 'Rest')
+    
+    def part    = fn.createReactPart(entity.clazz)
+    def page    = fn.createReactPage(entity.clazz)
+    def model   = fn.createReactModel(entity.clazz)
+
     def attr    = []
     attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
     attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
@@ -32,7 +28,7 @@
     attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
     attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
     %>
-    <file name="${inbox.type}.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[import React from "react";
+    <file name="${page.inbox}.tsx" layer="view:domain" dir="${page.path}"><![CDATA[import React from "react";
 
 import { Panel, Action, Button } from "ui-fast";
 import { FilterTextState, TableConfig } from "ui-fast";
@@ -42,19 +38,19 @@ import { ${data.var}Filter } from "../${rest.type}";
 import { ${data.type}, ${model.filter} } from "../${model.type}";
 import { ${part.table}, ${part.query} } from "../${part.type}";
 
-export interface ${inbox.props} extends RouteComponentProps {
+export interface ${page.inbox}Props extends RouteComponentProps {
     hide?: boolean
 }
 
-interface ${inbox.state} {
+interface ${page.inbox}State {
     filter: ${model.filter};
     values: Array<${data.type}>;
     select?: ${data.type};
 }
 
-class ${inbox.local} extends React.Component<${inbox.props}, ${inbox.state}> {
+class ${page.inbox}Local extends React.Component<${page.inbox}Props, ${page.inbox}State> {
 
-    constructor(props: ${inbox.props}) {
+    constructor(props: ${page.inbox}Props) {
         super(props);
         this.state = {
             filter: {},
@@ -167,9 +163,9 @@ class ${inbox.local} extends React.Component<${inbox.props}, ${inbox.state}> {
     }
 }
 
-export const ${inbox.type} = withRouter(${inbox.local});
+export const ${page.inbox} = withRouter(${page.inbox}Local);
 ]]></file>
-    <file name="${create.type}.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
+    <file name="${page.create}.tsx" layer="view:domain" dir="${page.path}"><![CDATA[
 import React from "react";
 import { Panel, Action, Button } from "ui-fast";
 import { InputTextState, InputTextValidate } from "ui-fast";
@@ -180,22 +176,22 @@ import { ${data.var}Create } from "../${rest.type}";
 import { ${data.type}Form } from "../${part.type}";
 import { isRequired } from "../../Validate";
 
-export interface ${create.props} extends RouteComponentProps {
+export interface ${page.create}Props extends RouteComponentProps {
     hide?: boolean,
 }
 
-interface ${create.state} {
+interface ${page.create}State {
     message: ${data.type}Message;
     ${data.var}: ${data.type};
 }
 
-class ${create.local} extends React.PureComponent<${create.props}, ${create.state}> {
+class ${page.create}Local extends React.PureComponent<${page.create}Props, ${page.create}State> {
 
     private validate: ${data.type}Validate = {<% attr.each{  %>
         ${it.var}: [isRequired],<% } %>
     }
 
-    constructor(props: ${create.props}) {
+    constructor(props: ${page.create}Props) {
         super(props);
         this.state = {
             message: {},
@@ -288,10 +284,10 @@ class ${create.local} extends React.PureComponent<${create.props}, ${create.stat
     };
 };
 
-export const ${create.type} = withRouter(${create.local});
+export const ${page.create} = withRouter(${page.create}Local);
 
 ]]></file>
-    <file name="${update.type}.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
+    <file name="${page.update}.tsx" layer="view:domain" dir="${page.path}"><![CDATA[
 import React from "react";
 import { Panel, Action, Button } from "ui-fast";
 import { InputTextState, InputTextValidate } from "ui-fast";
@@ -301,22 +297,22 @@ import { ${data.var}Reload, ${data.var}Update } from "../${rest.type}";
 import { ${data.type}Form } from "../${part.type}";
 import { isRequired } from "../../Validate";
 
-export interface ${update.props} extends RouteComponentProps<{ id${data.type}: string }> {
+export interface ${page.update}Props extends RouteComponentProps<{ id${data.type}: string }> {
     hide?: boolean
 }
         
-interface ${update.state} {
+interface ${page.update}State {
     message: ${data.type}Message;
     ${data.var}?: ${data.type};
 }
 
-class ${update.local} extends React.PureComponent<${update.props}, ${update.state}> {
+class ${page.update}Local extends React.PureComponent<${page.update}Props, ${page.update}State> {
 
     private validate: ${data.type}Validate = {<% attr.each{  %>
         ${it.var}: [isRequired],<% } %>
     }
 
-    constructor(props: ${update.props}) {
+    constructor(props: ${page.update}Props) {
         super(props);
         this.state = {
             message: {},
@@ -416,9 +412,9 @@ class ${update.local} extends React.PureComponent<${update.props}, ${update.stat
     };
 };
 
-export const ${update.type} = withRouter(${update.local});
+export const ${page.update} = withRouter(${page.update}Local);
 ]]></file>
-    <file name="${detail.type}.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
+    <file name="${page.detail}.tsx" layer="view:domain" dir="${page.path}"><![CDATA[
 import React from "react";
 import { Panel, Action, Button } from "ui-fast";
 import { withRouter, RouteComponentProps } from "react-router-dom";
@@ -427,16 +423,16 @@ import { ${data.type} } from "../${model.type}";
 import { ${data.var}Reload } from "../${rest.type}";
 import { ${data.type}View } from "../${part.type}";
 
-export interface ${detail.props} extends RouteComponentProps<{ id${data.type}: string }> {
+export interface ${page.detail}Props extends RouteComponentProps<{ id${data.type}: string }> {
     hide?: boolean
 }
 
-interface ${detail.state} {
+interface ${page.detail}State {
     ${data.var}?: ${data.type};
 }
 
-class ${detail.local} extends React.PureComponent<${detail.props}, ${detail.state}> {
-    constructor(props: ${detail.props}) {
+class ${page.detail}Local extends React.PureComponent<${page.detail}Props, ${page.detail}State> {
+    constructor(props: ${page.detail}Props) {
         super(props);
         this.state = {};
         let { id${data.type} } = this.props.match.params;
@@ -474,10 +470,10 @@ class ${detail.local} extends React.PureComponent<${detail.props}, ${detail.stat
     };
 };
 
-export const ${detail.type} = withRouter(${detail.local});
+export const ${page.detail} = withRouter(${page.detail}Local);
 
 ]]></file>
-    <file name="${remove.type}.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
+    <file name="${page.remove}.tsx" layer="view:domain" dir="${page.path}"><![CDATA[
 import React from "react";
 import { Panel, Action, Button } from "ui-fast";
 import { withRouter, RouteComponentProps } from "react-router-dom";
@@ -486,17 +482,17 @@ import { ${data.type} } from "../${model.type}";
 import { ${data.var}Reload, ${data.var}Remove } from "../${rest.type}";
 import { ${data.type}View } from "../${part.type}";
 
-export interface ${remove.props} extends RouteComponentProps<{ id${data.type}: string }> {
+export interface ${page.remove}Props extends RouteComponentProps<{ id${data.type}: string }> {
     hide?: boolean
 }
 
-interface ${remove.state} {
+interface ${page.remove}State {
     ${data.var}?: ${data.type};
 }
 
-class ${remove.local} extends React.PureComponent<${remove.props}, ${remove.state}> {
+class ${page.remove}Local extends React.PureComponent<${page.remove}Props, ${page.remove}State> {
 
-    constructor(props: ${remove.props}) {
+    constructor(props: ${page.remove}Props) {
         super(props);
         this.state = {};
         let { id${data.type} } = this.props.match.params;
@@ -553,10 +549,10 @@ class ${remove.local} extends React.PureComponent<${remove.props}, ${remove.stat
     };
 };
 
-export const ${remove.type} = withRouter(${remove.local});
+export const ${page.remove} = withRouter(${page.remove}Local);
 
 ]]></file>
-    <file name="${search.type}.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
+    <file name="${page.search}.tsx" layer="view:domain" dir="${page.path}"><![CDATA[
 import React from "react";
 
 import { Panel, Action, Button } from "ui-fast";
@@ -564,24 +560,24 @@ import { FilterTextState, TableConfig } from "ui-fast";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 
 import { ${data.var}Filter } from "../${rest.type}";
-import { ${data.type}, ${model.filter} } from "../${model.type}";
+import { ${model.data}, ${model.filter} } from "../${model.type}";
 import { ${part.table}, ${part.query} } from "../${part.type}";
 
-export interface ${search.props} extends RouteComponentProps {
+export interface ${page.search}Props extends RouteComponentProps {
     hide?: boolean,
     selectClick: (${data.var}: ${data.type}) => void,
     cancelClick: () => void
 }
 
-interface ${search.state} {
+interface ${page.search}State {
     filter: ${model.filter};
     values: Array<${data.type}>;
     select?: ${data.type};
 }
 
-class ${search.local} extends React.Component<${search.props}, ${search.state}> {
+class ${page.search}Local extends React.Component<${page.search}Props, ${page.search}State> {
 
-    constructor(props: ${search.props}) {
+    constructor(props: ${page.search}Props) {
         super(props);
         this.state = {
             filter: {},
@@ -689,10 +685,10 @@ class ${search.local} extends React.Component<${search.props}, ${search.state}> 
     }
 }
 
-export const ${search.type} = withRouter(${search.local});
+export const ${page.search} = withRouter(${page.search}Local);
 
 ]]></file>
-    <file name="${crud.type}.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
+    <file name="${page.crud}.tsx" layer="view:domain" dir="${page.path}"><![CDATA[
 import React from "react";
 import { Panel, Action, Button } from "ui-fast";
 import { InputTextValidate, InputTextState } from "ui-fast";
@@ -703,34 +699,34 @@ import { ${data.type}Form, ${data.type}View } from "../${part.type}";
 import { isRequired } from "../../Validate";
 
 type StateType = "CREATE" | "UPDATE" | "REMOVE" | "ERROR";
-export interface ${crud.type}Event {
+export interface ${page.crud}Event {
     state: StateType;
     index: number;
     ${data.var}: ${data.type};
 }
 
-interface ${crud.state} {
+interface ${page.crud}State {
     message: ${data.type}Message,
     backup: ${data.type},
     ${data.var}: ${data.type},
     state: "NEW" | "EDIT" | "SAVE",
 }
 
-export interface ${crud.props} {
+export interface ${page.crud}Props {
     index: number,
     ${data.var}: ${data.type},
     allowUpdate?: boolean,
     allowRemove?: boolean,
-    eventListener?: (event: ${crud.type}Event) => void
+    eventListener?: (event: ${page.crud}Event) => void
 }
 
-export class ${crud.type} extends React.PureComponent<${crud.props}, ${crud.state}> {
+export class ${page.crud} extends React.PureComponent<${page.crud}Props, ${page.crud}State> {
 
     private validate: ${data.type}Validate = {<% attr.each{  %>
         ${it.var}: [isRequired],<% } %>
     }
 
-    constructor(props: ${crud.props}) {
+    constructor(props: ${page.crud}Props) {
         super(props);
         let ${data.var} = props.${data.var};
         this.state = {
@@ -800,7 +796,7 @@ export class ${crud.type} extends React.PureComponent<${crud.props}, ${crud.stat
 
     eventListener(state: StateType, ${data.var}: ${data.type}) {
         let { eventListener, index } = this.props;
-        let event: ${crud.type}Event = {
+        let event: ${page.crud}Event = {
             state: state,
             ${data.var}: ${data.var},
             index: index
@@ -926,25 +922,25 @@ export class ${crud.type} extends React.PureComponent<${crud.props}, ${crud.stat
     };
 }
 ]]></file>
-    <file name="${proc01.type}.tsx" layer="view:domain" dir="${data.path}/page"><![CDATA[
+    <file name="${page.proc01}.tsx" layer="view:domain" dir="${page.path}"><![CDATA[
 import React from "react";
 import Help, { Panel, Increase } from "ui-fast";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 
-import { ${crud.type}, ${crud.type}Event } from "./${crud.type}";
+import { ${page.crud}, ${page.crud}Event } from "./${page.crud}";
 import { ${data.type} } from "../${model.type}";
 import { ${data.var}Remove, ${data.var}Filter } from "../${rest.type}";
-export interface ${proc01.props} extends RouteComponentProps {
+export interface ${page.proc01}Props extends RouteComponentProps {
     hide?: boolean,
 }
 
-interface ${proc01.state} {
+interface ${page.proc01}State {
     values: Array<${data.type}>;
 }
 
-class ${proc01.local} extends React.PureComponent<${proc01.props}, ${proc01.state}> {
+class ${page.proc01}Local extends React.PureComponent<${page.proc01}Props, ${page.proc01}State> {
 
-    constructor(props: ${proc01.props}) {
+    constructor(props: ${page.proc01}Props) {
         super(props);
         this.state = {
             values: []
@@ -977,7 +973,7 @@ class ${proc01.local} extends React.PureComponent<${proc01.props}, ${proc01.stat
         }
     }
 
-    eventListener(event: ${crud.type}Event) {
+    eventListener(event: ${page.crud}Event) {
         let { values } = this.state;
         let ${data.var} = values[event.index];
         if (${data.var} && event.state === "REMOVE") {
@@ -1007,7 +1003,7 @@ class ${proc01.local} extends React.PureComponent<${proc01.props}, ${proc01.stat
         let { ${data.var}Append, ${data.var}Remove, eventListener } = this;
         let ${data.var}Form = (${data.var}: ${data.type}, index: number) => {
             return (
-                <${crud.type}
+                <${page.crud}
                     ${data.var}={${data.var}}
                     index={index}
                     allowUpdate={true}
@@ -1032,20 +1028,20 @@ class ${proc01.local} extends React.PureComponent<${proc01.props}, ${proc01.stat
     };
 }
 
-export const ${proc01.type} = withRouter(${proc01.local});
+export const ${page.proc01} = withRouter(${page.proc01}Local);
 ]]></file>
     <file name="${data.type}Page.tsx" layer="view:domain" dir="${data.path}"><![CDATA[
 
 import React from "react";
 import { Panel, Button } from "ui-fast";
 import { Route, Switch } from "react-router-dom";
-import { ${inbox.type} } from "./page/${inbox.type}";
-import { ${create.type} } from "./page/${create.type}";
-import { ${update.type} } from "./page/${update.type}";
-import { ${detail.type} } from "./page/${detail.type}";
-import { ${remove.type} } from "./page/${remove.type}";
-import { ${search.type} } from "./page/${search.type}";
-import { ${proc01.type} } from "./page/${proc01.type}";
+import { ${page.inbox} } from "./page/${page.inbox}";
+import { ${page.create} } from "./page/${page.create}";
+import { ${page.update} } from "./page/${page.update}";
+import { ${page.detail} } from "./page/${page.detail}";
+import { ${page.remove} } from "./page/${page.remove}";
+import { ${page.search} } from "./page/${page.search}";
+import { ${page.proc01} } from "./page/${page.proc01}";
 import { ${data.var}Ping } from "./${rest.type}";
 
 export const ${data.type}Manager: React.SFC = () => {
@@ -1065,24 +1061,25 @@ export const ${data.type}Manager: React.SFC = () => {
                 Administracion de ${data.type}(s)
             </header>
             <Switch>
-                <Route path="/${data.var}/search" component={${search.type}} />
-                <Route path="/${data.var}/proc01" component={${proc01.type}} />
-                <Route path="/${data.var}/create" component={${create.type}} />
-                <Route path="/${data.var}/update/:id${data.type}" component={${update.type}} />
-                <Route path="/${data.var}/detail/:id${data.type}" component={${detail.type}} />
-                <Route path="/${data.var}/remove/:id${data.type}" component={${remove.type}} />
-                <Route path="/${data.var}/inbox/:id${data.type}" component={${inbox.type}} />
-                <Route path="/${data.var}" component={${inbox.type}} />
+                <Route path="/${data.var}/search" component={${page.search}} />
+                <Route path="/${data.var}/proc01" component={${page.proc01}} />
+                <Route path="/${data.var}/create" component={${page.create}} />
+                <Route path="/${data.var}/update/:id${data.type}" component={${page.update}} />
+                <Route path="/${data.var}/detail/:id${data.type}" component={${page.detail}} />
+                <Route path="/${data.var}/remove/:id${data.type}" component={${page.remove}} />
+                <Route path="/${data.var}/inbox/:id${data.type}" component={${page.inbox}} />
+                <Route path="/${data.var}" component={${page.inbox}} />
             </Switch>
         </Panel>
     );
 }
 export {
-    ${inbox.type},
-    ${create.type},
-    ${update.type},
-    ${detail.type},
-    ${remove.type}
+    ${page.inbox},
+    ${page.create},
+    ${page.update},
+    ${page.detail},
+    ${page.remove},
+    ${page.search}
 };
 
 ]]></file>

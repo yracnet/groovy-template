@@ -1,6 +1,6 @@
 package com.github.yracnet.generator;
 
-import com.github.yracnet.gen.spec.FnContext;
+import com.github.yracnet.gen.spec.FactoryImpl;
 import com.github.yracnet.gen.spec.GenRoot;
 import com.github.yracnet.gen.spec.Util;
 import groovy.json.JsonSlurper;
@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import javax.xml.bind.JAXBException;
 import org.codehaus.groovy.control.CompilationFailedException;
+import com.github.yracnet.gen.spec.Factory;
 
 public class Generate {
 
@@ -88,7 +89,7 @@ public class Generate {
         String jsonString = Util.createJsonString(model);
         JsonSlurper jsonSlurper = new JsonSlurper();
         Object mapper = jsonSlurper.parseText(jsonString);
-        FnContext fn = new FnContext();
+        Factory fn = new FactoryImpl();
         fn.addPrefix(prefixList);
         TemplateEngine engine = new SimpleTemplateEngine();
         Map<String, Object> param = new HashMap<>();

@@ -5,7 +5,6 @@
  */
 package com.github.yracnet.generator;
 
-import com.github.yracnet.gen.spec.FnContext;
 import static com.github.yracnet.gen.spec.Util.*;
 import com.github.yracnet.jpa.spec.Entity;
 import com.github.yracnet.jpa.spec.EntityMappings;
@@ -28,6 +27,8 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.transform.Source;
+import com.github.yracnet.gen.spec.Factory;
+import com.github.yracnet.gen.spec.FactoryImpl;
 
 /**
  *
@@ -65,7 +66,7 @@ public class Run04 {
         param.put("artifactId", "customer");
         param.put("module", "manager");
         param.put("mapper", mapper);
-        param.put("fn", new FnContext());
+        param.put("fn", new FactoryImpl());
         Writable output = template.make(param);
         Writer writer = new PrintWriter(System.out);
         output.writeTo(writer);

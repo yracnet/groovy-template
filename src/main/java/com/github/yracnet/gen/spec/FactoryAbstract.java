@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * @author yracnet
  */
-public class FnContext {
+public class FactoryAbstract implements Factory{
 
     public Map deduce(String name) {
         return deduce(name, "");
@@ -180,7 +180,7 @@ public class FnContext {
     }
 
     public static void main(String arg[]) {
-        FnContext fn = new FnContext();
+        FactoryAbstract fn = new FactoryAbstract();
         String values[] = {"AaaBbbb", "aaaBbbb", "xxxx"};
         for (String value : values) {
             System.out.println("===========>" + value);
@@ -191,7 +191,7 @@ public class FnContext {
         }
     }
 
-    private final List<String> prefix = new ArrayList<>();
+    protected final List<String> prefix = new ArrayList<>();
 
     public void addPrefix(List<String> list) {
         prefix.addAll(list);
@@ -223,11 +223,11 @@ public class FnContext {
         return all.substring(1);
     }
 
-    private String lowerFirst(String name) {
+    protected String lowerFirst(String name) {
         return name.toLowerCase().charAt(0) + name.substring(1);
     }
 
-    private String upperFirst(String name) {
+    protected String upperFirst(String name) {
         return name.toUpperCase().charAt(0) + name.substring(1);
     }
 }
