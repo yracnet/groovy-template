@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <file name="Endpoint.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
+import axios, { AxiosResponse } from 'axios';
+import { FlashContext, Message } from '../plataforma/Plataforma';
+//import { FlashContext, Message } from "bcb-platform";
+import { Result } from "./Model";
+
+let defaultSuccess = function (data: any) {
+  console.debug("success:", data);
+};
+let defaultError = function (data: any) {
+  console.debug("error:", data);
+};
+let processMessage = function (result: Result) {
+  console.debug('processMessage:', result);
+  let message: Array<Message> = result.messages.map(it => ({
+    type: it.type || 'info',
+    title: 'Respuesta del Servidor',
+    description: it.description,
+    action: it.action,
+    causes: it.causes,
+    duration: 5000
+  }));
+  FlashContext.flashMessage(message);
+};
+
+export const endpoint: String = 'http://127.0.0.1:8080/${contextPath}/rest';
+
+export const processCaller = function (caller: Promise<AxiosResponse>, success?: (data: any) => void, error?: (data: any) => void) {
+  let callerSuccess = success || defaultSuccess;
+  let callerError = error || defaultError;
+  caller.then(response => {
+    console.debug("Response-Success:", response);
+    let result: Result = response.data;
+    processMessage(result);
+    if (result.error === false) {
+      callerSuccess(result.value);
+    } else {
+      callerError(result);
+    }
+  }).catch(error => {
+    console.debug("Response-Error:", error.toJSON());
+    let result: Result = {
+      error: true,
+      messages: []
+    }
+    if (error.response && error.response.data) {
+      let response = error.response;
+      let data = response.data;
+      if (typeof data === 'object' && data.messages) {
+        result.error = data.error;
+        result.value = data.value;
+        result.messages = data.messages;
+      } else {
+        result.messages.push({
+          type: "error",
+          description: "Error al invocar al servicio",
+          causes: [
+            "Servicio:  " + error.config.url,
+            "Respuesta: " + response.status + ": " + response.statusText,
+            unescape('Contenido: ' + data)
+          ],
+          action: "Vea el Log del servidor!"
+        });
+      }
+    }
+    if (result.messages.length === 0) {
+      result.messages.push({
+        type: "error",
+        description: "Error al invocar al servicio",
+        causes: [
+          "Servicio:  " + error.config.url,
+          "Respuesta: " + (error.code || "999") + ": " + error.message
+        ],
+        action: "Vea el Log del servidor!"
+      });
+    }
+    processMessage(result);
+    callerError(result);
+  });
+}
+]]></file>
+    <file name="Model.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
+export interface FieldFilter {
+   operator: string,
+   value?: any
+}
+export interface FieldMessage {
+   type: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+   icon?: string;
+   message: string;
+}
+export interface ResultMessage {
+   type: string,
+   description: string,
+   action?: string,
+   causes: Array<string>
+}
+export interface Result {
+   error: boolean,
+   messages: Array<ResultMessage>,
+   value?: any | Array<any>,
+}
+export interface FilterAbstract {
+   config?: {
+      index?: number,
+      size?: number,
+      column?: string,
+      sort?: 'asc' | 'desc' | 'none'
+   }
+}
+]]></file>
+    <file name="Validate.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
+import { InputTextState } from "ui-fast";
+
+export const isRequired = function (name: string, inputValue: InputTextState): InputTextState {
+  if (!inputValue.value) {
+    inputValue.state = 'error';
+    inputValue.message = 'Se requiere un valor';
+  }
+  return inputValue;
+}
+
+export const isEmail = function (name: string, inputValue: InputTextState): InputTextState {
+  if (inputValue.value && !inputValue.value.includes('@')) {
+    inputValue.state = 'error';
+    inputValue.message = 'Correo invalido';
+  }
+  return inputValue;
+}
+]]></file>
+    <file name="Convert.tsx" layer="view:domain" dir="." skip="false" append="false"><![CDATA[
+export const toString = function (value: any): string {
+  return '' + value;
+}
+
+export const toDateFormat = function (value: date|number): string {
+  return '01/01/9999';
+}
+
+export const toMoneyFormat = function (value: number): string {
+  return '12.456,56';
+}
+]]></file>
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    entityRef.each {
+    id, entity ->
+    def pkg    = fn.pkg(groupId, artifactId, module);  
+    def data   = fn.deduceName(entity.clazz)
+    def filter = fn.deduceName(entity.clazz, 'Filter')
+    def message = fn.deduceName(entity.clazz, 'Message')
+    def serv   = fn.deduceName(entity.clazz, 'Serv')
+    def rest   = fn.deduceName(entity.clazz, 'Rest')
+    def viewCtrl = fn.deduceName(entity.clazz, '-ctrl')
+    def viewPart = fn.deduceName(entity.clazz, '-part')
+    def viewServ = fn.deduceName(entity.clazz, '-serv')
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    %>
+    <file name="${data.type}Model.tsx" layer="view:domain" dir="${data.path}" skip="false"><![CDATA[
+import { FieldFilter, FieldMessage, FilterAbstract } from "../Model";
+import { InputTextValidate } from "ui-fast";
+
+export interface ${data.type} {<% attr.each{  %>
+   ${it.var}?: ${it.jsType},<% } %>
+}
+
+export interface ${filter.type} extends FilterAbstract {<% attr.each{  %>
+   ${it.var}?: FieldFilter,<% } %>
+}
+
+export interface ${message.type} {<% attr.each{  %>
+   ${it.var}?: string | FieldMessage,<% } %>
+   [attr: string]: any
+}
+
+export interface ${data.type}Validate {<% attr.each{  %>
+   ${it.var}?: Array<InputTextValidate>,<% } %>
+   [attr: string]: any
+}
+]]></file>
+    <file name="${rest.type}.tsx" layer="view:domain" dir="${data.path}" skip="false"><![CDATA[
+
+import { endpoint, processCaller } from "../Endpoint";
+import { ${data.type}, ${filter.type} } from "./${data.type}Model";
+import axios from 'axios';
+
+type fnSuccessArray = (values: ${data.type}[]) => void;
+type fnSuccess = (value: ${data.type}) => void;
+type fnError = (response: any) => void;
+
+export const ${data.var}Ping = function (callback?: (response: any) => void) {
+  let caller = axios.get(`\${endpoint}/${data.path}`);
+  processCaller(caller, callback, callback);
+}
+
+export const ${data.var}Filter = function (payload: ${filter.type}, success?: fnSuccessArray, error?: fnError) {
+  let caller = axios.post(`\${endpoint}/${data.path}/filtrar`, payload);
+  processCaller(caller, success, error);
+}
+
+export const ${data.var}Reload = function (payload: ${data.type}, success?: fnSuccess, error?: fnError) {
+  let caller = axios.post(`\${endpoint}/${data.path}/recargar`, payload);
+  processCaller(caller, success, error);
+}
+
+export const ${data.var}Create = function (payload: ${data.type}, success?: fnSuccess, error?: fnError) {
+  let caller = axios.post(`\${endpoint}/${data.path}/registrar`, payload);
+  processCaller(caller, success, error);
+}
+
+export const ${data.var}Update = function (payload: ${data.type}, success?: fnSuccess, error?: fnError) {
+  let caller = axios.post(`\${endpoint}/${data.path}/actualizar`, payload);
+  processCaller(caller, success, error);
+}
+
+export const ${data.var}Remove = function (payload: ${data.type}, success?: fnSuccess, error?: fnError) {
+  let caller = axios.post(`\${endpoint}/${data.path}/eliminar`, payload);
+  processCaller(caller, success, error);
+}
+]]></file>
+    <% } %>
+</files>

@@ -25,7 +25,9 @@ public class GenerateRun {
         //gen.addTemplate("simple.crud2.impl");
         //gen.addTemplate("simple.crud2.local");
         //gen.addTemplate("simple.crud2.view");
-        gen.addTemplate("simple.crud2.react");
+        gen.addTemplate("simple.crud2.react.part");
+        gen.addTemplate("simple.crud2.react.page");
+        gen.addTemplate("simple.crud2.react.serv");
         gen.removePrefix("Form");
         gen.generate();
     }
