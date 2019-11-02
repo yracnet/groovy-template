@@ -25,7 +25,7 @@
 <![CDATA[
 import ${pkg}.data.${data.type};
 import ${pkg}.data.${filter.type};
-import bo.gob.bcb.grh.postulate.modelo.${clazz.type};
+import bo.gob.bcb.grh.sirepo.modelo.${clazz.type};
 import bo.central.result.ResultObject;
 import bo.central.result.ResultSet;
 import javax.ejb.EJB;
@@ -88,7 +88,7 @@ public class ${impl.type} implements ${serv.type} {
     <file name="${mapper.type}.java" layer="impl:mapper" dir="." pkg="${pkg}">
 <![CDATA[
 import ${pkg}.data.${data.type};
-import bo.gob.bcb.grh.postulate.modelo.${entity.clazz};
+import bo.gob.bcb.grh.sirepo.modelo.${entity.clazz};
 
 public class ${mapper.type} {
   

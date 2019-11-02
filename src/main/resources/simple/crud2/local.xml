@@ -33,7 +33,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.stream.Stream;
-import bo.gob.bcb.grh.postulate.modelo.${entity.clazz};
+import bo.gob.bcb.grh.sirepo.modelo.${entity.clazz};
 
 @Stateless
 @LocalBean
@@ -110,7 +110,7 @@ import java.util.List;
 import bo.central.result.ResultObject;
 import bo.central.result.Message;
 import bo.central.validate.Validate;
-import bo.gob.bcb.grh.postulate.modelo.${entity.clazz};
+import bo.gob.bcb.grh.sirepo.modelo.${entity.clazz};
 
 public class ${validate.type} {
 
