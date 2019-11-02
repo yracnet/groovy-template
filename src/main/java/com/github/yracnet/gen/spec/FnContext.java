@@ -32,7 +32,6 @@ public class FnContext {
         String varSufix = toVar(nameSufix);
         map.put("type", nameSufix);
         map.put("var", varSufix);
-        //map.put("dollar", toDollar(nameSufix));
         map.put("text", toText(nameSufix));
         map.put("const", toConst(nameSufix));
         map.put("path", toPath(nameSufix));
@@ -85,6 +84,41 @@ public class FnContext {
         String jsClazz = coll? "Array<"+clazz+">" : clazz;
         map.put("jsType", jsClazz);
         return map;
+    }
+
+
+//======================REACT==============================
+
+
+    public Map deduceReact(String name, String classifier) {
+        Map map = new HashMap();
+        String nameSufix = name + classifier;
+        nameSufix = nameSufix.replace("-", "$");
+        nameSufix = upperFirst(nameSufix);
+        String varSufix = toVar(nameSufix);
+        map.put("type", nameSufix);
+        map.put("var", varSufix);
+        //map.put("text", toText(nameSufix));
+        //map.put("const", toConst(nameSufix));
+        //map.put("path", toPath(nameSufix));
+        //map.put("uscore", toUnderscore(nameSufix));
+        //map.put("colon", toColon(nameSufix));
+        //map.put("dash", toDash(nameSufix));
+        //map.put("varList", varSufix + "List");
+        //map.put("get", "get" + nameSufix);
+        //map.put("set", "set" + nameSufix);
+        //map.put("param", nameSufix + " " + varSufix);
+        return map;
+    }
+
+    public Map deduceNameReact(String name, String classifier) {
+        name = toName(name);
+        return deduceReact(name, classifier);
+    }
+
+    public Map deduceNameReact(String name) {
+        name = toName(name);
+        return deduceReact(name, "");
     }
 
     public String toNameVar(String name) {

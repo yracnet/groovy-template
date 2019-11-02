@@ -5,21 +5,21 @@
     mapper.entity.each { entityRef[it.id] = it }
     entityRef.each {
     id, entity ->
-    def pkg    = fn.pkg(groupId, artifactId, module);  
-    def data   = fn.deduceName(entity.clazz)
-    def filter = fn.deduceName(entity.clazz, 'Filter')
-    def message = fn.deduceName(entity.clazz, 'Message')
-    def crud    = fn.deduceName(entity.clazz, 'CRUD')
-    def inbox   = fn.deduceName(entity.clazz, 'Inbox')
-    def create  = fn.deduceName(entity.clazz, 'Create')
-    def update  = fn.deduceName(entity.clazz, 'Update')
-    def remove  = fn.deduceName(entity.clazz, 'Remove')
-    def detail  = fn.deduceName(entity.clazz, 'Detail')
-    def search  = fn.deduceName(entity.clazz, 'Search')
-    def proc01 = fn.deduceName(entity.clazz, 'Proc01')
-    def serv   = fn.deduceName(entity.clazz, 'Serv')
-    def rest   = fn.deduceName(entity.clazz, 'Rest')
-    def attr   = []
+    def pkg     = fn.pkg(groupId, artifactId, module);  
+    def data    = fn.deduceNameReact(entity.clazz)
+    def filter  = fn.deduceNameReact(entity.clazz, 'Filter')
+    def message = fn.deduceNameReact(entity.clazz, 'Message')
+    def crud    = fn.deduceNameReact(entity.clazz, 'CRUD')
+    def inbox   = fn.deduceNameReact(entity.clazz, 'Inbox')
+    def create  = fn.deduceNameReact(entity.clazz, 'Create')
+    def update  = fn.deduceNameReact(entity.clazz, 'Update')
+    def remove  = fn.deduceNameReact(entity.clazz, 'Remove')
+    def detail  = fn.deduceNameReact(entity.clazz, 'Detail')
+    def search  = fn.deduceNameReact(entity.clazz, 'Search')
+    def proc01  = fn.deduceNameReact(entity.clazz, 'Proc01')
+    def serv    = fn.deduceName(entity.clazz, 'Serv')
+    def rest    = fn.deduceName(entity.clazz, 'Rest')
+    def attr    = []
     attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
     attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
     attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
