@@ -8,7 +8,7 @@
     def pkg    = fn.pkg(groupId, artifactId, module);  
     def data   = fn.deduceName(entity.clazz)
     def filter = fn.deduceName(entity.clazz, 'Filter')
-    def message = fn.deduceName(entity.clazz, 'Message')
+    def feedback = fn.deduceName(entity.clazz, 'Feedback')
     def crud    = fn.deduceName(entity.clazz, 'CRUD')
     def inbox   = fn.deduceName(entity.clazz, 'Inbox')
     def create  = fn.deduceName(entity.clazz, 'Create')
@@ -29,9 +29,9 @@
     <file name="${crud.type}.tsx" layer="view" dir="${data.path}/page"><![CDATA[
 import React from "react";
 import { Panel, Action, Button } from "ui-fast";
-import { InputTextValidate, InputTextValue } from "ui-fast";
+import { InputTextValue, InputTextFactory } from "ui-fast";
 
-import { ${data.type}, ${data.type}Message, ${data.type}Validate } from "../${data.type}Model";
+import { ${data.type}, ${data.type}Feedback, ${data.type}Validate } from "../${data.type}Model";
 import { ${data.var}Create, ${data.var}Remove, ${data.var}Update } from "../${data.type}Rest";
 import { ${data.type}Form, ${data.type}View } from "../${data.type}Part";
 import { isRequired } from "../../Validate";
@@ -44,10 +44,10 @@ export interface ${crud.type}Event {
 }
 
 interface ${crud.type}State {
-    message: ${data.type}Message,
+    state: "NEW" | "EDIT" | "SAVE"
     backup: ${data.type},
     ${data.var}: ${data.type},
-    state: "NEW" | "EDIT" | "SAVE",
+    feedback: ${data.type}Feedback,
 }
 
 export interface ${crud.type}Props {
@@ -68,13 +68,13 @@ export class ${crud.type} extends React.PureComponent<${crud.type}Props, ${crud.
         super(props);
         let ${data.var} = props.${data.var};
         this.state = {
-            message: {},
+            feedback: {},
             ${data.var}: ${data.var},
             backup: ${data.var},
             state: ${data.var}.id ? "SAVE" : "NEW"
         };
         this.onValue = this.onValue.bind(this);
-        this.refuseMessage = this.refuseMessage.bind(this);
+        this.refuseFeedback = this.refuseFeedback.bind(this);
         this.editClick = this.editClick.bind(this);
         this.createClick = this.createClick.bind(this);
         this.updateClick = this.updateClick.bind(this);
@@ -82,12 +82,12 @@ export class ${crud.type} extends React.PureComponent<${crud.type}Props, ${crud.
         this.cancelClick = this.cancelClick.bind(this);
     }
 
-    onValue(state: InputTextValue) {
+    onValue(inputValue: InputTextValue) {
         let ${data.var}: any = Object.assign({}, this.state.${data.var});
-        let message: any = Object.assign({}, this.state.message);
-        ${data.var}[state.name] = state.value;
-        message[state.name] = state.message;
-        this.setState({ ${data.var}, message });
+        let feedback: any = Object.assign({}, this.state.feedback);
+        ${data.var}[inputValue.name] = inputValue.value;
+        feedback[inputValue.name] = InputTextFactory.createFeedback(inputValue);
+        this.setState({ ${data.var}, feedback });
     }
 
     createClick() {
@@ -154,38 +154,27 @@ export class ${crud.type} extends React.PureComponent<${crud.type}Props, ${crud.
         this.setState({ ${data.var}: backup, state: "SAVE" });
     }
 
-    refuseMessage(): string {
-        let { ${data.var}, message } = this.state;
+    refuseFeedback(): string {
+        let { ${data.var}, feedback } = this.state;
         let { validate } = this;
         if (!${data.var}) {
-            return "El ${data.var} no es valido!";
+            return "El ${data.text} no es valido!";
         }
         let other: any = ${data.var} || {};
-        let attrs = Object.keys(validate);
-        let states: InputTextValue[] = attrs.map(attr => { return { name: attr, state: "none", value: other[attr] } });
-        states.map(state => {
-            let fnVals: Array<InputTextValidate> = validate[state.name];
-            if (fnVals) {
-                fnVals.every(fnVal => {
-                    state = fnVal(state)
-                    return state.state === "none";
-                });
-            }
-            return state;
-        }).filter(it => it && it.state !== "none")
-            .forEach(it => { message[it.name] = { message: it.message, type: it.state, icon: "warning" } });
-        if (Object.keys(message).filter(it => message[it]).length > 0) {
-            this.setState({ message }, () => {
+        feedback = InputTextFactory.createFeedbackObjectFromObject(other, validate);
+        let errors = Object.keys(feedback).length;
+        if (errors > 0) {
+            this.setState({ feedback }, () => {
                 this.forceUpdate();
             });
-            return "El formulario contiene uno o más errores.";
+            return "El formulario contiene uno o más errores. (" + errors + ")";
         }
         return "";
     }
 
     render(): React.ReactNode {
-        let { state, ${data.var}, message } = this.state;
-        let { editClick, cancelClick, createClick, updateClick, removeClick, onValue, validate, refuseMessage } = this;
+        let { state, ${data.var}, feedback } = this.state;
+        let { editClick, cancelClick, createClick, updateClick, removeClick, onValue, validate, refuseFeedback } = this;
         let { allowRemove, allowUpdate } = this.props;
         let id${data.type} = ${data.var} ? ${data.var}.id : "?";
         return (
@@ -215,7 +204,7 @@ export class ${crud.type} extends React.PureComponent<${crud.type}Props, ${crud.
                         <title>Registro ${data.type}</title>
                         <${data.type}Form value={${data.var}}
                             onValue={onValue}
-                            message={message}
+                            feedback={feedback}
                             validate={validate} />
                         <Action>
                             <Button name="apply"
@@ -229,7 +218,7 @@ export class ${crud.type} extends React.PureComponent<${crud.type}Props, ${crud.
                                 onClick={createClick}
                                 icon="check-circle"
                                 variant="primary"
-                                refuse={refuseMessage}
+                                refuse={refuseFeedback}
                                 confirm="Esta seguro de crear el registro?" />
                         </Action>
                     </Panel>
@@ -238,7 +227,7 @@ export class ${crud.type} extends React.PureComponent<${crud.type}Props, ${crud.
                         <title>Edicion ${data.type} <sub>{id${data.type}}</sub> </title>
                         <${data.type}Form value={${data.var}}
                             onValue={onValue}
-                            message={message}
+                            feedback={feedback}
                             validate={validate} />
                         <Action>
                             <Button name="apply"
@@ -252,7 +241,7 @@ export class ${crud.type} extends React.PureComponent<${crud.type}Props, ${crud.
                                 onClick={updateClick}
                                 icon="check-circle"
                                 variant="primary"
-                                refuse={refuseMessage}
+                                refuse={refuseFeedback}
                                 confirm="Esta seguro de actualizar el registro?" />
                         </Action>
                     </Panel>

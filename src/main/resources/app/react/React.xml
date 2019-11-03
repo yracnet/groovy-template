@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files>
     <file name="Endpoint.tsx" layer="view" dir="." skip="false" append="false"><![CDATA[
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { FlashContext, Message } from '../plataforma/Plataforma';
 //import { FlashContext, Message } from "bcb-platform";
 import { Result } from "./Model";
@@ -86,10 +86,10 @@ export interface FieldFilter {
    operator: string,
    value?: any
 }
-export interface FieldMessage {
-   type: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+export interface FieldFeedback {
+   state: 'valid' | 'invalid' | 'none';
    icon?: string;
-   message: string;
+   message?: string;
 }
 export interface ResultMessage {
    type: string,
@@ -112,34 +112,74 @@ export interface FilterAbstract {
 }
 ]]></file>
     <file name="Validate.tsx" layer="view" dir="." skip="false" append="false"><![CDATA[
-import { InputTextState } from "ui-fast";
+import { InputTextValue } from "ui-fast";
 
-export const isRequired = function (name: string, inputValue: InputTextState): InputTextState {
-  if (!inputValue.value) {
-    inputValue.state = 'error';
-    inputValue.message = 'Se requiere un valor';
+export const isRequired = function (state: InputTextValue): InputTextValue {
+  let value = state.value;
+  if (!value) {
+    state.state = 'invalid';
+    state.message = 'Se requiere un valor';
+  } else if (typeof value === 'string' && !value.trim()) {
+    state.state = 'invalid';
+    state.message = 'Se requiere un valor';
   }
-  return inputValue;
+  return state;
 }
 
-export const isEmail = function (name: string, inputValue: InputTextState): InputTextState {
-  if (inputValue.value && !inputValue.value.includes('@')) {
-    inputValue.state = 'error';
-    inputValue.message = 'Correo invalido';
+export const isEmail = function (state: InputTextValue): InputTextValue {
+  if (state.value && !state.value.includes('@')) {
+    state.state = 'invalid';
+    state.message = 'Correo invalido';
   }
-  return inputValue;
+  return state;
 }
 ]]></file>
     <file name="Convert.tsx" layer="view" dir="." skip="false" append="false"><![CDATA[
-export const toString = function (value: any): string {
-  return '' + value;
+import Moment from 'moment';
+
+export const toString = function (value?: any): string {
+  return value ? value.toString() : '';
 }
 
-export const toDateFormat = function (value: date|number): string {
-  return '01/01/9999';
+function padLeft(n: number) {
+  return ("00" + n).slice(-2);
+}
+export const toDateFormat = function (value?: Date | number | string): string {
+  if (!value)
+    return '';
+  if (typeof value === 'string')
+    return value;
+  let result;
+  try {
+    let date = new Date(value);
+    result = [padLeft(date.getDate()),
+    padLeft(date.getMonth() + 1),
+    date.getFullYear()
+    ].join('/');
+  } catch (e) {
+    console.log('toDateFormat::: error:', e);
+    result = value.toString();
+  }
+  console.log('toDateFormat::: ', value, ' --> ', result);
+  return result;
 }
 
-export const toMoneyFormat = function (value: number): string {
+export const toDateTime = function (value?: string): any {
+  if (!value)
+    return '';
+  let result;
+  try {
+    var dm = Moment(value, "DD/MM/YYYY");
+    result = dm.isValid() ? dm.toDate().getTime() : -1;
+  } catch (e) {
+    console.log('toDateTime::: error:', e);
+    result = -1;
+  }
+  console.log('toDateTime::: ', value, ' --> ', result);
+  return result;
+}
+
+export const toMoneyFormat = function (value?: number): string {
   return '12.456,56';
 }
 ]]></file>

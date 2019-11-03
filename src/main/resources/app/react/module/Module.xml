@@ -44,34 +44,35 @@ import axios from 'axios';
 
 type fnSuccessArray = (values: ${data.type}[]) => void;
 type fnSuccess = (value: ${data.type}) => void;
+type fnCaller = (response: any) => void;
 type fnError = (response: any) => void;
 
-export const ${data.var}Ping = function (callback?: (response: any) => void) {
+export const ${data.var}Ping = (callback?: fnCaller) => {
   let caller = axios.get(`\${endpoint}/${data.path}`);
   processCaller(caller, callback, callback);
 }
 
-export const ${data.var}Filter = function (payload: ${data.type}Filter, success?: fnSuccessArray, error?: fnError) {
+export const ${data.var}Filter = (payload: ${data.type}Filter, success?: fnSuccessArray, error?: fnError) => {
   let caller = axios.post(`\${endpoint}/${data.path}/filtrar`, payload);
   processCaller(caller, success, error);
 }
 
-export const ${data.var}Reload = function (payload: ${data.type}, success?: fnSuccess, error?: fnError) {
+export const ${data.var}Reload = (payload: ${data.type}, success?: fnSuccess, error?: fnError) => {
   let caller = axios.post(`\${endpoint}/${data.path}/recargar`, payload);
   processCaller(caller, success, error);
 }
 
-export const ${data.var}Create = function (payload: ${data.type}, success?: fnSuccess, error?: fnError) {
+export const ${data.var}Create = (payload: ${data.type}, success?: fnSuccess, error?: fnError) => {
   let caller = axios.post(`\${endpoint}/${data.path}/registrar`, payload);
   processCaller(caller, success, error);
 }
 
-export const ${data.var}Update = function (payload: ${data.type}, success?: fnSuccess, error?: fnError) {
+export const ${data.var}Update = (payload: ${data.type}, success?: fnSuccess, error?: fnError) => {
   let caller = axios.post(`\${endpoint}/${data.path}/actualizar`, payload);
   processCaller(caller, success, error);
 }
 
-export const ${data.var}Remove = function (payload: ${data.type}, success?: fnSuccess, error?: fnError) {
+export const ${data.var}Remove = (payload: ${data.type}, success?: fnSuccess, error?: fnError) => {
   let caller = axios.post(`\${endpoint}/${data.path}/eliminar`, payload);
   processCaller(caller, success, error);
 }

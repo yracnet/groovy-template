@@ -29,7 +29,7 @@
     <file name="${update.type}.tsx" layer="view" dir="${data.path}/page"><![CDATA[
 import React from "react";
 import { Panel, Action, Button } from "ui-fast";
-import { InputTextValue, InputTextValidate } from "ui-fast";
+import { InputTextValue, InputTextFactory } from "ui-fast";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { ${data.type}, ${data.type}Feedback, ${data.type}Validate } from "../${data.type}Model";
 import { ${data.var}Reload, ${data.var}Update } from "../${data.type}Rest";
@@ -39,9 +39,9 @@ import { isRequired } from "../../Validate";
 export interface ${update.type}Props extends RouteComponentProps<{ id${data.type}: string }> {
     hide?: boolean
 }
-        
+
 interface ${update.type}State {
-    message: ${data.type}Feedback;
+    feedback: ${data.type}Feedback;
     ${data.var}?: ${data.type};
 }
 
@@ -54,7 +54,7 @@ class ${update.type}Local extends React.PureComponent<${update.type}Props, ${upd
     constructor(props: ${update.type}Props) {
         super(props);
         this.state = {
-            message: {},
+            feedback: {},
             ${data.var}: undefined
         };
         let { id${data.type} } = this.props.match.params;
@@ -67,39 +67,28 @@ class ${update.type}Local extends React.PureComponent<${update.type}Props, ${upd
         this.cancelClick = this.cancelClick.bind(this);
     }
 
-    onValue(state: InputTextValue) {
+    onValue(inputValue: InputTextValue) {
         let ${data.var}: any = Object.assign({}, this.state.${data.var});
-        let message: any = Object.assign({}, this.state.message);
-        ${data.var}[state.name] = state.value;
-        message[state.name] = state.message;
-        this.setState({ ${data.var}, message });
+        let feedback: any = Object.assign({}, this.state.feedback);
+        ${data.var}[inputValue.name] = inputValue.value;
+        feedback[inputValue.name] = InputTextFactory.createFeedback(inputValue);
+        this.setState({ ${data.var}, feedback });
     }
 
     refuseFeedback(): string {
-        let { ${data.var}, message } = this.state;
+        let { ${data.var}, feedback } = this.state;
         let { validate } = this;
         if (!${data.var}) {
             return "El ${data.text} no es valido!";
         }
         let other: any = ${data.var} || {};
-        let attrs = Object.keys(validate);
-        let states: InputTextValue[] = attrs.map(attr => { return { name: attr, state: "none", value: other[attr] } });
-        states.map(state => {
-            let fnVals: Array<InputTextValidate> = validate[state.name];
-            if (fnVals) {
-                fnVals.every(fnVal => {
-                    state = fnVal(state)
-                    return state.state === "none";
-                });
-            }
-            return state;
-        }).filter(it => it && it.state !== "none")
-            .forEach(it => { message[it.name] = { message: it.message, type: it.state, icon: "warning" } });
-        if (Object.keys(message).filter(it => message[it]).length > 0) {
-            this.setState({ message }, () => {
+        feedback = InputTextFactory.createFeedbackObjectFromObject(other, validate);
+        let errors = Object.keys(feedback).length;
+        if (errors > 0) {
+            this.setState({ feedback }, () => {
                 this.forceUpdate();
             });
-            return "El formulario contiene uno o más errores.";
+            return "El formulario contiene uno o más errores. (" + errors + ")";
         }
         return "";
     }
@@ -120,12 +109,13 @@ class ${update.type}Local extends React.PureComponent<${update.type}Props, ${upd
         if (this.props.hide === true) {
             return false;
         }
-        let { ${data.var}, message } = this.state;
+        let { ${data.var}, feedback } = this.state;
         let { updateClick, cancelClick, refuseFeedback, onValue, validate } = this;
         return (
             <Panel icon="pencil" variant="warning" width="50">
                 <title>Modificar ${data.type} #{${data.var} ? ${data.var}.id : "?"}</title>
-                <${data.type}Form value={${data.var}}
+                <${data.type}Form 
+                    value={${data.var}}
                     onValue={onValue}
                     feedback={feedback}
                     validate={validate} />

@@ -124,7 +124,8 @@ class ${proc01.type}Local extends React.PureComponent<${proc01.type}Props, ${pro
                     appendMode="row"
                     onAppend={${data.var}Append}
                     onRemove={${data.var}Remove}
-                    minimum={0}
+                    confirmRemove="Esta seguro de eliminar el registro"
+                    minimum={1}
                     maximum={5}>
                 </Increase>
             </Panel>
