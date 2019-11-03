@@ -87,7 +87,7 @@ export interface FieldFilter {
    value?: any
 }
 export interface FieldFeedback {
-   state: 'valid' | 'invalid' | 'none';
+   state: 'valid' | 'invalid' | 'ignore';
    icon?: string;
    message?: string;
 }
