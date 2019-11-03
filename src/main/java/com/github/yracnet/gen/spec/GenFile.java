@@ -83,7 +83,7 @@ public class GenFile {
         layer = layer == null ? "error" : layer;
         switch (layer) {
             case "view":
-                mask = "/$project/$project-view/src/$dir/$name";
+                mask = "/$project/$project-view/src/main/$dir/$name";
                 break;
             case "rest":
                 mask = "/$project/$project-rest/src/main/java/$dir/$pkg/$name";
