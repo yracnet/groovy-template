@@ -29,10 +29,10 @@
     <file name="${create.type}.tsx" layer="view" dir="${data.path}/page"><![CDATA[
 import React from "react";
 import { Panel, Action, Button } from "ui-fast";
-import { InputTextState, InputTextValidate } from "ui-fast";
+import { InputTextValue, InputTextValidate } from "ui-fast";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 
-import { ${data.type}, ${data.type}Message, ${data.type}Validate } from "../${data.type}Model";
+import { ${data.type}, ${data.type}Feedback, ${data.type}Validate } from "../${data.type}Model";
 import { ${data.var}Create } from "../${data.type}Rest";
 import { ${data.type}Form } from "../${data.type}Part";
 import { isRequired } from "../../Validate";
@@ -42,7 +42,7 @@ export interface ${create.type}Props extends RouteComponentProps {
 }
 
 interface ${create.type}State {
-    message: ${data.type}Message;
+    feedback: ${data.type}Feedback;
     ${data.var}: ${data.type};
 }
 
@@ -55,32 +55,32 @@ class ${create.type}Local extends React.PureComponent<${create.type}Props, ${cre
     constructor(props: ${create.type}Props) {
         super(props);
         this.state = {
-            message: {},
+            feedback: {},
             ${data.var}: {}
         };
         this.onValue = this.onValue.bind(this);
-        this.refuseMessage = this.refuseMessage.bind(this);
+        this.refuseFeedback = this.refuseFeedback.bind(this);
         this.createClick = this.createClick.bind(this);
         this.cancelClick = this.cancelClick.bind(this);
     }
 
-    onValue(state: InputTextState) {
+    onValue(state: InputTextValue) {
         let ${data.var}: any = Object.assign({}, this.state.${data.var});
-        let message: any = Object.assign({}, this.state.message);
+        let feedback: any = Object.assign({}, this.state.feedback);
         ${data.var}[state.name] = state.value;
-        message[state.name] = state.message;
-        this.setState({ ${data.var}, message });
+        feedback[state.name] = state.feedback;
+        this.setState({ ${data.var}, feedback });
     }
 
-    refuseMessage(): string {
-        let { ${data.var}, message } = this.state;
+    refuseFeedback(): string {
+        let { ${data.var}, feedback } = this.state;
         let { validate } = this;
         if (!${data.var}) {
             return "El ${data.var} no es valido!";
         }
         let other: any = ${data.var} || {};
         let attrs = Object.keys(validate);
-        let states: InputTextState[] = attrs.map(attr => { return { name: attr, state: "none", value: other[attr] } });
+        let states: InputTextValue[] = attrs.map(attr => { return { name: attr, state: "none", value: other[attr] } });
         states.map(state => {
             let fnVals: Array<InputTextValidate> = validate[state.name];
             if (fnVals) {
@@ -91,9 +91,9 @@ class ${create.type}Local extends React.PureComponent<${create.type}Props, ${cre
             }
             return state;
         }).filter(it => it && it.state !== "none")
-            .forEach(it => { message[it.name] = { message: it.message, type: it.state, icon: "warning" } });
-        if (Object.keys(message).filter(it => message[it]).length > 0) {
-            this.setState({ message }, () => {
+            .forEach(it => { feedback[it.name] = { message: it.message, type: it.state, icon: "warning" } });
+        if (Object.keys(feedback).filter(it => feedback[it]).length > 0) {
+            this.setState({ feedback }, () => {
                 this.forceUpdate();
             });
             return "El formulario contiene uno o más errores.";
@@ -117,12 +117,16 @@ class ${create.type}Local extends React.PureComponent<${create.type}Props, ${cre
         if (this.props.hide === true) {
             return false;
         }
-        let { ${data.var}, message } = this.state;
-        let { createClick, cancelClick, refuseMessage, onValue, validate } = this;
+        let { ${data.var}, feedback } = this.state;
+        let { createClick, cancelClick, refuseFeedback, onValue, validate } = this;
         return (
             <Panel icon="pencil" variant="warning" width="50">
                 <title>Crear Nuevo ${data.type}</title>
-                <${data.type}Form value={${data.var}} onValue={onValue} message={message} validate={validate} />
+                <${data.type}Form 
+                   value={${data.var}} 
+                   onValue={onValue}
+                   feedback={feedback}
+                   validate={validate} />
                 <footer>
                     <Action>
                         <Button name="apply"
@@ -135,7 +139,7 @@ class ${create.type}Local extends React.PureComponent<${create.type}Props, ${cre
                             text="Guardar"
                             icon="check-circle"
                             variant="primary"
-                            refuse={refuseMessage}
+                            refuse={refuseFeedback}
                             confirm="Esta seguro de crear el registro?"
                             hide={!${data.var}} />
                     </Action>

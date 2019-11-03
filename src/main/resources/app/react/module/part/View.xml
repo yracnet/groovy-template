@@ -36,9 +36,9 @@ export const ${data.type}View: React.SFC<${data.type}ViewProps> = (props) => {
   return (
     value ?
       <Grid
-        lgcols={[4, 2, 2, 2, 2, 2]}
+        colsLg={[4, 2, 2, 2, 2, 2]}
         cols={[12]}
-        mdcols={[12, 6, 6, 6, 6, 6]}>
+        colsMd={[12, 6, 6, 6, 6, 6]}>
 <% attr.each{  %>
         <LabelText value="${it.text}" >
           <OutputText name="${it.var}"

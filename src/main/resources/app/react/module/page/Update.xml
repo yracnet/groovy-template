@@ -29,9 +29,9 @@
     <file name="${update.type}.tsx" layer="view" dir="${data.path}/page"><![CDATA[
 import React from "react";
 import { Panel, Action, Button } from "ui-fast";
-import { InputTextState, InputTextValidate } from "ui-fast";
+import { InputTextValue, InputTextValidate } from "ui-fast";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { ${data.type}, ${data.type}Message, ${data.type}Validate } from "../${data.type}Model";
+import { ${data.type}, ${data.type}Feedback, ${data.type}Validate } from "../${data.type}Model";
 import { ${data.var}Reload, ${data.var}Update } from "../${data.type}Rest";
 import { ${data.type}Form } from "../${data.type}Part";
 import { isRequired } from "../../Validate";
@@ -41,7 +41,7 @@ export interface ${update.type}Props extends RouteComponentProps<{ id${data.type
 }
         
 interface ${update.type}State {
-    message: ${data.type}Message;
+    message: ${data.type}Feedback;
     ${data.var}?: ${data.type};
 }
 
@@ -62,12 +62,12 @@ class ${update.type}Local extends React.PureComponent<${update.type}Props, ${upd
             this.setState({ ${data.var} });
         })
         this.onValue = this.onValue.bind(this);
-        this.refuseMessage = this.refuseMessage.bind(this);
+        this.refuseFeedback = this.refuseFeedback.bind(this);
         this.updateClick = this.updateClick.bind(this);
         this.cancelClick = this.cancelClick.bind(this);
     }
 
-    onValue(state: InputTextState) {
+    onValue(state: InputTextValue) {
         let ${data.var}: any = Object.assign({}, this.state.${data.var});
         let message: any = Object.assign({}, this.state.message);
         ${data.var}[state.name] = state.value;
@@ -75,7 +75,7 @@ class ${update.type}Local extends React.PureComponent<${update.type}Props, ${upd
         this.setState({ ${data.var}, message });
     }
 
-    refuseMessage(): string {
+    refuseFeedback(): string {
         let { ${data.var}, message } = this.state;
         let { validate } = this;
         if (!${data.var}) {
@@ -83,7 +83,7 @@ class ${update.type}Local extends React.PureComponent<${update.type}Props, ${upd
         }
         let other: any = ${data.var} || {};
         let attrs = Object.keys(validate);
-        let states: InputTextState[] = attrs.map(attr => { return { name: attr, state: "none", value: other[attr] } });
+        let states: InputTextValue[] = attrs.map(attr => { return { name: attr, state: "none", value: other[attr] } });
         states.map(state => {
             let fnVals: Array<InputTextValidate> = validate[state.name];
             if (fnVals) {
@@ -121,13 +121,13 @@ class ${update.type}Local extends React.PureComponent<${update.type}Props, ${upd
             return false;
         }
         let { ${data.var}, message } = this.state;
-        let { updateClick, cancelClick, refuseMessage, onValue, validate } = this;
+        let { updateClick, cancelClick, refuseFeedback, onValue, validate } = this;
         return (
             <Panel icon="pencil" variant="warning" width="50">
                 <title>Modificar ${data.type} #{${data.var} ? ${data.var}.id : "?"}</title>
                 <${data.type}Form value={${data.var}}
                     onValue={onValue}
-                    message={message}
+                    feedback={feedback}
                     validate={validate} />
                 <footer>
                     <Action>
@@ -141,7 +141,7 @@ class ${update.type}Local extends React.PureComponent<${update.type}Props, ${upd
                             text="Guardar"
                             icon="check-circle"
                             variant="primary"
-                            refuse={refuseMessage}
+                            refuse={refuseFeedback}
                             confirm="Esta seguro de actualizar el registro?"
                             hide={!${data.var}} />
                     </Action>

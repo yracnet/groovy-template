@@ -29,7 +29,7 @@
     <file name="${crud.type}.tsx" layer="view" dir="${data.path}/page"><![CDATA[
 import React from "react";
 import { Panel, Action, Button } from "ui-fast";
-import { InputTextValidate, InputTextState } from "ui-fast";
+import { InputTextValidate, InputTextValue } from "ui-fast";
 
 import { ${data.type}, ${data.type}Message, ${data.type}Validate } from "../${data.type}Model";
 import { ${data.var}Create, ${data.var}Remove, ${data.var}Update } from "../${data.type}Rest";
@@ -82,7 +82,7 @@ export class ${crud.type} extends React.PureComponent<${crud.type}Props, ${crud.
         this.cancelClick = this.cancelClick.bind(this);
     }
 
-    onValue(state: InputTextState) {
+    onValue(state: InputTextValue) {
         let ${data.var}: any = Object.assign({}, this.state.${data.var});
         let message: any = Object.assign({}, this.state.message);
         ${data.var}[state.name] = state.value;
@@ -162,7 +162,7 @@ export class ${crud.type} extends React.PureComponent<${crud.type}Props, ${crud.
         }
         let other: any = ${data.var} || {};
         let attrs = Object.keys(validate);
-        let states: InputTextState[] = attrs.map(attr => { return { name: attr, state: "none", value: other[attr] } });
+        let states: InputTextValue[] = attrs.map(attr => { return { name: attr, state: "none", value: other[attr] } });
         states.map(state => {
             let fnVals: Array<InputTextValidate> = validate[state.name];
             if (fnVals) {

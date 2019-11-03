@@ -23,7 +23,7 @@
     %>
     <file name="${data.type}Query.tsx" layer="view" dir="${data.path}/part"><![CDATA[
 import React from "react";
-import { Grid, FilterText, FilterTextChange } from "ui-fast";
+import { Grid, LabelText, FilterText, FilterTextChange } from "ui-fast";
 import { ${data.type}Filter } from "../${data.type}Model";
 import { toString } from "../../Convert";
 
@@ -35,14 +35,19 @@ export interface ${data.type}QueryProps {
 export const ${data.type}Query: React.SFC<${data.type}QueryProps> = (props) => {
   let { value, onChange } = props;
   return (
-    <Grid cols="4, 8"><% attr.each{  %>
-      <FilterText name="${it.var}"
-        value={value.${it.var}}
-        onChange={onChange}
-        label="${it.text}"
-        onConvert={toString}
-        option="number" />
-      <% } %>
+    <Grid
+      colsLg={[4, 2, 2, 2, 2, 2]}
+      cols={[12]}
+      colsMd={[12, 6, 6, 6, 6, 6]}>
+<% attr.each{  %>
+      <LabelText value="${it.text}" >
+        <FilterText name="${it.var}"
+          value={value.${it.var}}
+          onChange={onChange}
+          onConvert={toString}
+          option="number" />
+      </LabelText>
+<% } %>
     </Grid>
   );
 }

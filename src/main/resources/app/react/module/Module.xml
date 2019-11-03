@@ -15,7 +15,7 @@
     attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
     %>
     <file name="${data.type}Model.tsx" layer="view" dir="${data.path}" skip="false"><![CDATA[
-import { FieldFilter, FieldMessage, FilterAbstract } from "../Model";
+import { FieldFilter, FieldFeedback, FilterAbstract } from "../Model";
 import { InputTextValidate } from "ui-fast";
 
 export interface ${data.type} {<% attr.each{  %>
@@ -26,8 +26,8 @@ export interface ${data.type}Filter extends FilterAbstract {<% attr.each{  %>
    ${it.var}?: FieldFilter,<% } %>
 }
 
-export interface ${data.type}Message {<% attr.each{  %>
-   ${it.var}?: string | FieldMessage,<% } %>
+export interface ${data.type}Feedback {<% attr.each{  %>
+   ${it.var}?: FieldFeedback,<% } %>
    [attr: string]: any
 }
 
