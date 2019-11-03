@@ -108,6 +108,12 @@ public class Util {
             JsonBuilder builder = new JsonBuilder(entityMapper);
             String jsonString = builder.toPrettyString();
             Files.write(Paths.get(modelJson.toURI()), jsonString.getBytes(), StandardOpenOption.CREATE);
+            if(modelXml.exists()){
+                modelXml.delete();
+            }
+            if(modelJson.exists()){
+                modelJson.delete();
+            }
             return jsonString;
         } catch (IOException | JAXBException | NullPointerException e) {
             throw new RuntimeException("Error Read and Write model: " + jpaModel, e);

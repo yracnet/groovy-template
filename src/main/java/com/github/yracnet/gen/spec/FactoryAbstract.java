@@ -59,7 +59,7 @@ public class FactoryAbstract implements Factory{
     public Map deduceAttrName(Map attr) {
         String name = (String) attr.get("name");
         Map map = deduceName(name);
-        String type = attr.get("attributeType").toString();
+        String type = attr.getOrDefault("attributeType", "Long").toString();
         map.put("type", type);
         int i = type.lastIndexOf(".");
         if (i > 0) {

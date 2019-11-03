@@ -104,14 +104,13 @@ public class Generate {
             try {
                 Template template = engine.createTemplate(file);
                 Writable out = template.make(param);
-                File x = new File(parent, file.getName());
-                System.out.println("::::::::::::::::::--->" + x);
-                if (x.exists()) {
-                    x.delete();
+                File generate = new File(parent, file.getName());
+                System.out.println("::::::::::::::::::--->" + generate);
+                if (generate.exists()) {
+                    generate.delete();
                 }
-                //out.writeTo(new PrintWriter(System.out));
-                out.writeTo(new FileWriter(x));
-                GenRoot item = Util.readRoot(x);
+                out.writeTo(new FileWriter(generate));
+                GenRoot item = Util.readRoot(generate);
                 item.genFileEach(genFile -> {
                     File outFile = genFile.getFileOutput(output, artifactId, module);
                     if (genFile.isSkip()) {
@@ -121,6 +120,7 @@ public class Generate {
                         Util.writeContent(outContent, outFile, genFile.isAppend(), genFile.getComment());
                     }
                 });
+                generate.delete();
             } catch (IOException | JAXBException | ClassNotFoundException | CompilationFailedException e) {
                 System.out.println("Error Process: " + file + ":" + e.getMessage());
                 e.printStackTrace();
