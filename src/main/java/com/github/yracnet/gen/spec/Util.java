@@ -8,6 +8,8 @@ package com.github.yracnet.gen.spec;
 import com.github.yracnet.jpa.spec.Entity;
 import com.github.yracnet.jpa.spec.EntityMappings;
 import groovy.json.JsonBuilder;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,7 +19,16 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Result;
 import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 /**
@@ -38,7 +49,6 @@ public class Util {
 
     public static File getProjectPath() {
         String path = Util.class.getResource("/").getPath();
-        System.out.println("--->" + path);
         return new File(path + "/../..");
     }
 
@@ -50,6 +60,23 @@ public class Util {
     public static File getResourceFile(String name) {
         File base = getProjectPath();
         return new File(base, "/src/main/resources/" + name);
+    }
+
+    public static Source removeNamespace(File jpaModel) {
+        try {
+            TransformerFactory factory = TransformerFactory.newInstance();
+            File xsltFile = getResourceFile("template/orm/remove-ns.xsl");
+            Source xslt = new StreamSource(xsltFile);
+            Transformer transformer = factory.newTransformer(xslt);
+            Source source = new StreamSource(jpaModel);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            Result result = new StreamResult(byteArrayOutputStream);
+            //transformer.transform(source, new StreamResult(new File("output.xml")));
+            transformer.transform(source, result);
+            return new StreamSource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+        } catch (TransformerException e) {
+            throw new RuntimeException("Error remove Namespace", e);
+        }
     }
 
     public static String createJsonString(File jpaModel) throws RuntimeException {
@@ -70,7 +97,8 @@ public class Util {
                 }
 
             });
-            Source source = new StreamSource(jpaModel);
+            //Source source = new StreamSource(jpaModel);
+            Source source = removeNamespace(jpaModel);
             EntityMappings entityMapper = unmarshaller.unmarshal(source, EntityMappings.class).getValue();
             Marshaller marshaller = JAXB_CONTEXT.createMarshaller();
 

@@ -32,10 +32,12 @@ public class GenRoot {
     }
 
     public void genFileEach(Consumer<GenFile> it) {
-        genFileList.forEach(x -> {
-            //x.init(this);
-            it.accept(x);
-        });
+        if (genFileList != null) {
+            genFileList.forEach(x -> {
+                //x.init(this);
+                it.accept(x);
+            });
+        }
     }
 
 }
