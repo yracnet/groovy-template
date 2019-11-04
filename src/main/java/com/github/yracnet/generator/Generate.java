@@ -29,6 +29,7 @@ public class Generate {
     private String module;
     private String contextPath;
     private String namespace;
+    private String basePkg;
     private final List<File> templateList = new ArrayList<>();
     private final List<String> prefixList = new ArrayList<>();
 
@@ -72,6 +73,14 @@ public class Generate {
         this.contextPath = contextPath;
     }
 
+    public String getBasePkg() {
+        return basePkg;
+    }
+
+    public void setBasePkg(String basePkg) {
+        this.basePkg = basePkg;
+    }
+
     public String getNamespace() {
         return namespace;
     }
@@ -92,18 +101,20 @@ public class Generate {
         Factory fn = new FactoryImpl();
         fn.addPrefix(prefixList);
         TemplateEngine engine = new SimpleTemplateEngine();
-        Map<String, Object> param = new HashMap<>();
-        param.put("groupId", groupId);
-        param.put("artifactId", artifactId);
-        param.put("module", module);
-        param.put("contextPath", contextPath);
-        param.put("ns", namespace);
-        param.put("mapper", mapper);
-        param.put("fn", fn);
+        Map<String, Object> context = new HashMap<>();
+        context.put("basePkg", basePkg);
+        context.put("pkg", basePkg + "." + module);
+        context.put("groupId", groupId);
+        context.put("artifactId", artifactId);
+        context.put("module", module);
+        context.put("contextPath", contextPath);
+        context.put("ns", namespace);
+        context.put("mapper", mapper);
+        context.put("fn", fn);
         templateEach(file -> {
             try {
                 Template template = engine.createTemplate(file);
-                Writable out = template.make(param);
+                Writable out = template.make(context);
                 File generate = new File(parent, file.getName());
                 System.out.println("::::::::::::::::::--->" + generate);
                 if (generate.exists()) {
@@ -112,7 +123,8 @@ public class Generate {
                 out.writeTo(new FileWriter(generate));
                 GenRoot item = Util.readRoot(generate);
                 item.genFileEach(genFile -> {
-                    File outFile = genFile.getFileOutput(output, artifactId, module);
+                    //genFile.setPkg(basePkg + "." + module);
+                    File outFile = genFile.getFileOutput(output, context);
                     if (genFile.isSkip()) {
                         System.out.println("Write Skip: " + outFile);
                     } else {

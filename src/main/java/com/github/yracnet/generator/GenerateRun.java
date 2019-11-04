@@ -12,20 +12,22 @@ package com.github.yracnet.generator;
 public class GenerateRun {
 
     public static void main(String[] args) {
-        String model = "/work/dev/bcb-01/r3/2019A-01/sirepo-modelo/src/main/resources/modelo.jpa";
-        String output = "/work/dev/bcb-01/r3/generate";
+        String model = "/work/dev/bcb-03/mrp/mrp-modelo/src/main/resources/modelo.jpa";
+        String output = "/work/dev/bcb-03/generate";
         Generate gen = new Generate(model, output);
-        gen.setGroupId("bo.gob.bcb.grh.sirepo");
-        gen.setArtifactId("sirepo");
+        gen.setGroupId("bo.gob.bcb.grh.mrp");
+        gen.setArtifactId("mrp");
         gen.setModule("portal");
         gen.setNamespace("psv");
         gen.setContextPath("sirepo-portal-rest-0.1.0-01");
+        gen.setBasePkg("bo.gob.bcb.grh.mrp");
         gen.addTemplateDirectory("app.javaee");
-        gen.addTemplateDirectory("app.react");
-        gen.addTemplateDirectory("app.react.module");
-        gen.addTemplateDirectory("app.react.module.page");
-        gen.addTemplateDirectory("app.react.module.part");
-        gen.removePrefix("Form");
+        //gen.addTemplateDirectory("app.javaee");
+        //gen.addTemplateDirectory("app.react");
+        //gen.addTemplateDirectory("app.react.module");
+        //gen.addTemplateDirectory("app.react.module.page");
+        //gen.addTemplateDirectory("app.react.module.part");
+        gen.removePrefix("Mrp");
         gen.generate();
     }
 }

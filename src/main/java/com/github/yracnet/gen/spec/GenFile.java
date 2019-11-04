@@ -6,6 +6,8 @@
 package com.github.yracnet.gen.spec;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -78,7 +80,7 @@ public class GenFile {
 //    public String getRealName() {
 //        return name == null ? "NaN" : name.contains(".") ? name : (name + ".err");
 //    }
-    public File getRealPath(File output, String project) {
+    public File getRealPath(File output, String project, Map<String, Object> context) {
         String mask = "/$project/error/$name";
         layer = layer == null ? "error" : layer;
         switch (layer) {
@@ -115,6 +117,9 @@ public class GenFile {
             case "model:entity":
                 mask = "/$project-model/src/main/java/$dir/$pkg/$name";
                 break;
+            case "model:validate":
+                mask = "/$artifactId-modelo/src/main/java/$dir/$pkg/$name";
+                break;
             //} else if ("conf".equals(layer)) {
             //    mask = "/$project/$project-view/src/main/webapp/WEB-INF/$name";
             //} else if ("web-inf".equals(layer)) {
@@ -131,6 +136,10 @@ public class GenFile {
         mask = mask.replace("$name", getName());
         mask = mask.replace("//", "/");
         mask = mask.replace("/./", "/");
+        for (String key : context.keySet()) {
+            String val = context.getOrDefault(key, "error_" + key).toString();
+            mask = mask.replace("$" + key, val);
+        }
         return new File(output, mask);
     }
 
@@ -182,9 +191,19 @@ public class GenFile {
         this.content = content;
     }
 
+    public File getFileOutput(File output, Map<String, Object> context) {
+        String project = (String) context.getOrDefault("project", null);
+        if (project == null) {
+            project = context.getOrDefault("artifactId", "_artifactId_") + "-"
+                    + context.getOrDefault("module", "_module_");
+        }
+        output = getRealPath(output, project, context);
+        return output;
+    }
+
     public File getFileOutput(File output, String artifactId, String module) {
         String project = artifactId + "-" + module;
-        output = getRealPath(output, project);
+        output = getRealPath(output, project, new HashMap<>());
         return output;
     }
 

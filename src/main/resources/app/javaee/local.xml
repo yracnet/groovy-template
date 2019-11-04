@@ -5,7 +5,6 @@
     mapper.entity.each { entityRef[it.id] = it }
     entityRef.each {
     id, entity ->
-    def pkg    = fn.pkg(groupId, artifactId, module);  
     def clazz  = fn.deduce(entity.clazz)
     def data   = fn.deduceName(entity.clazz)
     def filter = fn.deduceName(entity.clazz, 'Filter')
@@ -27,19 +26,21 @@ import bo.central.result.ResultObject;
 import bo.central.result.ResultSet;
 import bo.central.filter.FilterBuilder;
 import bo.central.Filter;
+import bo.central.validate.Summary;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.stream.Stream;
-import bo.gob.bcb.grh.sirepo.modelo.${entity.clazz};
+import ${basePkg}.modelo.${entity.clazz};
+import ${basePkg}.validate.${validate.type};
 
 @Stateless
 @LocalBean
 public class ${local.type} {
 
-    @PersistenceContext(unitName = "form-store")
+    @PersistenceContext(unitName = "mrp-persit")
     private EntityManager em;
 
     public ${local.type}() {
@@ -66,24 +67,30 @@ public class ${local.type} {
     }
 
     public ResultObject<${clazz.type}> create${data.type}(${clazz.type} ${data.var}) {
-        ResultObject<${clazz.type}> result = ${validate.type}.validateCreate${data.type}(${data.var});
-        if (result.hasError()) {
+        ResultObject result = new ResultObject();
+        Summary summary = ${validate.type}.validateCreate${data.type}(${data.var});
+        if (summary.hasReason()) {
+            result.setError(true);
+            result.addError(summary.getMessage(), summary.getReason());
             return result;
         }
         em.persist(${data.var});
         result.setValue(${data.var});
-        result.addMessage("El ${data.text} fue registrado correctamente").type("INFO").action("Puede proceder a realizar mas operaciones");
+        result.addSuccess("El ${data.text} fue registrado correctamente", "Puede proceder a realizar mas operaciones");
         return result;
     }
 
     public ResultObject<${clazz.type}> update${data.type}(${clazz.type} ${data.var}) {
-        ResultObject<${clazz.type}> result = ${validate.type}.validateUpdate${data.type}(${data.var});
-        if (result.hasError()) {
+        ResultObject result = new ResultObject();
+        Summary summary = ${validate.type}.validateUpdate${data.type}(${data.var});
+        if (summary.hasReason()) {
+            result.setError(true);
+            result.addError(summary.getMessage(), summary.getReason());
             return result;
         }
-        em.persist(${data.var});
+        em.merge(${data.var});
         result.setValue(${data.var});
-        result.addMessage("El ${data.text} fue actualizado correctamente").type("INFO").action("Puede proceder a realizar mas operaciones");
+        result.addSuccess("El ${data.text} fue actualizado correctamente", "Puede proceder a realizar mas operaciones");
         return result;
     }
 
@@ -93,81 +100,17 @@ public class ${local.type} {
     }
 
     public ResultObject<${clazz.type}> remove${data.type}(${clazz.type} ${data.var}) {
-        ResultObject<${clazz.type}> result = ${validate.type}.validateRemove${data.type}(${data.var});
-        if (result.hasError()) {
+        ResultObject result = new ResultObject();
+        Summary summary = ${validate.type}.validateRemove${data.type}(${data.var});
+        if (summary.hasReason()) {
+            result.setError(true);
+            result.addError(summary.getMessage(), summary.getReason());
             return result;
         }
         em.remove(${data.var});
         result.setValue(${data.var});
-        result.addMessage("El ${data.text} fue eliminado correctamente").type("INFO").action("Puede proceder a realizar mas operaciones");
+        result.addSuccess("El ${data.text} fue eliminado correctamente", "Puede proceder a realizar mas operaciones");
         return result;
-    }
-}
-]]></file>
-    <file name="${validate.type}.java" layer="local:validate" dir="." pkg="${pkg}">
-<![CDATA[
-import java.util.List;
-import bo.central.result.ResultObject;
-import bo.central.result.Message;
-import bo.central.validate.Validate;
-import bo.gob.bcb.grh.sirepo.modelo.${entity.clazz};
-
-public class ${validate.type} {
-
-    static ResultObject validateCreate${data.type}(${clazz.type} ${data.var}) {
-        ResultObject result = new ResultObject<>();
-        Message message = Message.of("WARN", "Validacion Creacion ${data.text}");
-        if (${data.var} == null) {
-            message.addCause("El objeto es NULL");
-        } else {
-            message.addCause(${data.var}.getId() != null, "Id no valido!");
-            validateContent(${data.var}, message);
-        }
-        if(message.hasCause()){
-            result.addMessage(message);
-            result.setError(true);
-        }
-        return result;
-        
-    }
-
-    static ResultObject validateUpdate${data.type}(${clazz.type} ${data.var}) {
-        ResultObject result = new ResultObject<>();
-        Message message = Message.of("WARN", "Validacion Actualizacion ${data.text}");
-        if (${data.var} == null) {
-            message.addCause("El objeto es NULL");
-        } else {
-            message.addCause(${data.var}.getId() == null, "Id no valido!");
-            validateContent(${data.var}, message);
-        }
-        if (message.hasCause()) {
-            result.addMessage(message);
-            result.setError(true);
-        }
-        return result;
-    }
-
-    static ResultObject validateRemove${data.type}(${clazz.type} ${data.var}) {
-        ResultObject result = new ResultObject<>();
-        Message message = Message.of("WARN", "Validacion Eliminacion ${data.text}");
-        if (${data.var} == null) {
-            message.addCause("El objeto es NULL");
-        } else {
-            message.addCause(${data.var}.getId() != null, "Id no valido!");
-        }
-        if (message.hasCause()) {
-            result.addMessage(message);
-            result.setError(true);
-        }
-        return result;
-    }
-
-    private static void validateContent(${clazz.type} entity, Message message) {
-        List<String> causes =  Validate.create(${clazz.type}.class)
-                <% attr.each{  %>
-                   //.isRequired("${it.text}",  ${clazz.type}::${it.get})<% } %>
-                .apply(entity, "${data.text}");
-       message.addCauses(causes);
     }
 }
 ]]></file>

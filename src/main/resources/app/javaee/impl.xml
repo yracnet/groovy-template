@@ -5,7 +5,6 @@
     mapper.entity.each { entityRef[it.id] = it }
     entityRef.each {
     id, entity ->
-    def pkg    = fn.pkg(groupId, artifactId, module);  
     def clazz  = fn.deduce(entity.clazz)
     def data   = fn.deduceName(entity.clazz)
     def filter = fn.deduceName(entity.clazz, 'Filter')
@@ -25,7 +24,8 @@
 <![CDATA[
 import ${pkg}.data.${data.type};
 import ${pkg}.data.${filter.type};
-import bo.gob.bcb.grh.sirepo.modelo.${clazz.type};
+import ${basePkg}.modelo.${clazz.type};
+import ${pkg}.mapper.${mapper.type};
 import bo.central.result.ResultObject;
 import bo.central.result.ResultSet;
 import javax.ejb.EJB;
@@ -85,10 +85,10 @@ public class ${impl.type} implements ${serv.type} {
   }
 }
 ]]></file>
-    <file name="${mapper.type}.java" layer="impl:mapper" dir="." pkg="${pkg}">
+    <file name="${mapper.type}.java" layer="impl:mapper" dir="." pkg="${pkg}.mapper">
 <![CDATA[
 import ${pkg}.data.${data.type};
-import bo.gob.bcb.grh.sirepo.modelo.${entity.clazz};
+import ${basePkg}.modelo.${clazz.type};
 
 public class ${mapper.type} {
   
