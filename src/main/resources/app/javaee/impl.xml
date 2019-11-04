@@ -16,9 +16,10 @@
     def attr   = []
     attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
     attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
-    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
-    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
-    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    def attr2   = []
+    attr2.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr2.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr2.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
     %>
     <file name="${impl.type}.java" layer="impl" dir="." pkg="${pkg}">
 <![CDATA[
@@ -96,6 +97,8 @@ public class ${mapper.type} {
         ${data.type} ${data.var} = new ${data.type}();
         <% attr.each{  %>
         ${data.var}.${it.set}(${clazz.var}.${it.get}());<% } %>
+        <% attr2.each{  %>
+        //${data.var}.${it.set}(${clazz.var}.${it.get}());<% } %>
         return ${data.var};
     }
   
@@ -103,6 +106,8 @@ public class ${mapper.type} {
         ${clazz.type} ${clazz.var} = new ${clazz.type}();
         <% attr.each{  %>
         ${clazz.var}.${it.set}(${data.var}.${it.get}());<% } %>
+        <% attr2.each{  %>
+        //${clazz.var}.${it.set}(${data.var}.${it.get}());<% } %>
         return ${clazz.var};
     }
 }
