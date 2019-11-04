@@ -5,16 +5,21 @@
     mapper.entity.each { entityRef[it.id] = it }
     entityRef.each {
     id, entity -> 
+    def clazz  = fn.deduce(entity.clazz)
     def data   = fn.deduceName(entity.clazz)
     def filter = fn.deduceName(entity.clazz, 'Filter')
     def serv   = fn.deduceName(entity.clazz, 'Serv')
     def rest   = fn.deduceName(entity.clazz, 'Rest')
+    def mapper = fn.deduceName(entity.clazz, 'Mapper')
+    def local  = fn.deduceName(entity.clazz, 'Local')
+    def impl   = fn.deduceName(entity.clazz, 'Impl')
     def attr   = []
     attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
     attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
-    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
-    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
-    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    def attr2   = []
+    attr2.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr2.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr2.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
     %>
     <file name="${rest.type}.java" layer="rest" dir="." pkg="${pkg}" skip="false"><![CDATA[
 import bo.central.Result;
@@ -22,10 +27,15 @@ import bo.central.result.Message;
 import bo.central.result.ResultSet;
 import bo.central.result.ResultObject;
 import bo.central.result.ResultVoid;
-import bo.gob.bcb.grh.postulate.sitio.data.${data.type};
-import bo.gob.bcb.grh.postulate.sitio.data.${filter.type};
+import ${basePkg}.modelo.${clazz.type};
+import ${pkg}.data.${data.type};
+import ${pkg}.data.${filter.type};
+import ${pkg}.mapper.${mapper.type};
 import java.util.Date;
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -34,14 +44,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.interceptor.Interceptors;
 
+@Stateless
 @Path("${data.path}")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Interceptors ({RestInterceptor.class})
-public class ${rest.type} {
+@TransactionManagement(TransactionManagementType.CONTAINER)
+public class ${rest.type} implements ${serv.type} {
 
     @EJB
-    private ${serv.type} serv;
+    private ${local.type} local;
 
     @GET
     @Path("/")
@@ -49,39 +61,79 @@ public class ${rest.type} {
         Result result = ResultVoid.of();
         Message message = result.addMessage("Ping Service");
         message.addCause("This: " + this);
-        message.addCause("Serv: " + serv);
         message.addCause("Date: " + new Date());
+        message.addCause("Local: " + local);
         return result;
     }
 
     @POST
     @Path("filtrar")
+    @Override
     public ResultSet<${data.type}> filtrar${data.type}(${filter.type} filter) {
-        return serv.filtrar${data.type}(filter);
+        ResultSet<${clazz.type}> result = local.filter${data.type}(filter);
+        return result.mapper(${mapper.type}::mapperTo${data.type});
     }
 
     @POST
     @Path("recargar")
+    @Override
     public ResultObject<${data.type}> recargar${data.type}(${data.type} ${data.var}) {
-        return serv.recargar${data.type}(${data.var});
+        Long id = ${data.var} == null? null : ${data.var}.getId();
+        ResultObject<${clazz.type}> result = local.search${data.type}(id);
+        return result.mapper(${mapper.type}::mapperTo${data.type});
     }
 
     @POST
     @Path("registrar")
+    @Override
     public ResultObject<${data.type}> registrar${data.type}(${data.type} ${data.var}) {
-        return serv.registrar${data.type}(${data.var});
+        ${clazz.type} ${clazz.var} = ${mapper.type}.mapperTo${clazz.type}(${data.var});
+        ResultObject<${clazz.type}> result = local.create${data.type}(${clazz.var});
+        return result.mapper(${mapper.type}::mapperTo${data.type});
     }
 
     @POST
     @Path("actualizar")
+    @Override
     public ResultObject<${data.type}> actualizar${data.type}(${data.type} ${data.var}) {
-        return serv.actualizar${data.type}(${data.var});
+        ${clazz.type} ${clazz.var} = ${mapper.type}.mapperTo${clazz.type}(${data.var});
+        ResultObject<${clazz.type}> result = local.update${data.type}(${clazz.var});
+        return result.mapper(${mapper.type}::mapperTo${data.type});
     }
 
     @POST
     @Path("eliminar")
+    @Override
     public ResultObject<${data.type}> eliminar${data.type}(${data.type} ${data.var}) {
-        return serv.eliminar${data.type}(${data.var});
+        Long id = ${data.var} == null? null : ${data.var}.getId();
+        ResultObject<${clazz.type}> result = local.remove${data.type}(id);
+        return result.mapper(${mapper.type}::mapperTo${data.type});
+    }
+}
+]]></file>
+    <file name="${mapper.type}.java" layer="rest" dir="." pkg="${pkg}.mapper">
+<![CDATA[
+import ${pkg}.data.${data.type};
+import ${basePkg}.modelo.${clazz.type};
+
+public class ${mapper.type} {
+  
+    public static ${data.type} mapperTo${data.type}(${clazz.type} ${clazz.var}){
+        ${data.type} ${data.var} = new ${data.type}();
+        <% attr.each{  %>
+        ${data.var}.${it.set}(${clazz.var}.${it.get}());<% } %>
+        <% attr2.each{  %>
+        //${data.var}.${it.set}(${clazz.var}.${it.get}());<% } %>
+        return ${data.var};
+    }
+  
+    public static ${clazz.type} mapperTo${clazz.type}(${data.type} ${data.var}){
+        ${clazz.type} ${clazz.var} = new ${clazz.type}();
+        <% attr.each{  %>
+        ${clazz.var}.${it.set}(${data.var}.${it.get}());<% } %>
+        <% attr2.each{  %>
+        //${clazz.var}.${it.set}(${data.var}.${it.get}());<% } %>
+        return ${clazz.var};
     }
 }
 ]]></file>

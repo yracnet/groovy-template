@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    entityRef.each {
+    id, entity -> 
+    def data   = fn.deduceName(entity.clazz)
+    def filter = fn.deduceName(entity.clazz, 'Filter')
+    def serv   = fn.deduceName(entity.clazz, 'Serv')
+    def rest   = fn.deduceName(entity.clazz, 'Rest')
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    %>
+    <file name="${rest.type}.java" layer="rest" dir="." pkg="${pkg}" skip="false"><![CDATA[
+import bo.central.Result;
+import bo.central.result.Message;
+import bo.central.result.ResultSet;
+import bo.central.result.ResultObject;
+import bo.central.result.ResultVoid;
+import bo.gob.bcb.grh.postulate.sitio.data.${data.type};
+import bo.gob.bcb.grh.postulate.sitio.data.${filter.type};
+import java.util.Date;
+import javax.ejb.EJB;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.interceptor.Interceptors;
+
+@Path("${data.path}")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+@Interceptors ({RestInterceptor.class})
+public class ${rest.type} {
+
+    @EJB
+    private ${serv.type} serv;
+
+    @GET
+    @Path("/")
+    public Result ping() {
+        Result result = ResultVoid.of();
+        Message message = result.addMessage("Ping Service");
+        message.addCause("This: " + this);
+        message.addCause("Serv: " + serv);
+        message.addCause("Date: " + new Date());
+        return result;
+    }
+
+    @POST
+    @Path("filtrar")
+    public ResultSet<${data.type}> filtrar${data.type}(${filter.type} filter) {
+        return serv.filtrar${data.type}(filter);
+    }
+
+    @POST
+    @Path("recargar")
+    public ResultObject<${data.type}> recargar${data.type}(${data.type} ${data.var}) {
+        return serv.recargar${data.type}(${data.var});
+    }
+
+    @POST
+    @Path("registrar")
+    public ResultObject<${data.type}> registrar${data.type}(${data.type} ${data.var}) {
+        return serv.registrar${data.type}(${data.var});
+    }
+
+    @POST
+    @Path("actualizar")
+    public ResultObject<${data.type}> actualizar${data.type}(${data.type} ${data.var}) {
+        return serv.actualizar${data.type}(${data.var});
+    }
+
+    @POST
+    @Path("eliminar")
+    public ResultObject<${data.type}> eliminar${data.type}(${data.type} ${data.var}) {
+        return serv.eliminar${data.type}(${data.var});
+    }
+}
+]]></file>
+    <% } %>
+</files>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    entityRef.each {
+    id, entity ->
+    def clazz  = fn.deduce(entity.clazz)
+    def data   = fn.deduceName(entity.clazz)
+    def filter = fn.deduceName(entity.clazz, 'Filter')
+    def serv   = fn.deduceName(entity.clazz, 'Serv')
+    def impl   = fn.deduceName(entity.clazz, 'Impl')
+    def func   = fn.deduceName(entity.clazz, 'Func')
+    def local  = fn.deduceName(entity.clazz, 'Local')
+    def validate  = fn.deduceName(entity.clazz, 'Validate')
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    %>
+    <file name="${validate.type}.java" layer="model:validate" dir="." pkg="${basePkg}.validate">
+<![CDATA[
+import java.util.List;
+import ${basePkg}.modelo.${entity.clazz};
+import bo.central.validate.Summary;
+import bo.central.validate.Validate;
+
+public class ${validate.type} {
+
+    public static Summary validateCreate${data.type}(${clazz.type} ${data.var}) {
+        Summary summary = new Summary("Validacion Creacion ${data.text}");
+        summary.appendReason(${data.var} == null, "${data.text} invalido, valor NULL");
+        if (summary.isReasonEmpty()) {
+            summary.appendReason(${data.var}.getId() != null, "ID ${data.text} no valido!");
+            List<String> reason = validateContent(${data.var});
+            summary.appendReason(reason);
+        }
+        return summary;
+    }
+
+    public static Summary validateUpdate${data.type}(${clazz.type} ${data.var}) {
+        Summary summary = new Summary("Validacion Actualizacion ${data.text}");
+        summary.appendReason(${data.var} == null, "${data.text} invalido, valor NULL");
+        if (summary.isReasonEmpty()) {
+            summary.appendReason(${data.var}.getId() == null, "ID ${data.text} no valido!");
+            List<String> reason = validateContent(${data.var});
+            summary.appendReason(reason);
+        }
+        return summary;
+    }
+
+    public static Summary validateRemove${data.type}(${clazz.type} ${data.var}) {
+        Summary summary = new Summary("Validacion Eliminacion ${data.text}");
+        summary.appendReason(${data.var} == null, "${data.text} invalido, valor NULL");
+        if (summary.isReasonEmpty()) {
+            summary.appendReason(${data.var}.getId() == null, "ID ${data.text} no valido!");
+        }
+        return summary;
+    }
+
+    private static List<String> validateContent(${clazz.type} entity) {
+        return Validate.create(${clazz.type}.class)<% attr.each{  %>
+                //.isRequired("${it.text}",  ${clazz.type}::${it.get})<% } %>
+                .apply(entity, "${data.text}");
+    }
+}
+]]></file>
+    <% } %>
+</files>

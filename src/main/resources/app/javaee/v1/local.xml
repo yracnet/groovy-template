@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    entityRef.each {
+    id, entity ->
+    def clazz  = fn.deduce(entity.clazz)
+    def data   = fn.deduceName(entity.clazz)
+    def filter = fn.deduceName(entity.clazz, 'Filter')
+    def serv   = fn.deduceName(entity.clazz, 'Serv')
+    def impl   = fn.deduceName(entity.clazz, 'Impl')
+    def func   = fn.deduceName(entity.clazz, 'Func')
+    def local  = fn.deduceName(entity.clazz, 'Local')
+    def validate  = fn.deduceName(entity.clazz, 'Validate')
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    %>
+    <file name="${local.type}.java" layer="local" dir="." pkg="${pkg}">
+<![CDATA[
+import bo.central.result.ResultObject;
+import bo.central.result.ResultSet;
+import bo.central.filter.FilterBuilder;
+import bo.central.Filter;
+import bo.central.validate.Summary;
+import java.util.List;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.stream.Stream;
+import ${basePkg}.modelo.${entity.clazz};
+import ${basePkg}.validate.${validate.type};
+
+@Stateless
+@LocalBean
+public class ${local.type} {
+
+    @PersistenceContext(unitName = "mrp-persit")
+    private EntityManager em;
+
+    public ${local.type}() {
+    }
+
+    public ${local.type}(EntityManager em) {
+        this.em = em;
+    }
+
+    public Stream<${clazz.type}> filter${data.type}Stream(Filter filter) {
+        return FilterBuilder.create(${clazz.type}.class, filter).executeStream(em);
+    }
+
+    public ResultSet<${clazz.type}> filter${data.type}(Filter filter) {
+        ResultSet<${clazz.type}> result = new ResultSet();
+        List<${clazz.type}> list = FilterBuilder.create(${clazz.type}.class, filter).executeQuery(em);
+        result.setValue(list);
+        return result;
+    }
+
+    public ResultObject<${clazz.type}> search${data.type}(Long id) {
+        ${clazz.type} ${data.var} = em.find(${clazz.type}.class, id);
+        return ResultObject.of(${data.var}, ${data.var} == null);
+    }
+
+    public ResultObject<${clazz.type}> create${data.type}(${clazz.type} ${data.var}) {
+        ResultObject result = new ResultObject();
+        Summary summary = ${validate.type}.validateCreate${data.type}(${data.var});
+        if (summary.hasReason()) {
+            result.setError(true);
+            result.addError(summary.getMessage(), summary.getReason());
+            return result;
+        }
+        em.persist(${data.var});
+        result.setValue(${data.var});
+        result.addSuccess("El ${data.text} fue registrado correctamente", "Puede proceder a realizar mas operaciones");
+        return result;
+    }
+
+    public ResultObject<${clazz.type}> update${data.type}(${clazz.type} ${data.var}) {
+        ResultObject result = new ResultObject();
+        Summary summary = ${validate.type}.validateUpdate${data.type}(${data.var});
+        if (summary.hasReason()) {
+            result.setError(true);
+            result.addError(summary.getMessage(), summary.getReason());
+            return result;
+        }
+        em.merge(${data.var});
+        result.setValue(${data.var});
+        result.addSuccess("El ${data.text} fue actualizado correctamente", "Puede proceder a realizar mas operaciones");
+        return result;
+    }
+
+    public ResultObject<${clazz.type}> remove${data.type}(Long id) {
+        ${clazz.type} ${data.var} = em.find(${clazz.type}.class, id);
+        return remove${data.type}(${data.var});
+    }
+
+    public ResultObject<${clazz.type}> remove${data.type}(${clazz.type} ${data.var}) {
+        ResultObject result = new ResultObject();
+        Summary summary = ${validate.type}.validateRemove${data.type}(${data.var});
+        if (summary.hasReason()) {
+            result.setError(true);
+            result.addError(summary.getMessage(), summary.getReason());
+            return result;
+        }
+        em.remove(${data.var});
+        result.setValue(${data.var});
+        result.addSuccess("El ${data.text} fue eliminado correctamente", "Puede proceder a realizar mas operaciones");
+        return result;
+    }
+}
+]]></file>
+    <% } %>
+</files>
