@@ -33,7 +33,7 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 
 import { ${data.type} } from "../${data.type}Model";
 import { ${data.var}Reload } from "../${data.type}Rest";
-import { ${data.type}View } from "../${data.type}Part";
+import { ${data.type}View } from "../part/${data.type}View";
 
 export interface ${detail.type}Props extends RouteComponentProps<{ id${data.type}: string }> {
     hide?: boolean

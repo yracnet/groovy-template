@@ -35,7 +35,8 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 
 import { ${data.var}Filter } from "../${data.type}Rest";
 import { ${data.type}, ${data.type}Filter } from "../${data.type}Model";
-import { ${data.type}Table, ${data.type}Query } from "../${data.type}Part";
+import { ${data.type}Table } from "../part/${data.type}Table";
+import { ${data.type}Query } from "../part/${data.type}Query";
 
 export interface ${search.type}Props extends RouteComponentProps {
     hide?: boolean,

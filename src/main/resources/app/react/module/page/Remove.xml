@@ -33,7 +33,7 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 
 import { ${data.type} } from "../${data.type}Model";
 import { ${data.var}Reload, ${data.var}Remove } from "../${data.type}Rest";
-import { ${data.type}View } from "../${data.type}Part";
+import { ${data.type}View } from "../part/${data.type}View";
 
 export interface ${remove.type}Props extends RouteComponentProps<{ id${data.type}: string }> {
     hide?: boolean
@@ -57,7 +57,7 @@ class ${remove.type}Local extends React.PureComponent<${remove.type}Props, ${rem
     }
 
     removeClick() {
-        let value = this.state.${data.var} || {};
+        let value: ${data.type} = this.state.${data.var} || {};
         ${data.var}Remove(value, (${data.var}: ${data.type}) => {
             this.setState({ ${data.var}: ${data.var} });
             this.cancelClick();

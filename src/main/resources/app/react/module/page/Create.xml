@@ -33,7 +33,7 @@ import { InputTextValue, InputTextFactory } from "ui-fast";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { ${data.type}, ${data.type}Feedback, ${data.type}Validate } from "../${data.type}Model";
 import { ${data.var}Create } from "../${data.type}Rest";
-import { ${data.type}Form } from "../${data.type}Part";
+import { ${data.type}Form } from "../part/${data.type}Form";
 import { isRequired } from "../../Validate";
 
 export interface ${create.type}Props extends RouteComponentProps {
@@ -64,8 +64,8 @@ class ${create.type}Local extends React.PureComponent<${create.type}Props, ${cre
     }
 
     onValue(inputValue: InputTextValue) {
-        let ${data.var}: any = Object.assign({}, this.state.${data.var});
-        let feedback: any = Object.assign({}, this.state.feedback);
+        let ${data.var}: ${data.type} = Object.assign({}, this.state.${data.var});
+        let feedback: ${data.type}Feedback = Object.assign({}, this.state.feedback);
         ${data.var}[inputValue.name] = inputValue.value;
         feedback[inputValue.name] = InputTextFactory.createFeedback(inputValue);
         this.setState({ ${data.var}, feedback });
@@ -77,7 +77,7 @@ class ${create.type}Local extends React.PureComponent<${create.type}Props, ${cre
         if (!${data.var}) {
             return "El ${data.text} no es valido!";
         }
-        let other: any = ${data.var} || {};
+        let other: ${data.type} = ${data.var} || {};
         feedback = InputTextFactory.createFeedbackObjectFromObject(other, validate);
         let errors = Object.keys(feedback).length;
         if (errors > 0) {
@@ -90,7 +90,7 @@ class ${create.type}Local extends React.PureComponent<${create.type}Props, ${cre
     }
 
     createClick() {
-        let value = this.state.${data.var} || {};
+        let value: ${data.type} = this.state.${data.var} || {};
         ${data.var}Create(value, (${data.var}: ${data.type}) => {
             this.setState({ ${data.var}: ${data.var} });
             this.cancelClick();

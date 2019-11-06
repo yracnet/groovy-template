@@ -33,9 +33,6 @@ import ${pkg}.data.${filter.type};
 import ${pkg}.mapper.${mapper.type};
 import java.util.Date;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -44,12 +41,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.interceptor.Interceptors;
 
-@Stateless
 @Path("${data.path}")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Interceptors ({RestInterceptor.class})
-@TransactionManagement(TransactionManagementType.CONTAINER)
 public class ${rest.type} implements ${serv.type} {
 
     @EJB

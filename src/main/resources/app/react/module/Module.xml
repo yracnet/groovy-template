@@ -21,11 +21,13 @@ import { InputTextValidate } from "ui-fast";
 
 export interface ${data.type} {<% attr.each{  %>
    ${it.var}?: ${it.jsType},<% } %>
-   version?:number
+   version?:number,
+   [attr: string]: any
 }
 
 export interface ${data.type}Filter extends FilterAbstract {<% attr.each{  %>
    ${it.var}?: FieldFilter,<% } %>
+   [attr: string]: any
 }
 
 export interface ${data.type}Feedback {<% attr.each{  %>
@@ -131,12 +133,6 @@ export {
     ${data.type}Search
 };
 
-]]></file>
-    <file name="${data.type}Part.tsx" layer="view" dir="${data.path}"><![CDATA[
-export * from "./part/${data.type}Table";
-export * from "./part/${data.type}Query";
-export * from "./part/${data.type}Form";
-export * from "./part/${data.type}View";
 ]]></file>
     <% } %>
 </files>

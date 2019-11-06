@@ -12,7 +12,7 @@ package com.github.yracnet.generator;
 public class GenerateRun {
 
     public static void main(String[] args) {
-        String model = "/work/dev/bcb-03/mrp/mrp-modelo/src/main/resources/modelo.jpa";
+        String model = "/work/dev/bcb-03/mrp/mrp-modelo/src/main/script/modelo.jpa";
         String output = "/work/dev/bcb-03/generate";
         Generate gen = new Generate(model, output);
         gen.setGroupId("bo.gob.bcb.grh.mrp");
@@ -22,11 +22,10 @@ public class GenerateRun {
         gen.setContextPath("sirepo-portal-rest-0.1.0-01");
         gen.setBasePkg("bo.gob.bcb.grh.mrp");
         gen.addTemplateDirectory("app.javaee");
-        //gen.addTemplateDirectory("app.javaee");
-        //gen.addTemplateDirectory("app.react");
-        //gen.addTemplateDirectory("app.react.module");
-        //gen.addTemplateDirectory("app.react.module.page");
-        //gen.addTemplateDirectory("app.react.module.part");
+        gen.addTemplateDirectory("app.react");
+        gen.addTemplateDirectory("app.react.module");
+        gen.addTemplateDirectory("app.react.module.page");
+        gen.addTemplateDirectory("app.react.module.part");
         gen.removePrefix("Mrp");
         gen.generate();
     }

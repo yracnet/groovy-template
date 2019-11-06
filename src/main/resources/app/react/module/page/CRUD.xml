@@ -33,7 +33,8 @@ import { InputTextValue, InputTextFactory } from "ui-fast";
 
 import { ${data.type}, ${data.type}Feedback, ${data.type}Validate } from "../${data.type}Model";
 import { ${data.var}Create, ${data.var}Remove, ${data.var}Update } from "../${data.type}Rest";
-import { ${data.type}Form, ${data.type}View } from "../${data.type}Part";
+import { ${data.type}Form } from "../part/${data.type}Form";
+import { ${data.type}View } from "../part/${data.type}View";
 import { isRequired } from "../../Validate";
 
 type StateType = "CREATE" | "UPDATE" | "REMOVE" | "ERROR";
