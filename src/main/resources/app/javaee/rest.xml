@@ -33,27 +33,17 @@ import ${pkg}.data.${filter.type};
 import ${pkg}.mapper.${mapper.type};
 import java.util.Date;
 import javax.ejb.EJB;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.interceptor.Interceptors;
 
-@Path("${data.path}")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
 @Interceptors ({RestInterceptor.class})
 public class ${rest.type} implements ${serv.type} {
 
     @EJB
     private ${local.type} local;
 
-    @GET
-    @Path("/")
-    public Result ping() {
-        Result result = ResultVoid.of();
+    @Override
+    public ResultVoid ping() {
+        ResultVoid result = ResultVoid.of();
         Message message = result.addMessage("Ping Service");
         message.addCause("This: " + this);
         message.addCause("Date: " + new Date());
@@ -61,16 +51,12 @@ public class ${rest.type} implements ${serv.type} {
         return result;
     }
 
-    @POST
-    @Path("filtrar")
     @Override
     public ResultSet<${data.type}> filtrar${data.type}(${filter.type} filter) {
         ResultSet<${clazz.type}> result = local.filter${data.type}(filter);
         return result.mapper(${mapper.type}::mapperTo${data.type});
     }
 
-    @POST
-    @Path("recargar")
     @Override
     public ResultObject<${data.type}> recargar${data.type}(${data.type} ${data.var}) {
         Long id = ${data.var} == null? null : ${data.var}.getId();
@@ -78,8 +64,6 @@ public class ${rest.type} implements ${serv.type} {
         return result.mapper(${mapper.type}::mapperTo${data.type});
     }
 
-    @POST
-    @Path("registrar")
     @Override
     public ResultObject<${data.type}> registrar${data.type}(${data.type} ${data.var}) {
         ${clazz.type} ${clazz.var} = ${mapper.type}.mapperTo${clazz.type}(${data.var});
@@ -87,8 +71,6 @@ public class ${rest.type} implements ${serv.type} {
         return result.mapper(${mapper.type}::mapperTo${data.type});
     }
 
-    @POST
-    @Path("actualizar")
     @Override
     public ResultObject<${data.type}> actualizar${data.type}(${data.type} ${data.var}) {
         ${clazz.type} ${clazz.var} = ${mapper.type}.mapperTo${clazz.type}(${data.var});
@@ -96,8 +78,6 @@ public class ${rest.type} implements ${serv.type} {
         return result.mapper(${mapper.type}::mapperTo${data.type});
     }
 
-    @POST
-    @Path("eliminar")
     @Override
     public ResultObject<${data.type}> eliminar${data.type}(${data.type} ${data.var}) {
         Long id = ${data.var} == null? null : ${data.var}.getId();

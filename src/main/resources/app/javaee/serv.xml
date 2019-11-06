@@ -21,17 +21,40 @@ import bo.central.result.ResultObject;
 import bo.central.result.ResultSet;
 import ${pkg}.data.${data.type};
 import ${pkg}.data.${filter.type};
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
+@Path("${data.path}")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public interface ${serv.type} {
 
+  @GET
+  @Path("/")
+  public ResultVoid ping() ;
+
+  @POST
+  @Path("filtrar")
   ResultSet<${data.type}> filtrar${data.type}(${filter.type} ${filter.var});
 
+  @POST
+  @Path("recargar")
   ResultObject<${data.type}> recargar${data.type}(${data.type} ${data.var});
 
+  @POST
+  @Path("registrar")
   ResultObject<${data.type}> registrar${data.type}(${data.type} ${data.var});
 
+  @POST
+  @Path("actualizar")
   ResultObject<${data.type}> actualizar${data.type}(${data.type} ${data.var});
 
+  @POST
+  @Path("eliminar")
   ResultObject<${data.type}> eliminar${data.type}(${data.type} ${data.var});
 }
 ]]></file>

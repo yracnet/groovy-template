@@ -138,6 +138,7 @@ public class Generate {
                 e.printStackTrace();
             }
         });
+        Util.formatCode(output);
     }
 
     public void addTemplate(String template) {

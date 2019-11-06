@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -30,6 +31,10 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import org.apache.maven.shared.invoker.DefaultInvocationRequest;
+import org.apache.maven.shared.invoker.DefaultInvoker;
+import org.apache.maven.shared.invoker.InvocationRequest;
+import org.apache.maven.shared.invoker.Invoker;
 
 /**
  *
@@ -108,10 +113,10 @@ public class Util {
             JsonBuilder builder = new JsonBuilder(entityMapper);
             String jsonString = builder.toPrettyString();
             Files.write(Paths.get(modelJson.toURI()), jsonString.getBytes(), StandardOpenOption.CREATE);
-            if(modelXml.exists()){
+            if (modelXml.exists()) {
                 modelXml.delete();
             }
-            if(modelJson.exists()){
+            if (modelJson.exists()) {
                 modelJson.delete();
             }
             return jsonString;
@@ -154,5 +159,26 @@ public class Util {
         Unmarshaller unmarshaller = JAXB_CONTEXT.createUnmarshaller();
         Source source = new StreamSource(file);
         return unmarshaller.unmarshal(source, GenRoot.class).getValue();
+    }
+
+    public static void formatCode(File output) {
+        try {
+            File pomSource = getResourceFile("template/orm/pom.xml");
+            File pomTarget = new File(output, "pom-temporal.xml");
+            if (pomTarget.exists()) {
+                pomTarget.delete();
+            }
+            Files.copy(pomSource.toPath(), pomTarget.toPath());
+            InvocationRequest request = new DefaultInvocationRequest();
+            request.setPomFile(pomTarget);
+            System.out.println("Format Code");
+            //request.setGoals(Arrays.asList("process", "clean"));
+            request.setGoals(Arrays.asList("process-resources", "clean"));
+            Invoker invoker = new DefaultInvoker();
+            invoker.execute(request);
+            pomTarget.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
