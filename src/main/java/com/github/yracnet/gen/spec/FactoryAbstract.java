@@ -119,6 +119,15 @@ public class FactoryAbstract implements Factory{
         return deduceReact(name, "");
     }
 
+    public String toNameType(String name) {
+        name = toName(name);
+        return name.toUpperCase().charAt(0) + name.substring(1);
+    }
+
+    public static String toType(String name) {
+        return name.toUpperCase().charAt(0) + name.substring(1);
+    }
+
     public String toNameVar(String name) {
         name = toName(name);
         return toVar(name);
@@ -185,6 +194,7 @@ public class FactoryAbstract implements Factory{
         for (String value : values) {
             System.out.println("===========>" + value);
             System.out.println("---->" + fn.toName(value));
+            System.out.println("---->" + fn.toNameType(value));
             System.out.println("---->" + fn.toNameVar(value));
             System.out.println("---->" + fn.toNameConst(value));
             System.out.println("---->" + fn.toNameLiteral(value));

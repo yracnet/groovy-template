@@ -201,6 +201,10 @@ public class GenFile {
         return output;
     }
 
+    public File getFileOutput(File output, String ext) {
+        return new File(output, dir + "/" + name + "." + ext);
+    }
+
     public File getFileOutput(File output, String artifactId, String module) {
         String project = artifactId + "-" + module;
         output = getRealPath(output, project, new HashMap<>());

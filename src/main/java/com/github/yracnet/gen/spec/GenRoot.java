@@ -5,6 +5,7 @@
  */
 package com.github.yracnet.gen.spec;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,6 +26,13 @@ public class GenRoot {
 
     public List<GenFile> getGenFileList() {
         return genFileList;
+    }
+
+    public void addGenFile(GenFile genFile) {
+        if(genFileList == null){
+            genFileList = new ArrayList<>();
+        }
+        genFileList.add(genFile);
     }
 
     public void setGenFileList(List<GenFile> genFileList) {

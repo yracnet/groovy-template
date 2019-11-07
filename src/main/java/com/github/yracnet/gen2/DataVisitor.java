@@ -9,6 +9,8 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.yracnet.data.SourceEntry;
 import com.github.yracnet.data.TSEntry;
+import com.github.yracnet.gen.spec.FactoryAbstract;
+import com.github.yracnet.gen.spec.GenRoot;
 import java.util.List;
 
 /**
@@ -16,6 +18,41 @@ import java.util.List;
  * @author yracnet
  */
 public class DataVisitor extends CommonVisitor {
+
+    static void createData(TSEntry it, List<SourceEntry> files, GenRoot genRoot) {
+        TSEntry it2 = createData(it, files);
+        genRoot.addGenFile(it2.asGenFile());
+    }
+    static TSEntry createData(TSEntry it, List<SourceEntry> files) {
+        TSEntry result = new TSEntry();
+        result.setPath(it.getPath());
+        result.setName(it.getName().replace("Serv", "Model"));
+        StringBuilder out = new StringBuilder();
+        out.append("import { FieldFeedback, FieldFilter, FilterAbstract } from \"../Model\";\n");
+        out.append("import { InputTextValidate } from \"ui-fast\";\n");
+        out.append("\n");
+        files.stream()
+                .filter(it2 -> it.isReference(it2.getClassName()))
+                .forEach(it3 -> {
+                    TSEntry c = createData(it3);
+                    out.append(c.getContent());
+                });
+        result.setContent(out.toString());
+        return result;
+    }
+
+    static void createData(SourceEntry it, List<SourceEntry> files, GenRoot genRoot) {
+        TSEntry entry = ServiceVisitor.createService(it);
+        entry.setName(it.getClassName().replace("Serv", "Model"));
+        entry = createData(entry, files);
+        genRoot.addGenFile(entry.asGenFile());
+        
+    }
+
+//    public static void createData(SourceEntry it, GenRoot genRoot) {
+//        TSEntry it2 = createData(it);
+//        genRoot.addGenFile(it2.asGenFile());
+//    }
 
     public static TSEntry createData(SourceEntry it) {
         TSEntry entry = new TSEntry();
@@ -45,22 +82,6 @@ public class DataVisitor extends CommonVisitor {
         }
         entry.setContent(out.toString());
         return entry;
-    }
-
-    static TSEntry createData(String path, String name, List<SourceEntry> datas) {
-        TSEntry result = new TSEntry();
-        result.setPath(path);
-        result.setName(name);
-        StringBuilder out = new StringBuilder();
-        out.append("import { FieldFeedback, FieldFilter, FilterAbstract } from \"../Model\";\n");
-        out.append("import { InputTextValidate } from \"ui-fast\";\n");
-        out.append("\n");
-        datas.forEach(it -> {
-            TSEntry c = createData(it);
-            out.append(c.getContent());
-        });
-        result.setContent(out.toString());
-        return result;
     }
 
     DataVisitor(TSEntry entry, StringBuilder out) {

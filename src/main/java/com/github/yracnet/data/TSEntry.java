@@ -5,6 +5,7 @@
  */
 package com.github.yracnet.data;
 
+import com.github.yracnet.gen.spec.GenFile;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +75,14 @@ public class TSEntry {
 
     public boolean isReference(String className) {
         return reference.contains(className);
+    }
+
+    public GenFile asGenFile() {
+        GenFile genFile = new GenFile();
+        genFile.setContent(content);
+        genFile.setName(name);
+        genFile.setDir(path);
+        return genFile;
     }
 
 }

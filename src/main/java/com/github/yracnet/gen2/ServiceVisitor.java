@@ -14,6 +14,7 @@ import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.yracnet.data.SourceEntry;
 import com.github.yracnet.gen.spec.FactoryAbstract;
+import com.github.yracnet.gen.spec.GenRoot;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,12 @@ import java.util.Optional;
  * @author yracnet
  */
 public class ServiceVisitor extends CommonVisitor {
+
+    public static void createService(SourceEntry it, GenRoot genRoot) {
+        TSEntry it2 = createService(it);
+        System.out.println("--->" + it2);
+        genRoot.addGenFile(it2.asGenFile());
+    }
 
     public static TSEntry createService(SourceEntry it) {
         TSEntry entry = new TSEntry();
@@ -102,7 +109,7 @@ public class ServiceVisitor extends CommonVisitor {
             }
             append("export const ").append(n.getNameAsString()).append(" = ");
             if (n.getParameters().isEmpty()) {
-                append("( fnResult?: Fn").append(n.getTypeAsString());
+                append("(fnResult?: Fn").append(n.getTypeAsString());
                 append(", fnError?: FnError) => {");
                 appendLN();
                 append("  let caller = axios.").append(method).append("(`${endpoint}/")
@@ -112,7 +119,7 @@ public class ServiceVisitor extends CommonVisitor {
                         .append("`);");
             } else {
                 Parameter p = n.getParameter(0);
-                append("( payload: ").append(p.getTypeAsString());
+                append("(payload: ").append(p.getTypeAsString());
                 append(", fnResult?: Fn").append(n.getTypeAsString());
                 append(", fnError?: FnError) => {");
                 appendLN();

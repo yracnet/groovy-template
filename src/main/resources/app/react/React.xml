@@ -6,11 +6,11 @@ import { FlashContext, Message } from '../plataforma/Plataforma';
 //import { FlashContext, Message } from "bcb-platform";
 import { Result } from "./Model";
 
-export type fnResultSet<T> = (value: T[], result?: Result) => void;
-export type fnResultObject<T> = (value: T, result?: Result) => void;
-export type fnResultVoid = (result?: Result) => void;
-export type fnResponse = (response: any) => void;
-export type fnError = (response: any) => void;
+export type FnResultSet<T> = (value: T[], result?: Result) => void;
+export type FnResultObject<T> = (value: T, result?: Result) => void;
+export type FnResultVoid = (result?: Result) => void;
+export type FnResponse = (response: any) => void;
+export type FnError = (response: any) => void;
 
 let defaultSuccess = function (data: any) {
   console.debug("success:", data);
