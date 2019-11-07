@@ -22,10 +22,11 @@
     %>
     <file name="${local.type}.java" layer="local" dir="." pkg="${pkg}">
 <![CDATA[
-import bo.central.result.ResultObject;
-import bo.central.result.ResultSet;
-import bo.central.filter.FilterBuilder;
 import bo.central.Filter;
+import bo.central.filter.FilterBuilder;
+import bo.central.result.ResultSet;
+import bo.central.result.ResultObject;
+import bo.central.result.ResultFactory;
 import bo.central.validate.Summary;
 import java.util.List;
 import javax.ejb.LocalBean;
@@ -63,14 +64,13 @@ public class ${local.type} {
 
     public ResultObject<${clazz.type}> search${data.type}(Long id) {
         ${clazz.type} ${data.var} = em.find(${clazz.type}.class, id);
-        return ResultObject.of(${data.var}, ${data.var} == null);
+        return ResultFactory.createResultObject(${data.var}, ${data.var} == null);
     }
 
     public ResultObject<${clazz.type}> create${data.type}(${clazz.type} ${data.var}) {
         ResultObject result = new ResultObject();
         Summary summary = ${validate.type}.validateCreate${data.type}(${data.var});
         if (summary.hasReason()) {
-            result.setError(true);
             result.addError(summary.getMessage(), summary.getReason());
             return result;
         }
@@ -84,7 +84,6 @@ public class ${local.type} {
         ResultObject result = new ResultObject();
         Summary summary = ${validate.type}.validateUpdate${data.type}(${data.var});
         if (summary.hasReason()) {
-            result.setError(true);
             result.addError(summary.getMessage(), summary.getReason());
             return result;
         }
@@ -103,7 +102,6 @@ public class ${local.type} {
         ResultObject result = new ResultObject();
         Summary summary = ${validate.type}.validateRemove${data.type}(${data.var});
         if (summary.hasReason()) {
-            result.setError(true);
             result.addError(summary.getMessage(), summary.getReason());
             return result;
         }

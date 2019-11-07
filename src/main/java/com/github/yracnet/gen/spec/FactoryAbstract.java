@@ -138,7 +138,7 @@ public class FactoryAbstract implements Factory{
         return name.toUpperCase();
     }
 
-    public String toPath(String name) {
+    public static String toPath(String name) {
         name = name.replaceAll("([a-z0-9]+)([A-Z0-9]+)", "$1/$2");
         return name.toLowerCase();
     }

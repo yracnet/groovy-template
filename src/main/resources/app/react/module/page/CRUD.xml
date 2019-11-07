@@ -5,7 +5,6 @@
     mapper.entity.each { entityRef[it.id] = it }
     entityRef.each {
     id, entity ->
-    def pkg    = fn.pkg(groupId, artifactId, module);  
     def data   = fn.deduceName(entity.clazz)
     def filter = fn.deduceName(entity.clazz, 'Filter')
     def feedback = fn.deduceName(entity.clazz, 'Feedback')
