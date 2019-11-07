@@ -15,7 +15,7 @@
     attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
     attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
     %>
-    <file name="${data.type}Model.tsx" layer="view" dir="${data.path}" skip="false"><![CDATA[
+    <file name="${data.type}Model.tsx" layer="view" dir="${data.path}" skip="true"><![CDATA[
 import { FieldFilter, FieldFeedback, FilterAbstract } from "../Model";
 import { InputTextValidate } from "ui-fast";
 
@@ -40,7 +40,7 @@ export interface ${data.type}Validate {<% attr.each{  %>
    [attr: string]: any
 }
 ]]></file>
-    <file name="${data.type}Rest.tsx" layer="view" dir="${data.path}" skip="false"><![CDATA[
+    <file name="${data.type}Serv.tsx" layer="view" dir="${data.path}" skip="true"><![CDATA[
 
 import { endpoint, processCaller } from "../Endpoint";
 import { ${data.type}, ${data.type}Filter } from "./${data.type}Model";

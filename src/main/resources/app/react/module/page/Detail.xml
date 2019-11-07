@@ -5,7 +5,6 @@
     mapper.entity.each { entityRef[it.id] = it }
     entityRef.each {
     id, entity ->
-    def pkg    = fn.pkg(groupId, artifactId, module);  
     def data   = fn.deduceName(entity.clazz)
     def filter = fn.deduceName(entity.clazz, 'Filter')
     def message = fn.deduceName(entity.clazz, 'Message')
@@ -32,7 +31,7 @@ import { Panel, Action, Button } from "ui-fast";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 
 import { ${data.type} } from "../${data.type}Model";
-import { ${data.var}Reload } from "../${data.type}Rest";
+import { ${data.var}Reload } from "../${data.type}Serv";
 import { ${data.type}View } from "../part/${data.type}View";
 
 export interface ${detail.type}Props extends RouteComponentProps<{ id${data.type}: string }> {

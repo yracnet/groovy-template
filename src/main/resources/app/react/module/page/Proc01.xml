@@ -5,7 +5,6 @@
     mapper.entity.each { entityRef[it.id] = it }
     entityRef.each {
     id, entity ->
-    def pkg    = fn.pkg(groupId, artifactId, module);  
     def data   = fn.deduceName(entity.clazz)
     def filter = fn.deduceName(entity.clazz, 'Filter')
     def message = fn.deduceName(entity.clazz, 'Message')
@@ -33,7 +32,7 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 
 import { ${crud.type}, ${crud.type}Event } from "./${crud.type}";
 import { ${data.type} } from "../${data.type}Model";
-import { ${data.var}Remove, ${data.var}Filter } from "../${data.type}Rest";
+import { ${data.var}Remove, ${data.var}Filter } from "../${data.type}Serv";
 export interface ${proc01.type}Props extends RouteComponentProps {
     hide?: boolean,
 }

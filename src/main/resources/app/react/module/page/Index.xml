@@ -5,7 +5,6 @@
     mapper.entity.each { entityRef[it.id] = it }
     entityRef.each {
     id, entity ->
-    def pkg    = fn.pkg(groupId, artifactId, module);  
     def data   = fn.deduceName(entity.clazz)
     def filter = fn.deduceName(entity.clazz, 'Filter')
     def message = fn.deduceName(entity.clazz, 'Message')
@@ -32,7 +31,7 @@ import { Panel, Action, Button } from "ui-fast";
 import { FilterTextState, TableConfig } from "ui-fast";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 
-import { ${data.var}Filter } from "../${data.type}Rest";
+import { ${data.var}Filter } from "../${data.type}Serv";
 import { ${data.type}, ${data.type}Filter } from "../${data.type}Model";
 import { ${data.type}Table } from "../part/${data.type}Table";
 import { ${data.type}Query } from "../part/${data.type}Query";

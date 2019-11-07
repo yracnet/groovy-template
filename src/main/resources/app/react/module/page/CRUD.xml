@@ -31,7 +31,7 @@ import { Panel, Action, Button } from "ui-fast";
 import { InputTextValue, InputTextFactory } from "ui-fast";
 
 import { ${data.type}, ${data.type}Feedback, ${data.type}Validate } from "../${data.type}Model";
-import { ${data.var}Create, ${data.var}Remove, ${data.var}Update } from "../${data.type}Rest";
+import { ${data.var}Create, ${data.var}Remove, ${data.var}Update } from "../${data.type}Serv";
 import { ${data.type}Form } from "../part/${data.type}Form";
 import { ${data.type}View } from "../part/${data.type}View";
 import { isRequired } from "../../Validate";
