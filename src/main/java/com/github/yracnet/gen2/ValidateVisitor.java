@@ -49,7 +49,7 @@ public class ValidateVisitor extends CommonVisitor {
                 ? "number"
                 : "any";
         if (name.startsWith("id") || name.endsWith("Id")) {
-            result = result + "|string";
+            result = result + " | string";
         }
         if (type != null && type.startsWith("FilterValue")) {
             result = "FieldFilter<" + result + ">";

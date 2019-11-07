@@ -61,7 +61,7 @@ public class ServiceVisitor extends CommonVisitor {
         appendLN();
         out.append("import axios from 'axios';");
         appendLN();
-        out.append("import { endpoint, processCaller, fnError, fnResultSet, fnResultObject, fnResultVoid } from \"../Endpoint\";");
+        out.append("import { endpoint, processCaller, FnError, FnResultSet, FnResultObject, FnResultVoid } from \"../Endpoint\";");
         appendLN();
         String serviceModel = n.getNameAsString();
         serviceModel = serviceModel.replace("Serv", "Model");
@@ -102,8 +102,8 @@ public class ServiceVisitor extends CommonVisitor {
             }
             append("export const ").append(n.getNameAsString()).append(" = ");
             if (n.getParameters().isEmpty()) {
-                append("( fnResult?: fn").append(n.getTypeAsString());
-                append(", fnError?: fnError) => {");
+                append("( fnResult?: Fn").append(n.getTypeAsString());
+                append(", fnError?: FnError) => {");
                 appendLN();
                 append("  let caller = axios.").append(method).append("(`${endpoint}/")
                         .append(rootPath)
@@ -113,8 +113,8 @@ public class ServiceVisitor extends CommonVisitor {
             } else {
                 Parameter p = n.getParameter(0);
                 append("( payload: ").append(p.getTypeAsString());
-                append(", fnResult?: fn").append(n.getTypeAsString());
-                append(", fnError?: fnError) => {");
+                append(", fnResult?: Fn").append(n.getTypeAsString());
+                append(", fnError?: FnError) => {");
                 appendLN();
                 append("  let caller = axios.").append(method).append("(`${endpoint}/")
                         .append(rootPath)
