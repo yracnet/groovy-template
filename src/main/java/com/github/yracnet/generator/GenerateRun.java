@@ -19,7 +19,7 @@ public class GenerateRun {
         gen.setArtifactId("mrp");
         gen.setModule("portal");
         gen.setNamespace("psv");
-        gen.setContextPath("sirepo-portal-rest-0.1.0-01");
+        gen.setContextPath("mrp-portal-rest-1.0.0");
         gen.setBasePkg("bo.gob.bcb.grh.mrp");
         gen.addTemplateDirectory("app.javaee");
         gen.addTemplateDirectory("app.react");

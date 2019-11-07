@@ -6,6 +6,12 @@ import { FlashContext, Message } from '../plataforma/Plataforma';
 //import { FlashContext, Message } from "bcb-platform";
 import { Result } from "./Model";
 
+export type fnResultSet<T> = (value: T[], result?: Result) => void;
+export type fnResultObject<T> = (value: T, result?: Result) => void;
+export type fnResultVoid = (result?: Result) => void;
+export type fnResponse = (response: any) => void;
+export type fnError = (response: any) => void;
+
 let defaultSuccess = function (data: any) {
   console.debug("success:", data);
 };
@@ -82,25 +88,26 @@ export const processCaller = function (caller: Promise<AxiosResponse>, success?:
 }
 ]]></file>
     <file name="Model.tsx" layer="view" dir="." skip="false" append="false"><![CDATA[
-export interface FieldFilter {
+export interface FieldFilter<T> {
    operator: string,
-   value?: any
+   value?: T
 }
 export interface FieldFeedback {
-   state: 'valid' | 'invalid' | 'ignore';
-   icon?: string;
-   message?: string;
+   state: 'valid' | 'invalid' | 'ignore',
+   icon?: string,
+   message?: string,
+   [attr: string]: any
 }
 export interface ResultMessage {
    type: string,
    description: string,
    action?: string,
-   causes: Array<string>
+   causes: string[]
 }
 export interface Result {
    error: boolean,
-   messages: Array<ResultMessage>,
-   value?: any | Array<any>,
+   messages: ResultMessage[],
+   value?: any | any[],
 }
 export interface FilterAbstract {
    config?: {
@@ -113,6 +120,9 @@ export interface FilterAbstract {
 ]]></file>
     <file name="Validate.tsx" layer="view" dir="." skip="false" append="false"><![CDATA[
 import { InputTextValue } from "ui-fast";
+import validator from 'validator';
+
+export type fnValidate = (state: InputTextValue) => InputTextValue;
 
 export const isRequired = function (state: InputTextValue): InputTextValue {
   let value = state.value;
@@ -127,7 +137,7 @@ export const isRequired = function (state: InputTextValue): InputTextValue {
 }
 
 export const isEmail = function (state: InputTextValue): InputTextValue {
-  if (state.value && !state.value.includes('@')) {
+  if (!validator.isEmail(state.value)) {
     state.state = 'invalid';
     state.message = 'Correo invalido';
   }
