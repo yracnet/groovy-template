@@ -44,7 +44,7 @@ public class Run01 {
                     TSEntry service = ServiceVisitor.createService(it);
                     genRoot.addGenFile(service.asGenFile());
                     DataVisitor.createData(service, files, genRoot);
-                    PageVisitor.createPage(service, genRoot);
+                    //PageVisitor.createPage(service, genRoot);
                     return genRoot;
                 })
                 .forEach(it -> {

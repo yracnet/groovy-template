@@ -81,6 +81,50 @@ export const ${data.var}Remove = (payload: ${data.type}, success?: fnSuccess, er
   processCaller(caller, success, error);
 }
 ]]></file>
+    <file name="${data.type}Router.tsx" layer="view" dir="${data.path}"><![CDATA[
+
+import React from "react";
+import { Panel, Button } from "ui-fast";
+import { Route, Switch } from "react-router-dom";
+import { ${data.type}Inbox } from "./page/${data.type}Inbox";
+import { ${data.type}Create } from "./page/${data.type}Create";
+import { ${data.type}Update } from "./page/${data.type}Update";
+import { ${data.type}Detail } from "./page/${data.type}Detail";
+import { ${data.type}Remove } from "./page/${data.type}Remove";
+import { ${data.type}Search } from "./page/${data.type}Search";
+import { ${data.type}Proc01 } from "./page/${data.type}Proc01";
+import { ${data.var}Ping } from "./${data.type}Serv";
+
+export default ${data.type}Router: React.SFC = () => {
+
+    let pingClick = function (name: string) {
+        ${data.var}Ping();
+    }
+
+    return (
+        <Panel>
+            <header>
+                <Button name="apply"
+                    onClick={pingClick}
+                    icon="bell"
+                    variant="primary"
+                    mode="link" />
+                Administracion de ${data.type}(s)
+            </header>
+            <Switch>
+                <Route path="/${data.var}/search" component={${data.type}Search} />
+                <Route path="/${data.var}/proc01" component={${data.type}Proc01} />
+                <Route path="/${data.var}/create" component={${data.type}Create} />
+                <Route path="/${data.var}/update/:id${data.type}" component={${data.type}Update} />
+                <Route path="/${data.var}/detail/:id${data.type}" component={${data.type}Detail} />
+                <Route path="/${data.var}/remove/:id${data.type}" component={${data.type}Remove} />
+                <Route path="/${data.var}/inbox/:id${data.type}" component={${data.type}Inbox} />
+                <Route path="/${data.var}" component={${data.type}Inbox} />
+            </Switch>
+        </Panel>
+    );
+}
+]]></file>
     <file name="${data.type}Page.tsx" layer="view" dir="${data.path}"><![CDATA[
 
 import React from "react";
@@ -93,7 +137,7 @@ import { ${data.type}Detail } from "./page/${data.type}Detail";
 import { ${data.type}Remove } from "./page/${data.type}Remove";
 import { ${data.type}Search } from "./page/${data.type}Search";
 import { ${data.type}Proc01 } from "./page/${data.type}Proc01";
-import { ${data.var}Ping } from "./${data.type}Rest";
+import { ${data.var}Ping } from "./${data.type}Serv";
 
 export const ${data.type}Manager: React.SFC = () => {
 

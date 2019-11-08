@@ -24,7 +24,8 @@ public class FeedbackVisitor extends CommonVisitor {
         String name = n.getNameAsString();
         out.append("\nexport interface ").append(name).append("Feedback {\n");
         Object o = super.visit(n, arg);
-        out.append("   [attr: string]: any\n}");
+        //out.append("   [attr: string]: any\n}");
+        out.append("\n}");
         return o;
     }
 

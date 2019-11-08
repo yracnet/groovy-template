@@ -24,7 +24,8 @@ public class ValidateVisitor extends CommonVisitor {
         String name = n.getNameAsString();
         out.append("\nexport interface ").append(name).append("Validate {\n");
         Object o = super.visit(n, arg);
-        out.append("   [attr: string]: any\n}");
+        //out.append("   [attr: string]: any\n}");
+        out.append("\n}");
         return o;
     }
 
@@ -33,7 +34,7 @@ public class ValidateVisitor extends CommonVisitor {
         String name = n.getNameAsString();
         String type = n.getTypeAsString();
         if (!name.equals("serialVersionUID")) {
-            out.append("   ").append(name).append("?: InputTextValidate[],\n");
+            out.append("   ").append(name).append("?: FnInputTextValidate[],\n");
         }
         return super.visit(n, arg);
     }

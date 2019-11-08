@@ -29,7 +29,7 @@ public class DataVisitor extends CommonVisitor {
         result.setName(it.getName().replace("Serv", "Model"));
         StringBuilder out = new StringBuilder();
         out.append("import { FieldFeedback, FieldFilter, FilterAbstract } from \"../Model\";\n");
-        out.append("import { InputTextValidate } from \"ui-fast\";\n");
+        out.append("import { FnInputTextValidate } from \"ui-fast\";\n");
         out.append("\n");
         files.stream()
                 .filter(it2 -> it.isReference(it2.getClassName()))
@@ -93,7 +93,8 @@ public class DataVisitor extends CommonVisitor {
         String name = n.getNameAsString();
         out.append("\nexport interface ").append(name).append(" {\n");
         Object o = super.visit(n, arg);
-        out.append("   [attr: string]: any \n}");
+        //out.append("   [attr: string]: any\n}");
+        out.append("\n}");
         return o;
     }
 
@@ -121,6 +122,9 @@ public class DataVisitor extends CommonVisitor {
                 ? "number"
                 : "any";
         if (name.startsWith("id") || name.endsWith("Id")) {
+            result = result + " | string";
+        }
+        if (result.equals("Date")) {
             result = result + " | string";
         }
         return result;

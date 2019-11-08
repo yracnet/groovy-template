@@ -54,9 +54,10 @@ public class FilterVisitor extends CommonVisitor {
     @Override
     public Object visit(ClassOrInterfaceDeclaration n, Object arg) {
         String name = n.getNameAsString();
-        out.append("\nexport interface ").append(name).append("Filter extends FilterAbstract {\n");
+        out.append("\nexport interface ").append(name).append(" extends FilterAbstract {\n");
         Object o = super.visit(n, arg);
-        out.append("   [attr: string]: any\n}");
+        //out.append("   [attr: string]: any\n}");
+        out.append("\n}");
         return o;
     }
 
