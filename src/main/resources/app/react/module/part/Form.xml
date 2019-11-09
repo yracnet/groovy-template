@@ -23,7 +23,7 @@
     %>
     <file name="${data.type}Form.tsx" layer="view" dir="${data.path}/part"><![CDATA[
 import React from "react";
-import { Grid, InputText, InputTextChange, LabelText, Alert } from "ui-fast";
+import { Grid, InputText, FnInputTextChange, LabelText, Alert } from "ui-fast";
 import { ${data.type}, ${data.type}Feedback, ${data.type}Validate } from "../${data.type}Model";
 import { toString } from "../../Convert";
 
@@ -31,7 +31,7 @@ export interface ${data.type}FormProps {
   value?: ${data.type},
   feedback?: ${data.type}Feedback,
   validate?: ${data.type}Validate,
-  onValue?: InputTextChange
+  onValue?: FnInputTextChange
 }
 
 export const ${data.type}Form: React.SFC<${data.type}FormProps> = (props) => {

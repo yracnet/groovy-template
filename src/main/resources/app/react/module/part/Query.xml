@@ -23,13 +23,13 @@
     %>
     <file name="${data.type}Query.tsx" layer="view" dir="${data.path}/part"><![CDATA[
 import React from "react";
-import { Grid, LabelText, FilterText, FilterTextChange } from "ui-fast";
+import { Grid, LabelText, FilterText, FnFilterTextChange } from "ui-fast";
 import { ${data.type}Filter } from "../${data.type}Model";
 import { toString } from "../../Convert";
 
 export interface ${data.type}QueryProps {
   value: ${data.type}Filter,
-  onChange: FilterTextChange
+  onChange: FnFilterTextChange
 }
 
 export const ${data.type}Query: React.SFC<${data.type}QueryProps> = (props) => {
