@@ -61,10 +61,10 @@ public interface ${serv.type} {
     <file name="${data.type}.java" layer="serv:data" dir="." pkg="${pkg}.data">
 <![CDATA[
 import java.io.Serializable;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlElement;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 public class ${data.type} implements Serializable {
@@ -91,15 +91,17 @@ import bo.central.filter.Config;
 import bo.central.filter.FilterElement;
 import bo.central.filter.FilterAbstract;
 import bo.central.filter.FilterValue;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 public class ${filter.type} extends FilterAbstract implements Serializable {
    private static final long serialVersionUID = 1L;
 <% attr.each{  %>
+   @XmlElement
    @FilterElement
    private FilterValue<${it.type}> ${it.var};
 <% } %>

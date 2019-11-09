@@ -12,8 +12,8 @@ package com.github.yracnet.generator;
 public class GenerateRun {
 
     public static void main(String[] args) {
-        String model = "/work/dev/bcb-01/R03/mrp/mrp-modelo/src/main/script/modelo.jpa";
-        String output = "/work/dev/bcb-01/R03/generate";
+        String model = "/work/dev/bcb-01/r4/019-back/mrp-modelo/src/main/script/modelo.jpa";
+        String output = "/work/dev/bcb-01/r4/generate";
         Generate gen = new Generate(model, output);
         gen.setGroupId("bo.gob.bcb.grh.mrp");
         gen.setArtifactId("mrp");
