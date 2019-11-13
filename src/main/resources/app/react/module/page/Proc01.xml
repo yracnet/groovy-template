@@ -52,9 +52,11 @@ class ${proc01.type}Local extends React.PureComponent<${proc01.type}Props, ${pro
         this.${data.var}Remove = this.${data.var}Remove.bind(this);
         this.setValues = this.setValues.bind(this);
         this.eventListener = this.eventListener.bind(this);
-        ${data.var}Filter({}, (data) => {
-            this.setValues(data);
-        });
+        if(!props.hide){
+            ${data.var}Filter({}, (data) => {
+                this.setValues(data);
+            });
+        }
     }
 
     ${data.var}Append(index: number) {
@@ -116,7 +118,10 @@ class ${proc01.type}Local extends React.PureComponent<${proc01.type}Props, ${pro
             )
         }
         return (
-            <Panel icon="pencil" variant="warning" width="90">
+            <Panel icon="pencil"
+                variant="primary"
+                col={8}
+                align="center">
                 <title>Correos Electronicos</title>
                 <Increase values={values}
                     onContent={${data.var}Form}

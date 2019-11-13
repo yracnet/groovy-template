@@ -107,7 +107,10 @@ class ${create.type}Local extends React.PureComponent<${create.type}Props, ${cre
         let { ${data.var}, feedback } = this.state;
         let { createClick, cancelClick, refuseFeedback, onValue, validate } = this;
         return (
-            <Panel icon="pencil" variant="warning" width="50">
+            <Panel icon="pencil"
+                variant="warning"
+                col={8}
+                align="center">
                 <title>Crear Nuevo ${data.type}</title>
                 <${data.type}Form 
                     value={${data.var}}

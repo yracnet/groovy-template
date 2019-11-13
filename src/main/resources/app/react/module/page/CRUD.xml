@@ -27,8 +27,7 @@
     %>
     <file name="${crud.type}.tsx" layer="view" dir="${data.path}/page"><![CDATA[
 import React from "react";
-import { Panel, Action, Button } from "ui-fast";
-import { InputTextValue, InputTextFactory } from "ui-fast";
+import { Panel, Action, Button, ObjectInputTextValidate, InputTextValue, InputTextFactory } from "ui-fast";
 
 import { ${data.type}, ${data.type}Feedback, ${data.type}Validate } from "../${data.type}Model";
 import { ${data.var}Create, ${data.var}Remove, ${data.var}Update } from "../${data.type}Serv";
@@ -60,7 +59,7 @@ export interface ${crud.type}Props {
 
 export class ${crud.type} extends React.PureComponent<${crud.type}Props, ${crud.type}State> {
 
-    private validate: ${data.type}Validate = {<% attr.each{  %>
+    private validate: ${data.type}Validate & ObjectInputTextValidate = {<% attr.each{  %>
         ${it.var}: [isRequired],<% } %>
     }
 

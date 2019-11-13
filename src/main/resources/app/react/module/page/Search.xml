@@ -75,7 +75,11 @@ class ${search.type}Local extends React.Component<${search.type}Props, ${search.
         let config = Object.assign({}, filter.config);
         let disabled = !select;
         return (
-            <Panel mode="modal" width="80" variant="primary">
+            <Panel icon="pencil"
+                variant="primary"
+                mode="modal"
+                col={8}
+                align="center">
                 <header>Buscar ${data.type}</header>
                 <${data.type}Query value={filter}
                     onChange={onFilter} />

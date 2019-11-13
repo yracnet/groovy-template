@@ -111,7 +111,10 @@ class ${update.type}Local extends React.PureComponent<${update.type}Props, ${upd
         let { ${data.var}, feedback } = this.state;
         let { updateClick, cancelClick, refuseFeedback, onValue, validate } = this;
         return (
-            <Panel icon="pencil" variant="warning" width="50">
+            <Panel icon="pencil"
+                variant="warning"
+                col={8}
+                align="center">
                 <title>Modificar ${data.type} #{${data.var} ? ${data.var}.id : "?"}</title>
                 <${data.type}Form 
                     value={${data.var}}

@@ -77,7 +77,8 @@ class ${remove.type}Local extends React.PureComponent<${remove.type}Props, ${rem
         return (
             <Panel icon="pencil"
                 variant="warning"
-                width="50">
+                col={8}
+                align="center">
                 <title>Eliminacion ${data.type} #{${data.var} ? ${data.var}.id : "?"}</title>
                 <${data.type}View value={${data.var}} />
                 <footer>
