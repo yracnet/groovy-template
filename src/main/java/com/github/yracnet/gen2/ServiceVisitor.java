@@ -79,7 +79,7 @@ public class ServiceVisitor extends CommonVisitor {
         pathExp.ifPresent(it -> {
             SingleMemberAnnotationExpr s = (SingleMemberAnnotationExpr) it;
             rootPath = s.getMemberValue().asStringLiteralExpr().getValue();
-            out.append("// @Root(\"").append(rootPath).append("\")");
+            //out.append("// @Root(\"").append(rootPath).append("\")");
             appendLN();
         });
         return super.visit(n, arg);
@@ -98,10 +98,10 @@ public class ServiceVisitor extends CommonVisitor {
             SingleMemberAnnotationExpr s = (SingleMemberAnnotationExpr) it;
             String subpath = s.getMemberValue().asStringLiteralExpr().getValue();
             appendLN();
-            n.getAnnotations().forEach(it1 -> {
-                append("// ").append(it1.toString());
-                appendLN();
-            });
+            //append("//");
+            //n.getAnnotations().forEach(it1 -> {
+            //    append(" ").append(it1.toString());
+            //});
             append("// ").append(n.getDeclarationAsString());
             appendLN();
             if (subpath.equals("/")) {

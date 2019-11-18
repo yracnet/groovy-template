@@ -11,6 +11,7 @@
     def attr   = []
     attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
     attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.version.collect{fn.deduceAttrName(it)})
     //attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
     //attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
     //attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})

@@ -55,19 +55,19 @@ public class ${local.type} {
         return FilterBuilder.create(${clazz.type}.class, filter).executeStream(em);
     }
 
-    public ResultSet<${clazz.type}> filter${data.type}(Filter filter) {
+    public ResultSet<${clazz.type}> ${data.var}Filter(Filter filter) {
         ResultSet<${clazz.type}> result = new ResultSet();
         List<${clazz.type}> list = FilterBuilder.create(${clazz.type}.class, filter).executeQuery(em);
         result.setValue(list);
         return result;
     }
 
-    public ResultObject<${clazz.type}> search${data.type}(Long id) {
+    public ResultObject<${clazz.type}> ${data.var}Search(Long id) {
         ${clazz.type} ${data.var} = em.find(${clazz.type}.class, id);
         return ResultFactory.createResultObject(${data.var}, ${data.var} == null);
     }
 
-    public ResultObject<${clazz.type}> create${data.type}(${clazz.type} ${data.var}) {
+    public ResultObject<${clazz.type}> ${data.var}Create(${clazz.type} ${data.var}) {
         ResultObject result = new ResultObject();
         Summary summary = ${validate.type}.validateCreate${data.type}(${data.var});
         if (summary.hasReason()) {
@@ -80,25 +80,25 @@ public class ${local.type} {
         return result;
     }
 
-    public ResultObject<${clazz.type}> update${data.type}(${clazz.type} ${data.var}) {
+    public ResultObject<${clazz.type}> ${data.var}Update(${clazz.type} ${data.var}) {
         ResultObject result = new ResultObject();
         Summary summary = ${validate.type}.validateUpdate${data.type}(${data.var});
         if (summary.hasReason()) {
             result.addError(summary.getMessage(), summary.getReason());
             return result;
         }
-        em.merge(${data.var});
+        ${data.var} = em.merge(${data.var});
         result.setValue(${data.var});
         result.addSuccess("El ${data.text} fue actualizado correctamente", "Puede proceder a realizar mas operaciones");
         return result;
     }
 
-    public ResultObject<${clazz.type}> remove${data.type}(Long id) {
+    public ResultObject<${clazz.type}> ${data.var}Remove(Long id) {
         ${clazz.type} ${data.var} = em.find(${clazz.type}.class, id);
-        return remove${data.type}(${data.var});
+        return ${data.var}Remove(${data.var});
     }
 
-    public ResultObject<${clazz.type}> remove${data.type}(${clazz.type} ${data.var}) {
+    public ResultObject<${clazz.type}> ${data.var}Remove(${clazz.type} ${data.var}) {
         ResultObject result = new ResultObject();
         Summary summary = ${validate.type}.validateRemove${data.type}(${data.var});
         if (summary.hasReason()) {

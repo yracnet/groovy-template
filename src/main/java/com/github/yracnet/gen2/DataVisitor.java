@@ -36,6 +36,7 @@ public class DataVisitor extends CommonVisitor {
                 .forEach(it3 -> {
                     TSEntry c = createData(it3);
                     out.append(c.getContent());
+                    System.out.println("--->"+c.getContent());
                 });
         result.setContent(out.toString());
         return result;
@@ -63,6 +64,10 @@ public class DataVisitor extends CommonVisitor {
         try {
             if (it.isFilter()) {
                 FilterVisitor fv = new FilterVisitor(entry, out);
+                fv.visit(it.getCunit(), null);
+                out.append("\n");
+            } else if (it.isParam()) {
+                ParamVisitor fv = new ParamVisitor(entry, out);
                 fv.visit(it.getCunit(), null);
                 out.append("\n");
             } else {

@@ -95,6 +95,10 @@ public class SourceEntry {
     }
 
     public boolean isFilter() {
-        return className.endsWith("Filter");
+        return className.trim().endsWith("Filter");
+    }
+
+    public boolean isParam() {
+        return className.trim().endsWith("Param");
     }
 }
