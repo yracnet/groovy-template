@@ -25,6 +25,7 @@
 import bo.central.Filter;
 import bo.central.filter.FilterBuilder;
 import bo.central.result.ResultSet;
+import bo.central.result.ResultVoid;
 import bo.central.result.ResultObject;
 import bo.central.result.ResultFactory;
 import bo.central.validate.Summary;
@@ -51,62 +52,61 @@ public class ${local.type} {
         this.em = em;
     }
 
-    public Stream<${clazz.type}> filter${data.type}Stream(Filter filter) {
+    public Stream<${clazz.type}> ${data.var}Stream(Filter filter) {
         return FilterBuilder.create(${clazz.type}.class, filter).executeStream(em);
     }
 
-    public ResultSet<${clazz.type}> ${data.var}Filter(Filter filter) {
+    public ResultSet<${clazz.type}> ${data.var}Query(Filter filter) {
         ResultSet<${clazz.type}> result = new ResultSet();
         List<${clazz.type}> list = FilterBuilder.create(${clazz.type}.class, filter).executeQuery(em);
         result.setValue(list);
         return result;
     }
 
-    public ResultObject<${clazz.type}> ${data.var}Search(Long id) {
+    public ResultObject<${clazz.type}> ${data.var}Find(Long id) {
         ${clazz.type} ${data.var} = em.find(${clazz.type}.class, id);
         return ResultFactory.createResultObject(${data.var}, ${data.var} == null);
     }
 
-    public ResultObject<${clazz.type}> ${data.var}Create(${clazz.type} ${data.var}) {
+    public ResultObject<${clazz.type}> ${data.var}Persist(${clazz.type} ${clazz.var}) {
         ResultObject result = new ResultObject();
-        Summary summary = ${validate.type}.validateCreate${data.type}(${data.var});
+        Summary summary = ${validate.type}.validateCreate${data.type}(${clazz.var});
         if (summary.hasReason()) {
             result.addError(summary.getMessage(), summary.getReason());
             return result;
         }
-        em.persist(${data.var});
-        result.setValue(${data.var});
+        em.persist(${clazz.var});
+        result.setValue(${clazz.var});
         result.addSuccess("El ${data.text} fue registrado correctamente", "Puede proceder a realizar mas operaciones");
         return result;
     }
 
-    public ResultObject<${clazz.type}> ${data.var}Update(${clazz.type} ${data.var}) {
+    public ResultObject<${clazz.type}> ${data.var}Merge(${clazz.type} ${clazz.var}) {
         ResultObject result = new ResultObject();
-        Summary summary = ${validate.type}.validateUpdate${data.type}(${data.var});
+        Summary summary = ${validate.type}.validateUpdate${data.type}(${clazz.var});
         if (summary.hasReason()) {
             result.addError(summary.getMessage(), summary.getReason());
             return result;
         }
-        ${data.var} = em.merge(${data.var});
-        result.setValue(${data.var});
+        ${clazz.var} = em.merge(${clazz.var});
+        result.setValue(${clazz.var});
         result.addSuccess("El ${data.text} fue actualizado correctamente", "Puede proceder a realizar mas operaciones");
         return result;
     }
 
-    public ResultObject<${clazz.type}> ${data.var}Remove(Long id) {
+    public ResultVoid ${data.var}Remove(Long id) {
         ${clazz.type} ${data.var} = em.find(${clazz.type}.class, id);
         return ${data.var}Remove(${data.var});
     }
 
-    public ResultObject<${clazz.type}> ${data.var}Remove(${clazz.type} ${data.var}) {
-        ResultObject result = new ResultObject();
-        Summary summary = ${validate.type}.validateRemove${data.type}(${data.var});
+    public ResultVoid ${data.var}Remove(${clazz.type} ${clazz.var}) {
+        ResultVoid result = new ResultVoid();
+        Summary summary = ${validate.type}.validateRemove${data.type}(${clazz.var});
         if (summary.hasReason()) {
             result.addError(summary.getMessage(), summary.getReason());
             return result;
         }
-        em.remove(${data.var});
-        result.setValue(${data.var});
+        em.remove(${clazz.var});
         result.addSuccess("El ${data.text} fue eliminado correctamente", "Puede proceder a realizar mas operaciones");
         return result;
     }

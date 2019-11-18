@@ -21,10 +21,9 @@ public class GenerateRun {
         gen.setNamespace("psv");
         gen.setContextPath("mrp-portal-rest-1.0.0");
         gen.setBasePkg("bo.gob.bcb.grh.mrp");
-        //gen.addTemplateDirectory("app.javaee");
-        gen.addTemplate("app.javaee.serv");
+        gen.addTemplateDirectory("app.javaee");
         //gen.addTemplateDirectory("app.react");
-        gen.addTemplateDirectory("app.react.module");
+        //gen.addTemplateDirectory("app.react.module");
         //gen.addTemplateDirectory("app.react.module.page");
         //gen.addTemplateDirectory("app.react.module.part");
         gen.removePrefix("Mrp");

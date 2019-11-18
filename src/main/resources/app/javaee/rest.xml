@@ -25,8 +25,8 @@
 import bo.central.Result;
 import bo.central.result.Message;
 import bo.central.result.ResultSet;
-import bo.central.result.ResultObject;
 import bo.central.result.ResultVoid;
+import bo.central.result.ResultObject;
 import ${basePkg}.modelo.${clazz.type};
 import ${pkg}.data.${data.type};
 import ${pkg}.data.${filter.type};
@@ -53,36 +53,35 @@ public class ${rest.type} implements ${serv.type} {
 
     @Override
     public ResultSet<${data.type}> ${data.var}Filtrar(${filter.type} filter) {
-        ResultSet<${clazz.type}> result = ${local.var}.${data.type}Filter(filter);
+        ResultSet<${clazz.type}> result = ${local.var}.${data.var}Query(filter);
         return result.mapper(${mapper.type}::mapperTo${data.type});
     }
 
     @Override
     public ResultObject<${data.type}> ${data.var}Recargar(${data.type} ${data.var}) {
         Long id = ${data.var} == null? null : ${data.var}.getId();
-        ResultObject<${clazz.type}> result = ${local.var}.${data.var}Search(id);
+        ResultObject<${clazz.type}> result = ${local.var}.${data.var}Find(id);
         return result.mapper(${mapper.type}::mapperTo${data.type});
     }
 
     @Override
     public ResultObject<${data.type}> ${data.var}Registrar(${data.type} ${data.var}) {
         ${clazz.type} ${clazz.var} = ${mapper.type}.mapperTo${clazz.type}(${data.var});
-        ResultObject<${clazz.type}> result = ${local.var}.${data.var}Create(${clazz.var});
+        ResultObject<${clazz.type}> result = ${local.var}.${data.var}Persist(${clazz.var});
         return result.mapper(${mapper.type}::mapperTo${data.type});
     }
 
     @Override
     public ResultObject<${data.type}> ${data.var}Actualizar(${data.type} ${data.var}) {
         ${clazz.type} ${clazz.var} = ${mapper.type}.mapperTo${clazz.type}(${data.var});
-        ResultObject<${clazz.type}> result = ${local.var}.${data.var}Update(${clazz.var});
+        ResultObject<${clazz.type}> result = ${local.var}.${data.var}Merge(${clazz.var});
         return result.mapper(${mapper.type}::mapperTo${data.type});
     }
 
     @Override
-    public ResultObject<${data.type}> ${data.var}Eliminar(${data.type} ${data.var}) {
+    public ResultVoid ${data.var}Eliminar(${data.type} ${data.var}) {
         Long id = ${data.var} == null? null : ${data.var}.getId();
-        ResultObject<${clazz.type}> result = ${local.var}.${data.var}Remove(id);
-        return result.mapper(${mapper.type}::mapperTo${data.type});
+        return ${local.var}.${data.var}Remove(id);
     }
 }
 ]]></file>
