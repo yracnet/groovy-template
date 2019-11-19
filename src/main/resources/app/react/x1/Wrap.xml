@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    entityRef.each {
+    id, entity ->
+    def data   = fn.deduceName(entity.clazz)
+    def filter = fn.deduceName(entity.clazz, 'Filter')
+    def message = fn.deduceName(entity.clazz, 'Message')
+    def crud    = fn.deduceName(entity.clazz, 'CRUD')
+    def inbox   = fn.deduceName(entity.clazz, 'Inbox')
+    def create  = fn.deduceName(entity.clazz, 'Create')
+    def update  = fn.deduceName(entity.clazz, 'Update')
+    def remove  = fn.deduceName(entity.clazz, 'Remove')
+    def detail  = fn.deduceName(entity.clazz, 'Detail')
+    def search  = fn.deduceName(entity.clazz, 'Search')
+    def proc01 = fn.deduceName(entity.clazz, 'Wrap')
+    def serv   = fn.deduceName(entity.clazz, 'Serv')
+    def rest   = fn.deduceName(entity.clazz, 'Rest')
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    %>
+    <file name="${proc01.type}.tsx" layer="view" dir="${data.dash}"><![CDATA[
+import React from "react";
+import Help, { Increase } from "ui-fast";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+
+import { ${crud.type}, ${crud.type}Event } from "./${crud.type}";
+import { ${data.type} } from "../Form3360Model";
+import { ${data.var}Filtrar } from "../Form3360Serv";
+
+export interface ${proc01.type}Param{
+    idPostulacion: string,
+}
+
+export interface ${proc01.type}Props extends RouteComponentProps<${proc01.type}Param> {
+    hide?: boolean,
+}
+
+interface ${proc01.type}State {
+    idPostulacion: string,
+    values: Array<${data.type}>,
+}
+
+class ${proc01.type}Local extends React.PureComponent<${proc01.type}Props, ${proc01.type}State> {
+
+    constructor(props: ${proc01.type}Props) {
+        super(props);
+        this.state = {
+            idPostulacion: this.props.match.params.idPostulacion,
+            values: []
+        };
+        this.${data.var}Values = this.${data.var}Values.bind(this);
+        this.${data.var}Append = this.${data.var}Append.bind(this);
+        this.${data.var}Refresh = this.${data.var}Refresh.bind(this);
+        this.${data.var}Listener = this.${data.var}Listener.bind(this);
+        if(!props.hide){
+            this.${data.var}Refresh();
+        }
+    }
+
+    ${data.var}Append(index: number) {
+        let { values } = this.state;
+        values = Help.insertArray(values, index, {});
+        this.${data.var}Values(values);
+    }
+
+    ${data.var}Refresh() {
+        let { idPostulacion } = this.state;
+        ${data.var}Filtrar({ idPostulacion }, (values) => {
+            values = values.length == 0 ? [{}] : values;
+            this.${data.var}Values(values);
+        });
+    }
+
+    ${data.var}Listener(crudEvent: ${crud.type}Event) {
+        let { values } = this.state;
+        let ${data.var} = values[crudEvent.index];
+        if (${data.var} && crudEvent.event === "REMOVE") {
+            //this.experienciaBcbRefresh();
+            values = values.filter(it => it !== ${data.var});
+            this.${data.var}Values(values);
+        } else if (${data.var} && crudEvent.event !== "ERROR") {
+            values[crudEvent.index] = crudEvent.value;
+            this.${data.var}Values(values);
+        }
+    }
+
+    ${data.var}Values(values: ${data.type}[]) {
+        this.setState({ values: [] }, () => {
+            this.setState({ values: values }, () => {
+                //this.forceUpdate();
+            });
+        });
+    }
+
+    render(): React.ReactNode {
+        if (this.props.hide === true) {
+            return false;
+        }
+        let { idPostulacion, values } = this.state;
+        let { ${data.var}Append, ${data.var}Listener } = this;
+        let ${data.var}Form = (${data.var}: ${data.type}, index: number) => {
+            return (
+                <${crud.type}
+                    idPostulacion={idPostulacion}
+                    ${data.var}={${data.var}}
+                    index={index}
+                    allowUpdate={true}
+                    allowRemove={true}
+                    eventListener={${data.var}Listener}
+                />
+            )
+        }
+        return (
+            <Increase values={values}
+                onContent={${data.var}Form}
+                appendMode="row"
+                onAppend={${data.var}Append}
+                confirmRemove="Esta seguro de eliminar el registro"
+                minimum={1}
+                maximum={5}>
+            </Increase>
+        );
+    };
+}
+
+export const ${proc01.type} = withRouter(${proc01.type}Local);
+]]></file>
+    <% } %>
+</files>

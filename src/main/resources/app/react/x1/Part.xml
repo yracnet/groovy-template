@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    entityRef.each {
+    id, entity ->
+    def pkg    = fn.pkg(groupId, artifactId, module);  
+    def data   = fn.deduceName(entity.clazz)
+    def filter = fn.deduceName(entity.clazz, 'Filter')
+    def message = fn.deduceName(entity.clazz, 'Message')
+    def serv   = fn.deduceName(entity.clazz, 'Serv')
+    def rest   = fn.deduceName(entity.clazz, 'Rest')
+    def viewCtrl = fn.deduceName(entity.clazz, '-ctrl')
+    def viewPart = fn.deduceName(entity.clazz, '-part')
+    def viewServ = fn.deduceName(entity.clazz, '-serv')
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    //attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    //attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    //attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    %>
+    <file name="${data.type}Setting.tsx" layer="view" dir="${data.dash}"><![CDATA[
+import { isRequired } from "../../Validate";
+
+const options = {<% attr.each{  %>
+  ${it.var}: [
+    { value: '?', label: '?' },
+  ],<% } %>
+}
+const text = {<% attr.each{  %>
+  ${it.var}: "${it.text}",<% } %>
+}
+const help = {<% attr.each{  %>
+  ${it.var}: undefined,<% } %>
+}
+const validate = {<% attr.each{  %>
+    ${it.var}: [isRequired],<% } %>
+}
+const validateMode = {
+    NONE: {},
+}
+const setting = {
+  validate: validate,
+  validateMode: validateMode,
+  validateFor: function (name?: string) {
+    return validate;
+  },
+  options: options,
+  text: text,
+  help: help,
+}
+export default setting;
+]]></file>
+    <file name="${data.type}Part.tsx" layer="view" dir="${data.dash}"><![CDATA[
+import React from "react";
+import { Grid, Alert } from "ui-fast";
+import { LabelText, OutputText } from "ui-fast";
+import { InputText, FnInputTextChange } from "ui-fast";
+import { ${data.type}, ${data.type}Feedback, ${data.type}Validate } from "../Form3360Model";
+import setting from "./${data.type}Setting";
+
+export interface ${data.type}FormProps {
+  value?: ${data.type},
+  feedback?: ${data.type}Feedback,
+  validate?: ${data.type}Validate,
+  onValue?: FnInputTextChange
+}
+
+export const ${data.type}Form: React.SFC<${data.type}FormProps> = (props) => {
+  let { value, onValue, feedback, validate } = props;
+  let { text, help } = setting;
+  feedback = feedback || {};
+  validate = validate ? validate : {};
+  return (
+    value ?
+      <Grid
+        cols={[12]}
+        colsXl={[3, 9, 3, 3, 3]}
+        colsMd={[6, 12, 4, 4, 4]}>
+<% attr.each{  %>
+        <LabelText value={text.${it.var}} help={help.${it.var}}>
+          <InputText
+            type="text"
+            name="${it.var}"
+            value={value.${it.var}} 
+            onChange={onValue}
+            feedback={feedback.${it.var}}
+            onValidate={validate.${it.var}}
+            />
+        </LabelText>
+<% } %>
+      </Grid>
+      :
+      <Alert variant="danger"
+        message="Se requiere un objeto instanciado"
+        icon="warning" />
+  );
+}
+
+export interface ${data.type}ViewProps {
+  value?: ${data.type}
+}
+
+export const ${data.type}View: React.SFC<${data.type}ViewProps> = (props) => {
+  let { value } = props;
+  let { text } = setting;
+  return (
+    value ?
+      <Grid
+        cols={[12]}
+        colsXl={[3, 9, 3, 3, 3]}
+        colsMd={[6, 12, 4, 4, 4]}>
+<% attr.each{  %>
+        <LabelText value={text.${it.var}}>
+          <OutputText name="${it.var}"
+            value={value.${it.var}}/>
+        </LabelText>
+<% } %>
+      </Grid>
+      :
+      <Alert variant="danger"
+        message="Se requiere un objeto instanciado"
+        icon="warning" />
+  );
+}
+]]></file>
+    <% } %>
+</files>

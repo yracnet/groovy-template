@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    entityRef.each {
+    id, entity ->
+    def data   = fn.deduceName(entity.clazz)
+    def filter = fn.deduceName(entity.clazz, 'Filter')
+    def feedback = fn.deduceName(entity.clazz, 'Feedback')
+    def crud    = fn.deduceName(entity.clazz, 'CRUD')
+    def inbox   = fn.deduceName(entity.clazz, 'Inbox')
+    def create  = fn.deduceName(entity.clazz, 'Create')
+    def update  = fn.deduceName(entity.clazz, 'Update')
+    def remove  = fn.deduceName(entity.clazz, 'Remove')
+    def detail  = fn.deduceName(entity.clazz, 'Detail')
+    def search  = fn.deduceName(entity.clazz, 'Search')
+    def proc01 = fn.deduceName(entity.clazz, 'Proc01')
+    def serv   = fn.deduceName(entity.clazz, 'Serv')
+    def rest   = fn.deduceName(entity.clazz, 'Rest')
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    %>
+    <file name="${crud.type}.tsx" layer="view" dir="${data.dash}"><![CDATA[
+import React from "react";
+import { Panel, Action, Button, InputTextValue, InputTextFactory } from "ui-fast";
+
+import { ${data.type}, ${data.type}Feedback } from "../Form3360Model";
+import { ${data.var}Registrar, ${data.var}Actualizar, ${data.var}Eliminar } from "../Form3360Serv";
+import { ${data.type}Form, ${data.type}View } from "./${data.type}Part";
+import setting from "./${data.type}Setting";
+
+type EventType = "CREATE" | "UPDATE" | "REMOVE" | "ERROR";
+
+export interface ${crud.type}Event {
+    event: EventType;
+    index: number;
+    value: ${data.type};
+}
+
+interface ${crud.type}State {
+    mode: "NEW" | "EDIT" | "SAVE"
+    value: ${data.type},
+    backup: ${data.type},
+    feedback: ${data.type}Feedback,
+}
+
+export interface ${crud.type}Props {
+    index: number,
+    idPostulacion: number | string,
+    ${data.var}: ${data.type},
+    allowUpdate?: boolean,
+    allowRemove?: boolean,
+    eventListener?: (event: ${crud.type}Event) => void
+}
+
+export class ${crud.type} extends React.PureComponent<${crud.type}Props, ${crud.type}State> {
+
+    constructor(props: ${crud.type}Props) {
+        super(props);
+        let ${data.var} = props.${data.var};
+        this.state = {
+            feedback: {},
+            value: ${data.var},
+            backup: ${data.var},
+            mode: ${data.var}.id ? "SAVE" : "NEW"
+        };
+        this.onValue = this.onValue.bind(this);
+        this.editClick = this.editClick.bind(this);
+        this.createClick = this.createClick.bind(this);
+        this.updateClick = this.updateClick.bind(this);
+        this.removeClick = this.removeClick.bind(this);
+        this.cancelClick = this.cancelClick.bind(this);
+        this.refuseFeedback = this.refuseFeedback.bind(this);
+    }
+
+    onValue(inputValue: InputTextValue) {
+        let value: any = Object.assign({}, this.state.value);
+        let feedback: any = Object.assign({}, this.state.feedback);
+        value[inputValue.name] = inputValue.value;
+        feedback[inputValue.name] = InputTextFactory.createFeedback(inputValue);
+        this.setState({ value, feedback });
+    }
+
+    createClick() {
+        let { value, mode } = this.state;
+        if (mode === "NEW") {
+            value.idPostulacion = this.props.idPostulacion;
+            ${data.var}Registrar(value, (data) => {
+                mode = "SAVE";
+                value = data;
+                this.setState({ mode, value });
+                this.eventListener("CREATE", value);
+            }, () => {
+                this.eventListener("ERROR", value);
+            });
+        }
+    }
+
+    updateClick() {
+        let { value, mode } = this.state;
+        if (mode === "EDIT") {
+            value.idPostulacion = this.props.idPostulacion;
+            ${data.var}Actualizar(value, (data) => {
+                mode = "SAVE";
+                value = data;
+                this.setState({ mode, value });
+                this.eventListener("UPDATE", value);
+            }, () => {
+                this.eventListener("ERROR", value);
+            });
+        }
+    }
+
+    removeClick() {
+        let { value, mode } = this.state;
+        if (mode !== "NEW") {
+            value.idPostulacion = this.props.idPostulacion;
+            ${data.var}Eliminar(value, () => {
+                this.eventListener("REMOVE", value);
+            }, () => {
+                this.eventListener("ERROR", value);
+            });
+        } else {
+            this.eventListener("REMOVE", value);
+        }
+    }
+
+    eventListener(event: EventType, value: ${data.type}) {
+        let { eventListener, index } = this.props;
+        if (eventListener) {
+            eventListener({ event, value, index });
+        }
+    }
+
+    editClick() {
+        let { value } = this.state;
+        this.setState({ backup: value, mode: "EDIT" });
+    }
+
+    cancelClick() {
+        let { backup } = this.state;
+        this.setState({ value: backup, mode: "SAVE" });
+    }
+
+    refuseFeedback(): string {
+        let { value, feedback } = this.state;
+        if (!value) {
+            return "El ${data.text} no es valido!";
+        }
+        let validate = setting.validateFor('?')
+        let other: any = value || {};
+        feedback = InputTextFactory.createFeedbackObjectFromObject(other, validate);
+        let errors = Object.keys(feedback).length;
+        if (errors > 0) {
+            this.setState({ feedback }, () => {
+                this.forceUpdate();
+            });
+            return "El formulario contiene uno o más errores. (" + errors + ")";
+        }
+        return "";
+    }
+
+    render(): React.ReactNode {
+        let { mode, value, feedback } = this.state;
+        let { editClick, cancelClick, createClick, updateClick, removeClick, onValue, refuseFeedback } = this;
+        let { allowRemove, allowUpdate } = this.props;
+        let validate = setting.validateFor('?')
+        return (
+            mode === "SAVE" ?
+                <Panel>
+                    <title>${data.text}</title>
+                    <${data.type}View value={value} />
+                    <Action>
+                        <Button name="apply"
+                            text="Eliminar"
+                            hide={!allowRemove}
+                            onClick={removeClick}
+                            icon="trash"
+                            variant="danger"
+                            confirm="Esta seguro de eliminar el registro?" />
+                        <Button name="apply"
+                            text="Editar"
+                            hide={!allowUpdate}
+                            onClick={editClick}
+                            icon="pencil"
+                            variant="primary" />
+                    </Action>
+                </Panel>
+                :
+                mode === "NEW" ?
+                    <Panel>
+                        <title>Registrar ${data.text}</title>
+                        <${data.type}Form 
+                            value={value}
+                            onValue={onValue}
+                            feedback={feedback}
+                            validate={validate} />
+                        <Action>
+                            <Button name="apply"
+                                text="Cancelar"
+                                onClick={removeClick}
+                                icon="arrow-circle-left"
+                                variant="warning" />
+                            <Button name="apply"
+                                text="Guardar"
+                                hide={!value}
+                                onClick={createClick}
+                                icon="check-circle"
+                                variant="primary"
+                                refuse={refuseFeedback}
+                                confirm="Esta seguro de crear el registro?" />
+                        </Action>
+                    </Panel>
+                    :
+                    <Panel>
+                        <title>Editar ${data.text}</title>
+                        <${data.type}Form 
+                            value={value}
+                            onValue={onValue}
+                            feedback={feedback}
+                            validate={validate} />
+                        <Action>
+                            <Button name="apply"
+                                text="Cancelar"
+                                onClick={cancelClick}
+                                icon="arrow-circle-left"
+                                variant="warning" />
+                            <Button name="apply"
+                                text="Actualizar"
+                                hide={!value}
+                                onClick={updateClick}
+                                icon="check-circle"
+                                variant="primary"
+                                refuse={refuseFeedback}
+                                confirm="Esta seguro de actualizar el registro?" />
+                        </Action>
+                    </Panel>
+        );
+    };
+}
+]]></file>
+    <% } %>
+</files>
