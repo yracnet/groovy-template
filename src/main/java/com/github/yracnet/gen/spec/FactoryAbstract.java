@@ -162,7 +162,7 @@ public class FactoryAbstract implements Factory{
         return toLiteral(name);
     }
 
-    public String toLiteral(String name) {
+    public static String toLiteral(String name) {
         return name.replaceAll("([a-z0-9]+)([A-Z0-9]+)", "$1 $2");
     }
 
