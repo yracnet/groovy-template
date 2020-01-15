@@ -66,14 +66,14 @@ public class ${rest.type} implements ${serv.type} {
     }
 
     @Override
-    public ResultObject<${data.type}> ${data.var}Registrar(${data.type} ${data.var}) {
+    public ResultVoid ${data.var}Registrar(${data.type} ${data.var}) {
         ${clazz.type} ${clazz.var} = ${mapper.type}.mapperTo${clazz.type}(${data.var});
         ResultObject<${clazz.type}> result = ${local.var}.${data.var}Persist(${clazz.var});
         return result.mapper(${mapper.type}::mapperTo${data.type});
     }
 
     @Override
-    public ResultObject<${data.type}> ${data.var}Actualizar(${data.type} ${data.var}) {
+    public ResultVoid ${data.var}Actualizar(${data.type} ${data.var}) {
         ${clazz.type} ${clazz.var} = ${mapper.type}.mapperTo${clazz.type}(${data.var});
         ResultObject<${clazz.type}> result = ${local.var}.${data.var}Merge(${clazz.var});
         return result.mapper(${mapper.type}::mapperTo${data.type});

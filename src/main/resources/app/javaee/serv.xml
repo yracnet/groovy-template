@@ -49,11 +49,11 @@ public interface ${serv.type} {
 
   @POST
   @Path("registrar")
-  ResultObject<${data.type}> registrar${data.type}(${data.type} ${data.var});
+  ResultVoid registrar${data.type}(${data.type} ${data.var});
 
   @POST
   @Path("actualizar")
-  ResultObject<${data.type}> actualizar${data.type}(${data.type} ${data.var});
+  ResultVoid actualizar${data.type}(${data.type} ${data.var});
 
   @POST
   @Path("eliminar")

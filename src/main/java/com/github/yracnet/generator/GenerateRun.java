@@ -12,8 +12,8 @@ package com.github.yracnet.generator;
 public class GenerateRun {
 
     public static void main(String[] args) {
-        String model = "/work/dev/bcb-01/R03/mrp/mrp-modelo/src/main/script/modelo.jpa";
-        String output = "/work/dev/bcb-01/R03/generate";
+        String model = "/work/dev/bcb-01/R04/mrp/mrp-modelo/src/main/script/modelo.jpa";
+        String output = "/work/dev/bcb-01/R04/generate";
         Generate gen = new Generate(model, output);
         gen.setGroupId("bo.gob.bcb.grh.mrp");
         gen.setArtifactId("mrp");
@@ -23,9 +23,9 @@ public class GenerateRun {
         gen.setBasePkg("bo.gob.bcb.grh.mrp");
         gen.addTemplateDirectory("app.javaee");
         gen.addTemplateDirectory("app.react.x1");
-        gen.addTemplateDirectory("app.react.module");
-        gen.addTemplateDirectory("app.react.module.page");
-        gen.addTemplateDirectory("app.react.module.part");
+        //gen.addTemplateDirectory("app.react.module");
+        //gen.addTemplateDirectory("app.react.module.page");
+        //gen.addTemplateDirectory("app.react.module.part");
         gen.removePrefix("Mrp");
         gen.generate();
     }

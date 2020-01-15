@@ -24,9 +24,9 @@ public class Run01 {
 
     public static void main(String[] args) throws Exception {
         
-        String out = "/work/dev/bcb-01/R03/generate/mrp-portal/mrp-portal-view/src/main";
+        String out = "/work/dev/bcb-01/R04/generate/mrp-portal/mrp-portal-view/src/main";
         File output = new File(out);
-        String src = "/work/dev/bcb-01/R03/mrp/mrp-portal/mrp-portal-serv/src/main/java";
+        String src = "/work/dev/bcb-01/R04/mrp/mrp-portal/mrp-portal-serv/src/main/java";
         Path root = Paths.get(src);
 
         List<SourceEntry> files = Files.find(root, 999, (p, f) -> f.isRegularFile() && p.getFileName().toString().endsWith(".java"))
