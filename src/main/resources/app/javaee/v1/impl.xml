@@ -12,7 +12,7 @@
     def impl   = fn.deduceName(entity.clazz, 'Impl')
     def func   = fn.deduceName(entity.clazz, 'Func')
     def mapper = fn.deduceName(entity.clazz, 'Mapper')
-    def local  = fn.deduceName(entity.clazz, 'Local')
+    def logic  = fn.deduceName(entity.clazz, 'Logic')
     def attr   = []
     attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
     attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
@@ -30,7 +30,7 @@ import ${pkg}.mapper.${mapper.type};
 import bo.central.result.ResultObject;
 import bo.central.result.ResultSet;
 import javax.ejb.EJB;
-import javax.ejb.Local;
+import javax.ejb.Logic;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -38,50 +38,50 @@ import javax.persistence.EntityManager;
 import javax.interceptor.Interceptors;
 
 @Stateless
-@Local(${serv.type}.class)
+@Logic(${serv.type}.class)
 @Interceptors ({ImplInterceptor.class})
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ${impl.type} implements ${serv.type} {
 
   @EJB
-  private ${local.type} local;
+  private ${logic.type} logic;
   
   public ${impl.type}(){
   }
   
   public ${impl.type}(EntityManager em){
-    local = new ${local.type}(em);
+    logic = new ${logic.type}(em);
   }
 
   @Override
   public ResultSet<${data.type}> filtrar${data.type}(${filter.type} filter){
-        ResultSet<${clazz.type}> result = local.filter${data.type}(filter);
+        ResultSet<${clazz.type}> result = logic.filter${data.type}(filter);
         return result.mapper(${mapper.type}::mapperTo${data.type});
   }
 
   @Override
   public ResultObject<${data.type}> recargar${data.type}(${data.type} ${data.var}) {
         Long id = ${data.var} == null? null : ${data.var}.getId();
-        ResultObject<${clazz.type}> result = local.search${data.type}(id);
+        ResultObject<${clazz.type}> result = logic.search${data.type}(id);
         return result.mapper(${mapper.type}::mapperTo${data.type});
   }
   
   @Override
   public ResultObject<${data.type}> registrar${data.type}(${data.type} ${data.var}){
         ${clazz.type} ${clazz.var} = ${mapper.type}.mapperTo${clazz.type}(${data.var});
-        ResultObject<${clazz.type}> result = local.create${data.type}(${clazz.var});
+        ResultObject<${clazz.type}> result = logic.create${data.type}(${clazz.var});
         return result.mapper(${mapper.type}::mapperTo${data.type});
   }
   @Override
   public ResultObject<${data.type}> actualizar${data.type}(${data.type} ${data.var}){
         ${clazz.type} ${clazz.var} = ${mapper.type}.mapperTo${clazz.type}(${data.var});
-        ResultObject<${clazz.type}> result = local.update${data.type}(${clazz.var});
+        ResultObject<${clazz.type}> result = logic.update${data.type}(${clazz.var});
         return result.mapper(${mapper.type}::mapperTo${data.type});
   }
   @Override
   public ResultObject<${data.type}> eliminar${data.type}(${data.type} ${data.var}){
         Long id = ${data.var} == null? null : ${data.var}.getId();
-        ResultObject<${clazz.type}> result = local.remove${data.type}(id);
+        ResultObject<${clazz.type}> result = logic.remove${data.type}(id);
         return result.mapper(${mapper.type}::mapperTo${data.type});
   }
 }

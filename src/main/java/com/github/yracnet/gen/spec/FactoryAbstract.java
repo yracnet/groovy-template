@@ -16,14 +16,17 @@ import java.util.Map;
  */
 public class FactoryAbstract implements Factory{
 
+    @Override
     public Map deduce(String name) {
         return deduce(name, "");
     }
 
+    @Override
     public Map deduceName(String name) {
         return deduceName(name, "");
     }
 
+    @Override
     public Map deduce(String name, String classifier) {
         Map map = new HashMap();
         String nameSufix = name + classifier;
@@ -45,17 +48,25 @@ public class FactoryAbstract implements Factory{
         return map;
     }
 
+    @Override
     public Map deduceName(String name, String classifier) {
         name = toName(name);
         return deduce(name, classifier);
     }
 
+    @Override
+    public Map deduceName2(String name, String classifier) {
+        return deduce(name, classifier);
+    }
+
+    @Override
     public Map deduceName(String name, String classifier, String ns) {
         name = toName(name);
         name = ns + name;
         return deduce(name, classifier);
     }
 
+    @Override
     public Map deduceAttrName(Map attr) {
         String name = (String) attr.get("name");
         Map map = deduceName(name);
@@ -71,6 +82,7 @@ public class FactoryAbstract implements Factory{
         return map;
     }
 
+    @Override
     public Map deduceRefName(Map attr, Map ref) {
         String connectedEntityId = (String) attr.get("connectedEntityId");
         ref = (Map) ref.get(connectedEntityId);
@@ -90,6 +102,7 @@ public class FactoryAbstract implements Factory{
 //======================REACT==============================
 
 
+    @Override
     public Map deduceReact(String name, String classifier) {
         Map map = new HashMap();
         String nameSufix = name + classifier;
@@ -99,7 +112,7 @@ public class FactoryAbstract implements Factory{
         map.put("type", nameSufix);
         map.put("props", nameSufix + "Props");
         map.put("state", nameSufix + "State");
-        map.put("local", nameSufix + "Local");
+        map.put("logic", nameSufix + "Logic");
         map.put("filter", nameSufix + "Filter");
         map.put("query", nameSufix + "Query");
         map.put("table", nameSufix + "Table");
@@ -109,11 +122,13 @@ public class FactoryAbstract implements Factory{
         return map;
     }
 
+    @Override
     public Map deduceNameReact(String name, String classifier) {
         name = toName(name);
         return deduceReact(name, classifier);
     }
 
+    @Override
     public Map deduceNameReact(String name) {
         name = toName(name);
         return deduceReact(name, "");

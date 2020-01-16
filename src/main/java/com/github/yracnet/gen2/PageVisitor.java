@@ -61,13 +61,13 @@ public class PageVisitor extends CommonVisitor {
         out.append("   hide?: boolean\n");
         out.append("}\n");
         appendLN();
-        out.append("class ").append(name).append("Local extends React.PureComponent<").append(name).append("Props,").append(name).append("State> {\n");
+        out.append("class ").append(name).append("Logic extends React.PureComponent<").append(name).append("Props,").append(name).append("State> {\n");
         out.append("   render(): React.ReactNode {\n");
         out.append("      return <h1>").append(name).append("Page</h1>\n");
         out.append("   }\n");
         out.append("}\n");
         appendLN();
-        out.append("export const ").append(name).append("Page = withRouter(").append(name).append("Local);");
+        out.append("export const ").append(name).append("Page = withRouter(").append(name).append("Logic);");
         return super.visit(n, arg);
     }
 

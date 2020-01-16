@@ -27,6 +27,8 @@ public interface Factory {
 
     public Map deduceName(String name, String classifier);
 
+    public Map deduceName2(String name, String classifier);
+
     public Map deduceName(String name, String classifier, String ns);
 
     public Map deduceAttrName(Map attr);

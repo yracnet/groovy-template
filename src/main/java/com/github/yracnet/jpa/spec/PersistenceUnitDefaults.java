@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  *         These defaults are applied to the persistence unit as a whole 
- *         unless they are overridden by local annotation or XML 
+ *         unless they are overridden by logic annotation or XML 
  *         element settings. 
  *         
  *         schema - Used as the schema for all tables, secondary tables, join

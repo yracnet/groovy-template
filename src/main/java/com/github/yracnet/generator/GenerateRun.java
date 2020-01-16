@@ -12,21 +12,21 @@ package com.github.yracnet.generator;
 public class GenerateRun {
 
     public static void main(String[] args) {
-        String model = "/work/dev/bcb-01/R04/mrp/mrp-modelo/src/main/script/modelo.jpa";
-        String output = "/work/dev/bcb-01/R04/generate";
+        String model = "/work/dev/bcb-01/R05/param/param-model/src/main/script/model.jpa";
+        String output = "/work/dev/bcb-01/R05/param-gen";
         Generate gen = new Generate(model, output);
-        gen.setGroupId("bo.gob.bcb.grh.mrp");
-        gen.setArtifactId("mrp");
-        gen.setModule("portal");
-        gen.setNamespace("psv");
-        gen.setContextPath("mrp-portal-rest-1.0.0");
-        gen.setBasePkg("bo.gob.bcb.grh.mrp");
+        gen.setGroupId("bo.gob.bcb.param");
+        gen.setArtifactId("param");
+        gen.setModule("manager");
+        gen.setNamespace("par");
+        gen.setContextPath("/param/manager");
+        gen.setBasePkg("bo.gob.bcb.param");
         gen.addTemplateDirectory("app.javaee");
-        gen.addTemplateDirectory("app.react.x1");
+        //gen.addTemplateDirectory("app.react.x1");
         //gen.addTemplateDirectory("app.react.module");
         //gen.addTemplateDirectory("app.react.module.page");
         //gen.addTemplateDirectory("app.react.module.part");
-        gen.removePrefix("Mrp");
+        gen.removePrefix("Par");
         gen.generate();
     }
 }

@@ -5,15 +5,15 @@
     def data   = fn.deduceName(it.clazz, 'Data')
     def serv   = fn.deduceName(it.clazz, 'Serv')
     def impl   = fn.deduceName(it.clazz, 'Impl')
-    def local   = fn.deduce(it.clazz, 'Local')
+    def logic   = fn.deduce(it.clazz, 'Logic')
     %>
     ${filter}
     ${data}
     ${serv}
     ${impl}
-    ${local}
-    <file name="${local.type}" pkg="demo" dir="." layer="xx" module="none">
-        public class ${local.type}{
+    ${logic}
+    <file name="${logic.type}" pkg="demo" dir="." layer="xx" module="none">
+        public class ${logic.type}{
         
         }
     </file>

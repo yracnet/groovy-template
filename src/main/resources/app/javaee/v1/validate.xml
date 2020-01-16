@@ -11,7 +11,7 @@
     def serv   = fn.deduceName(entity.clazz, 'Serv')
     def impl   = fn.deduceName(entity.clazz, 'Impl')
     def func   = fn.deduceName(entity.clazz, 'Func')
-    def local  = fn.deduceName(entity.clazz, 'Local')
+    def logic  = fn.deduceName(entity.clazz, 'Logic')
     def validate  = fn.deduceName(entity.clazz, 'Validate')
     def attr   = []
     attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})

@@ -108,17 +108,17 @@ public class GenFile {
             case "impl:mapper":
                 mask = "/$project/$project-impl/src/main/java/$dir/$pkg/$name";
                 break;
-            case "local":
-                mask = "/$project/$project-local/src/main/java/$dir/$pkg/$name";
+            case "logic":
+                mask = "/$project/$project-logic/src/main/java/$dir/$pkg/$name";
                 break;
-            case "local:validate":
-                mask = "/$project/$project-local/src/main/java/$dir/$pkg/$name";
+            case "logic:validate":
+                mask = "/$project/$project-logic/src/main/java/$dir/$pkg/$name";
                 break;
             case "model:entity":
                 mask = "/$project-model/src/main/java/$dir/$pkg/$name";
                 break;
             case "model:validate":
-                mask = "/$artifactId-modelo/src/main/java/$dir/$pkg/$name";
+                mask = "/$artifactId-model/src/main/java/$dir/$pkg/$name";
                 break;
             //} else if ("conf".equals(layer)) {
             //    mask = "/$project/$project-view/src/main/webapp/WEB-INF/$name";

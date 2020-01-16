@@ -44,7 +44,7 @@ interface ${update.type}State {
     ${data.var}?: ${data.type};
 }
 
-class ${update.type}Local extends React.PureComponent<${update.type}Props, ${update.type}State> {
+class ${update.type}Logic extends React.PureComponent<${update.type}Props, ${update.type}State> {
 
     private validate: ${data.type}Validate = {<% attr.each{  %>
         ${it.var}: [isRequired],<% } %>
@@ -143,7 +143,7 @@ class ${update.type}Local extends React.PureComponent<${update.type}Props, ${upd
     };
 };
 
-export const ${update.type} = withRouter(${update.type}Local);
+export const ${update.type} = withRouter(${update.type}Logic);
 ]]></file>
     <% } %>
 </files>

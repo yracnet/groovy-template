@@ -35,7 +35,7 @@ public class FactoryImpl extends FactoryAbstract {
         name = toName(name + classifier);
         String nameSufix = upperFirst(name);
         map.put("name", nameSufix);
-        map.put("local", nameSufix + "Local");
+        map.put("logic", nameSufix + "Logic");
         map.put("state", nameSufix + "State");
         map.put("props", nameSufix + "Props");
         map.put("event", nameSufix + "Event");
@@ -62,7 +62,7 @@ public class FactoryImpl extends FactoryAbstract {
         name = toName(name + classifier);
         String nameSufix = upperFirst(name);
         map.put("name", nameSufix);
-        map.put("local", nameSufix + "Local");
+        map.put("logic", nameSufix + "Logic");
         map.put("state", nameSufix + "State");
         map.put("props", nameSufix + "Props");
         map.put("event", nameSufix + "Event");

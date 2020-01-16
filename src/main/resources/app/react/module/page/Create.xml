@@ -44,7 +44,7 @@ interface ${create.type}State {
     ${data.var}: ${data.type};
 }
 
-class ${create.type}Local extends React.PureComponent<${create.type}Props, ${create.type}State> {
+class ${create.type}Logic extends React.PureComponent<${create.type}Props, ${create.type}State> {
 
     private validate: ${data.type}Validate = {<% attr.each{  %>
         ${it.var}: [isRequired],<% } %>
@@ -139,7 +139,7 @@ class ${create.type}Local extends React.PureComponent<${create.type}Props, ${cre
     };
 };
 
-export const ${create.type} = withRouter(${create.type}Local);
+export const ${create.type} = withRouter(${create.type}Logic);
 ]]></file>
     <% } %>
 </files>

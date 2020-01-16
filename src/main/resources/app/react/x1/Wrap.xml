@@ -47,7 +47,7 @@ interface ${proc01.type}State {
     values: Array<${data.type}>,
 }
 
-class ${proc01.type}Local extends React.PureComponent<${proc01.type}Props, ${proc01.type}State> {
+class ${proc01.type}Logic extends React.PureComponent<${proc01.type}Props, ${proc01.type}State> {
 
     constructor(props: ${proc01.type}Props) {
         super(props);
@@ -130,7 +130,7 @@ class ${proc01.type}Local extends React.PureComponent<${proc01.type}Props, ${pro
     };
 }
 
-export const ${proc01.type} = withRouter(${proc01.type}Local);
+export const ${proc01.type} = withRouter(${proc01.type}Logic);
 ]]></file>
     <% } %>
 </files>

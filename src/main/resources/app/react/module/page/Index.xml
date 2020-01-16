@@ -46,7 +46,7 @@ interface ${inbox.type}State {
     select?: ${data.type};
 }
 
-class ${inbox.type}Local extends React.Component<${inbox.type}Props, ${inbox.type}State> {
+class ${inbox.type}Logic extends React.Component<${inbox.type}Props, ${inbox.type}State> {
 
     constructor(props: ${inbox.type}Props) {
         super(props);
@@ -161,7 +161,7 @@ class ${inbox.type}Local extends React.Component<${inbox.type}Props, ${inbox.typ
     }
 }
 
-export const ${inbox.type} = withRouter(${inbox.type}Local);
+export const ${inbox.type} = withRouter(${inbox.type}Logic);
 ]]></file>
     <% } %>
 </files>

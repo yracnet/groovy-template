@@ -18,9 +18,9 @@
     %>
     <file name="${serv.type}.java" layer="serv" dir="." pkg="${pkg}">
 <![CDATA[
-import bo.central.result.ResultObject;
-import bo.central.result.ResultVoid;
-import bo.central.result.ResultSet;
+import bo.gob.bcb.result.ResultObject;
+import bo.gob.bcb.result.ResultVoid;
+import bo.gob.bcb.result.ResultList;
 import ${pkg}.data.${data.type};
 import ${pkg}.data.${filter.type};
 import javax.ws.rs.GET;
@@ -41,23 +41,23 @@ public interface ${serv.type} {
 
   @POST
   @Path("filtrar")
-  ResultSet<${data.type}> filtrar${data.type}(${filter.type} ${filter.var});
+  ResultList<${data.type}> ${data.var}Filtrar(${filter.type} ${filter.var});
 
   @POST
   @Path("recargar")
-  ResultObject<${data.type}> recargar${data.type}(${data.type} ${data.var});
+  ResultObject<${data.type}> ${data.var}Recargar(${data.type} ${data.var});
 
   @POST
   @Path("registrar")
-  ResultVoid registrar${data.type}(${data.type} ${data.var});
+  ResultObject<${data.type}> ${data.var}Registrar(${data.type} ${data.var});
 
   @POST
   @Path("actualizar")
-  ResultVoid actualizar${data.type}(${data.type} ${data.var});
+  ResultObject<${data.type}> ${data.var}Actualizar(${data.type} ${data.var});
 
   @POST
   @Path("eliminar")
-  ResultVoid eliminar${data.type}(${data.type} ${data.var});
+  ResultVoid ${data.var}Eliminar(${data.type} ${data.var});
 }
 ]]></file>
     <file name="${data.type}.java" layer="serv:data" dir="." pkg="${pkg}.data">
@@ -89,10 +89,10 @@ public class ${data.type} implements Serializable {
     <file name="${filter.type}.java" layer="serv:filter" dir="." pkg="${pkg}.data">
 <![CDATA[
 import java.io.Serializable;
-import bo.central.filter.Config;
-import bo.central.filter.FilterElement;
-import bo.central.filter.FilterAbstract;
-import bo.central.filter.FilterValue;
+import bo.gob.bcb.filter.Config;
+import bo.gob.bcb.filter.FilterElement;
+import bo.gob.bcb.filter.FilterAbstract;
+import bo.gob.bcb.filter.FilterValue;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlAccessType;

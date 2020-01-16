@@ -10,9 +10,9 @@
     def filter = fn.deduceName(entity.clazz, 'Filter')
     def serv   = fn.deduceName(entity.clazz, 'Serv')
     def impl   = fn.deduceName(entity.clazz, 'Impl')
-    def func   = fn.deduceName(entity.clazz, 'Func')
-    def local  = fn.deduceName(entity.clazz, 'Local')
-    def validate  = fn.deduceName(entity.clazz, 'Validate')
+    def func   = fn.deduceName2(entity.clazz, 'Func')
+    def logic  = fn.deduceName2(entity.clazz, 'Logic')
+    def validate  = fn.deduceName2(entity.clazz, 'Validate')
     def attr   = []
     attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
     attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
@@ -23,46 +23,46 @@
     <file name="${validate.type}.java" layer="model:validate" dir="." pkg="${basePkg}.validate">
 <![CDATA[
 import java.util.List;
-import ${basePkg}.modelo.${entity.clazz};
-import bo.central.validate.Summary;
-import bo.central.validate.Validate;
+import ${basePkg}.model.${entity.clazz};
+import bo.gob.bcb.validate.Summary;
+import bo.gob.bcb.validate.Validate;
 
 public class ${validate.type} {
 
-    public static Summary validateCreate${data.type}(${clazz.type} ${data.var}) {
+    public static Summary validateCreate${clazz.type}(${clazz.type} ${clazz.var}) {
         Summary summary = new Summary("Validacion Creacion ${data.text}");
-        summary.appendReason(${data.var} == null, "${data.text} invalido, valor NULL");
+        summary.appendReason(${clazz.var} == null, "${data.text} invalido, valor NULL");
         if (summary.isReasonEmpty()) {
-            summary.appendReason(${data.var}.getId() != null, "ID ${data.text} no valido!");
-            List<String> reason = validateContent(${data.var});
+            summary.appendReason(${clazz.var}.getId() != null, "ID ${data.text} no valido!");
+            List<String> reason = validateContent(${clazz.var});
             summary.appendReason(reason);
         }
         return summary;
     }
 
-    public static Summary validateUpdate${data.type}(${clazz.type} ${data.var}) {
+    public static Summary validateUpdate${clazz.type}(${clazz.type} ${clazz.var}) {
         Summary summary = new Summary("Validacion Actualizacion ${data.text}");
-        summary.appendReason(${data.var} == null, "${data.text} invalido, valor NULL");
+        summary.appendReason(${clazz.var} == null, "${data.text} invalido, valor NULL");
         if (summary.isReasonEmpty()) {
-            summary.appendReason(${data.var}.getId() == null, "ID ${data.text} no valido!");
-            List<String> reason = validateContent(${data.var});
+            summary.appendReason(${clazz.var}.getId() == null, "ID ${data.text} no valido!");
+            List<String> reason = validateContent(${clazz.var});
             summary.appendReason(reason);
         }
         return summary;
     }
 
-    public static Summary validateRemove${data.type}(${clazz.type} ${data.var}) {
+    public static Summary validateRemove${clazz.type}(${clazz.type} ${clazz.var}) {
         Summary summary = new Summary("Validacion Eliminacion ${data.text}");
-        summary.appendReason(${data.var} == null, "${data.text} invalido, valor NULL");
+        summary.appendReason(${clazz.var} == null, "${data.text} invalido, valor NULL");
         if (summary.isReasonEmpty()) {
-            summary.appendReason(${data.var}.getId() == null, "ID ${data.text} no valido!");
+            summary.appendReason(${clazz.var}.getId() == null, "ID ${data.text} no valido!");
         }
         return summary;
     }
 
     private static List<String> validateContent(${clazz.type} entity) {
         return Validate.create(${clazz.type}.class)<% attr.each{  %>
-                //.isRequired("${it.text}",  ${clazz.type}::${it.get})<% } %>
+                //.isRequired("${it.text}",  ${clazz.type}::${it.get}) //<% } %>
                 .apply(entity, "${data.text}");
     }
 }

@@ -9,9 +9,8 @@
     def data   = fn.deduceName(entity.clazz)
     def filter = fn.deduceName(entity.clazz, 'Filter')
     def serv   = fn.deduceName(entity.clazz, 'Serv')
-    def rest   = fn.deduceName(entity.clazz, 'Rest')
     def mapper = fn.deduceName(entity.clazz, 'Mapper')
-    def logic  = fn.deduceName(entity.clazz, 'Logic')
+    def logic  = fn.deduceName2(entity.clazz, 'Logic')
     def impl   = fn.deduceName(entity.clazz, 'Impl')
     def attr   = []
     attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
@@ -22,34 +21,34 @@
     attr2.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
     attr2.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
     %>
-    <file name="${rest.type}.java" layer="rest" dir="." pkg="${pkg}" skip="false"><![CDATA[
+    <file name="${impl.type}.java" layer="impl" dir="." pkg="${pkg}" skip="false"><![CDATA[
 import bo.gob.bcb.Result;
 import bo.gob.bcb.result.Message;
 import bo.gob.bcb.result.ResultList;
 import bo.gob.bcb.result.ResultVoid;
 import bo.gob.bcb.result.ResultObject;
-import ${basePkg}.modelo.${clazz.type};
+import bo.gob.bcb.result.ResultFactory;
+import ${basePkg}.model.${clazz.type};
 import ${pkg}.data.${data.type};
 import ${pkg}.data.${filter.type};
 import ${pkg}.mapper.${mapper.type};
 import java.util.Date;
-import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 
-@Interceptors ({RestInterceptor.class})
-public class ${rest.type} implements ${serv.type} {
+@Interceptors ({EJBInterceptor.class})
+public class ${impl.type} implements ${serv.type} {
 
-    @EJB
+    @Inject
     private ${logic.type} ${logic.var};
 
     @Override
     public ResultVoid ping() {
-        ResultVoid result = ResultVoid.of();
-        Message message = result.addMessage("Ping Service");
-        message.addCause("This: " + this);
+        Message message = ResultFactory.createMessageSuccess("Ping Service");
         message.addCause("Date: " + new Date());
-        message.addCause("Logic: " + ${logic.var});
-        return result;
+        message.addCause("This: " + this);
+        message.addCause("${logic.type}: " + ${logic.var});
+        return ResultFactory.createResultVoidSuccess(message);
     }
 
     @Override
@@ -66,14 +65,14 @@ public class ${rest.type} implements ${serv.type} {
     }
 
     @Override
-    public ResultVoid ${data.var}Registrar(${data.type} ${data.var}) {
+    public ResultObject<${data.type}> ${data.var}Registrar(${data.type} ${data.var}) {
         ${clazz.type} ${clazz.var} = ${mapper.type}.mapperTo${clazz.type}(${data.var});
         ResultObject<${clazz.type}> result = ${logic.var}.${data.var}Persist(${clazz.var});
         return result.mapper(${mapper.type}::mapperTo${data.type});
     }
 
     @Override
-    public ResultVoid ${data.var}Actualizar(${data.type} ${data.var}) {
+    public ResultObject<${data.type}> ${data.var}Actualizar(${data.type} ${data.var}) {
         ${clazz.type} ${clazz.var} = ${mapper.type}.mapperTo${clazz.type}(${data.var});
         ResultObject<${clazz.type}> result = ${logic.var}.${data.var}Merge(${clazz.var});
         return result.mapper(${mapper.type}::mapperTo${data.type});
@@ -86,7 +85,7 @@ public class ${rest.type} implements ${serv.type} {
     }
 }
 ]]></file>
-    <file name="${mapper.type}.java" layer="rest" dir="." pkg="${pkg}.mapper">
+    <file name="${mapper.type}.java" layer="impl" dir="." pkg="${pkg}.mapper">
 <![CDATA[
 import ${pkg}.data.${data.type};
 import ${basePkg}.model.${clazz.type};

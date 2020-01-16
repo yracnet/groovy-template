@@ -49,7 +49,7 @@ interface ${search.type}State {
     select?: ${data.type};
 }
 
-class ${search.type}Local extends React.Component<${search.type}Props, ${search.type}State> {
+class ${search.type}Logic extends React.Component<${search.type}Props, ${search.type}State> {
 
     constructor(props: ${search.type}Props) {
         super(props);
@@ -163,7 +163,7 @@ class ${search.type}Local extends React.Component<${search.type}Props, ${search.
     }
 }
 
-export const ${search.type} = withRouter(${search.type}Local);
+export const ${search.type} = withRouter(${search.type}Logic);
 
 ]]></file>
     <% } %>

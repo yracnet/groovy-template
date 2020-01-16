@@ -42,7 +42,7 @@ interface ${remove.type}State {
     ${data.var}?: ${data.type};
 }
 
-class ${remove.type}Local extends React.PureComponent<${remove.type}Props, ${remove.type}State> {
+class ${remove.type}Logic extends React.PureComponent<${remove.type}Props, ${remove.type}State> {
 
     constructor(props: ${remove.type}Props) {
         super(props);
@@ -102,7 +102,7 @@ class ${remove.type}Local extends React.PureComponent<${remove.type}Props, ${rem
     };
 };
 
-export const ${remove.type} = withRouter(${remove.type}Local);
+export const ${remove.type} = withRouter(${remove.type}Logic);
 
 ]]></file>
     <% } %>
