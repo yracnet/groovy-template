@@ -90,6 +90,12 @@ public class GenFile {
             case "rest":
                 mask = "/$project/$project-rest/src/main/java/$dir/$pkg/$name";
                 break;
+            case "react":
+                mask = "/$project/$project-react/src/main/java/$dir/$pkg/$name";
+                break;
+            case "faces":
+                mask = "/$project/$project-faces/src/main/java/$dir/$pkg/$name";
+                break;
             case "test":
                 mask = "/$project/$project-view/src/test/java/$dir/$pkg/$name";
                 break;

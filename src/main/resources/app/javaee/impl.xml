@@ -22,7 +22,6 @@
     attr2.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
     %>
     <file name="${impl.type}.java" layer="impl" dir="." pkg="${pkg}" skip="false"><![CDATA[
-import bo.gob.bcb.Result;
 import bo.gob.bcb.result.Message;
 import bo.gob.bcb.result.ResultList;
 import bo.gob.bcb.result.ResultVoid;

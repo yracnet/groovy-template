@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files>
+    <% 
+    def entityRef = [:]
+    mapper.entity.each { entityRef[it.id] = it }
+    entityRef.each {
+    id, entity -> 
+    def clazz  = fn.deduce(entity.clazz)
+    def data   = fn.deduceName(entity.clazz)
+    def filter = fn.deduceName(entity.clazz, 'Filter')
+    def serv   = fn.deduceName(entity.clazz, 'Serv')
+    def back   = fn.deduceName(entity.clazz, 'Backing')
+    
+    
+    
+    def attr   = []
+    attr.addAll(entity.attributes.id.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.basic.collect{fn.deduceAttrName(it)})
+    attr.addAll(entity.attributes.version.collect{fn.deduceAttrName(it)})
+    def attr2   = []
+    attr2.addAll(entity.attributes.oneToMany.collect{fn.deduceRefName(it, entityRef)})
+    attr2.addAll(entity.attributes.oneToOne.collect{fn.deduceRefName(it, entityRef)})
+    attr2.addAll(entity.attributes.manyToOne.collect{fn.deduceRefName(it, entityRef)})
+    %>
+    <file name="${back.type}.java" layer="faces" dir="." pkg="${pkg}" skip="false"><![CDATA[
+import bo.gob.bcb.result.Message;
+import bo.gob.bcb.result.ResultList;
+import bo.gob.bcb.result.ResultVoid;
+import bo.gob.bcb.result.ResultObject;
+import bo.gob.bcb.result.ResultFactory;
+import ${pkg}.data.${data.type};
+import ${pkg}.data.${filter.type};
+import java.util.Date;
+import javax.inject.Inject;
+import javax.interceptor.Interceptors;
+
+@ViewScope
+@Named(name = "_${back.var}")
+@Interceptors ({BEANInterceptor.class})
+public class ${back.type} {
+
+    @Inject
+    private ${serv.type} ${serv.var};
+
+    private ${data.type} ${data.var};
+    private List<${data.type}> ${data.var}List;
+    private ${filter.type} ${filter.var} = new ${filter.type}();
+
+    public ${data.type} get${data.type}() {
+        if(${data.var} == null){
+            ${data.var} = new ${data.type}();
+            //show message
+        }
+        return ${data.var};
+    }
+
+    public ${filter.type} get${filter.type}() {
+        return ${filter.var};
+    }
+
+    public List<${data.type}> get${data.type}List() {
+        if(${data.var}List == null){
+            ResultList<${data.type}> result = ${serv.var}.${data.var}Filtrar(${filter.var});
+            ${data.var}List = result.getValue();
+            //show message
+        }
+        return ${data.var}List;
+    }
+    
+    public String ${data.var}Cancelar_action() {
+        ${data.var} = null;
+        ${data.var}List = null;
+        return "inicio";
+    }
+    
+    public String ${data.var}Registrar_init() {
+        ${data.var} = new ${data.type}();
+        return "registrar";
+    }
+    
+    public String ${data.var}Actualizar_init(${data.type} row) {
+        ${data.var} = row;
+        return "editar";
+    }
+    
+    public String ${data.var}Eliminar_init(${data.type} row) {
+        ${data.var} = row;
+        return "eliminar";
+    }
+    
+    public String ${data.var}Registrar_caller() {
+        ResultObject<${data.type}> result = ${serv.var}.${data.var}Registrar(${data.var});
+        ${data.var} = null;
+        ${data.var}List = null;
+        return "inicio";
+    }
+    
+    public String ${data.var}Actualizar_caller() {
+        ResultObject<${data.type}> result = ${serv.var}.${data.var}Actualizar(${data.var});
+        ${data.var} = null;
+        ${data.var}List = null;
+        return "inicio";
+    }
+    
+    public String ${data.var}Eliminar_caller() {
+        ResultObject<${data.type}> result = ${serv.var}.${data.var}Eliminar(${data.var});
+        ${data.var} = null;
+        ${data.var}List = null;
+        return "inicio";
+    }
+}
+]]></file>
+    <file name="${data.type}.xhtml" layer="faces:view" dir="." pkg="${pkg}.mapper">
+<![CDATA[
+
+]]></file>
+    <% } %>
+</files>
